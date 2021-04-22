@@ -1,10 +1,10 @@
 {
     "mongoose": {
-        "URI": "mongodb+srv://Sukairo:basepass@lab4c.2zcnb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+        "URI": "mongodb+srv://Sukairo:basepass@lab4c.2zcnb.mongodb.net/bestTutorDB?retryWrites=true&w=majority"
     },
 
     "server": {
-        "PORT": 3000,
+        "PORT": 5353,
         "secret": "ThisIsAJWTSecretMightChangeLater"
     }
 }
