@@ -5,8 +5,7 @@ const Teacher = new Schema({
     desc: { type: String },
     education: { type: String },
     experience: { type: String },
-    city: { type: String, required: true },
-    roles: [{ type: String, ref: "Role" }], //possible roles: 'USER', 'TCHR'
+    city: { type: String, required: true }
 })
 
 module.exports = model("Teacher", Teacher)
