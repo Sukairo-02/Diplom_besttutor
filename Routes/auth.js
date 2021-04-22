@@ -6,16 +6,6 @@ const authMidware = require("./midware/ensureAuth")
 const roleMidware = require("./midware/ensureRoles")
 const ensureAuth = require("./midware/ensureAuth")
 
-// router.post('/registration', [
-//     check('username', "Username can't be empty!").notEmpty(),
-//     check('password', "Password must have length of 4-24 symbols").isLength({min: 4, max: 24}),
-
-// ], controller.registration)
-
-// router.post('/login', controller.login)
-
-// router.get('/users', roleMidware(['USER', 'ADMIN']), controller.getUsers)
-
 router.post(
     "/register",
     [
