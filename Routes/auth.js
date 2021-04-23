@@ -39,4 +39,6 @@ router.post("/initroles", controller.initRoles)
 
 router.get("/userdata", ensureAuth, controller.userdata)
 
+router.get("/lightdata", ensureAuth, controller.lightdata)
+
 module.exports = router

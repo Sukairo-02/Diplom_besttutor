@@ -11,7 +11,7 @@ const ensureDate = require("../midware/ensureDate")
 const generateAccessToken = (id, roles) => {
     const payload = {
         id,
-        roles,
+        roles
     }
 
     return jwt.sign(payload, secret, {
@@ -69,8 +69,8 @@ class authController {
 
             if (isTeacher) {
                 let tchr = new Teacher()
-                tchr._id = user._id //mongodb has no relations, will use _id to find teacher's data if user is teacher.
-                await tchr.save() //teacher must be forced into teacher data edit right after registration.
+                tchr.src = user._id //mongodb has no relations, will use _id to find teacher's data if user is teacher.
+                await tchr.save()
             }
 
             await user.save()
@@ -125,11 +125,71 @@ class authController {
 
     async userdata(req, res) {
         try {
-            const users = await User.find()
-            res.json(users)
+            const token = req.headers.authorization.split(" ")[1]
+            if (!token) {
+                return res.status(403).json({ isAuth: false })
+            }
+
+            const { id: usid, roles: roles } = jwt.verify(token, config.get("server.secret"))
+            const user = await User.findOne({ _id: usid })
+            let isTeacher
+            const teacher = await Teacher.findOne({src: usid})
+
+            if (teacher) {
+                isTeacher = true
+                return res.json({
+                    _id: usid,
+                    username: user.username,
+                    email: user.email,
+                    dateOfBirth: user.dateOfBirth,
+                    avatar: user.avatar,
+                    roles: roles,
+                    phone: teacher.phone,
+                    desc: teacher.desc,
+                    education: teacher.education,
+                    exprerience: teacher.exprerience,
+                    city: teacher.city
+                })
+            } else {
+                isTeacher = false
+                return res.json({
+                    _id: usid,
+                    username: user.username,
+                    email: user.email,
+                    dateOfBirth: user.dateOfBirth,
+                    avatar: user.avatar,
+                    roles: roles,
+                })
+            }
         } catch (e) {
             console.log(e)
-            res.status(400).json({ message: "Info gather failed!" })
+            return res
+                .status(403)
+                .json({ message: "Error occured while getting user's data!" })
+        }
+    }
+
+    async lightdata(req, res) {
+        try {
+            const token = req.headers.authorization.split(" ")[1]
+            if (!token) {
+                return res.status(403).json({ isAuth: false })
+            }
+
+            const { id: usid, roles: roles } = jwt.verify(token, config.get("server.secret"))
+            const user = await User.findOne({ _id: usid })
+            return res.json({
+                _id: usid,
+                username: user.username,
+                email: user.email,
+                avatar: user.avatar,
+                roles: roles
+            })
+        } catch (e) {
+            console.log(e)
+            return res
+                .status(403)
+                .json({ message: "Error occured while getting user's data!" })
         }
     }
 
