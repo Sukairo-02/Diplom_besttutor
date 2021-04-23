@@ -97,14 +97,14 @@ class authController {
             const { email, password } = req.body
             const user = await User.findOne({ email: email })
             if (!user) {
-                return res.status(400).json({
+                return res.status(401).json({
                     message: `Can't find account with email ${email}!`,
                 })
             }
 
             const validPass = bcrypt.compareSync(password, user.password)
             if (!validPass) {
-                return res.status(400).json({ message: "Invalid password!" })
+                return res.status(401).json({ message: "Invalid password!" })
             }
 
             const token = generateAccessToken(user._id, user.roles)
@@ -202,7 +202,7 @@ class authController {
                     .json({ message: "Error: user unauthorized!" })
             }
 
-            const { id: _id, roles: roles } = jwt.verify(
+            const { id: _id } = jwt.verify(
                 token,
                 config.get("server.secret")
             )

@@ -2,8 +2,7 @@ const Router = require("express")
 const router = new Router()
 const controller = require("./classes/authClass")
 const { check } = require("express-validator")
-const authMidware = require("./midware/ensureAuth")
-const roleMidware = require("./midware/ensureRoles")
+const ensureRoles = require("./midware/ensureRoles")
 const ensureAuth = require("./midware/ensureAuth")
 const ensureDate = require("./midware/ensureDate")
 
@@ -50,7 +49,7 @@ router.post(
     [
         check("phone", "Invalid phone number!").isMobilePhone(),
         check("city", "You must enter a city!").notEmpty(),
-        ensureAuth,
+        ensureRoles(["TCHR"])
     ],
     controller.editteacher
 )
