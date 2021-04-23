@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken")
 const { validationResult } = require("express-validator")
 const config = require("config")
 const secret = config.get("server.secret")
-const ensureDate = require("../midware/ensureDate")
 
 const generateAccessToken = (id, roles) => {
     const payload = {
@@ -37,12 +36,6 @@ class authController {
                 isTeacher,
             } = req.body //isTeacher is a boolean value. Is set to true if user decided
             //to register as teacher, false otherwise.
-
-            // if (!ensureDate(dateOfBirth)) {
-            //     return res
-            //         .status(403)
-            //         .json({ message: "Invalith date of birth!" })
-            // }
 
             const candidate = await User.findOne({ email: email })
             if (candidate) {
@@ -222,12 +215,6 @@ class authController {
             }
 
             const { username, dateOfBirth, avatar } = req.body
-            // if (!ensureDate(dateOfBirth)) {
-            //     return res
-            //         .status(403)
-            //         .json({ message: "Error: invalid date of birth!" })
-            // }
-
             user.username = username
             user.dateOfBirth = dateOfBirth
             user.avatar = avatar
