@@ -3,6 +3,13 @@ const config = require('config')
 
 module.exports = function (req, res, next) {
     try {
+        if (!req.headers.authorization)
+        {
+            return res
+            .status(403)
+            .json({message: "User unauthorized!"})
+        }
+
         const token = req.headers.authorization.split(' ')[1]
         if (!token)
         {
@@ -18,6 +25,6 @@ module.exports = function (req, res, next) {
         console.log(e)
         return res
         .status(403)
-        .json({message: "Error occured!"})
+        .json({message: "Invalid token!"})
     }
 }

@@ -33,7 +33,15 @@ router.post(
 
 router.post("/logout", controller.logout)
 
-router.post("/edit", ensureAuth, controller.edit)
+router.post(
+    "/edit",
+    [
+        check("email", "Invalid email!").isEmail(),
+        check("username", "You must enter a username!").notEmpty(),
+        ensureAuth,
+    ],
+    controller.edit
+)
 
 router.post("/initroles", controller.initRoles)
 

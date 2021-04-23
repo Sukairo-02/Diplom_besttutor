@@ -11,7 +11,7 @@ const ensureDate = require("../midware/ensureDate")
 const generateAccessToken = (id, roles) => {
     const payload = {
         id,
-        roles
+        roles,
     }
 
     return jwt.sign(payload, secret, {
@@ -125,15 +125,24 @@ class authController {
 
     async userdata(req, res) {
         try {
-            const token = req.headers.authorization.split(" ")[1]
-            if (!token) {
-                return res.status(403).json({ isAuth: false })
+            if (!req.headers.authorization) {
+                return res.status(403).json({ message: "User unauthorized!" })
             }
 
-            const { id: usid, roles: roles } = jwt.verify(token, config.get("server.secret"))
+            const token = req.headers.authorization.split(" ")[1]
+            if (!token) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: user unauthorized!" })
+            }
+
+            const { id: usid, roles: roles } = jwt.verify(
+                token,
+                config.get("server.secret")
+            )
             const user = await User.findOne({ _id: usid })
             let isTeacher
-            const teacher = await Teacher.findOne({src: usid})
+            const teacher = await Teacher.findOne({ src: usid })
 
             if (teacher) {
                 isTeacher = true
@@ -148,7 +157,7 @@ class authController {
                     desc: teacher.desc,
                     education: teacher.education,
                     exprerience: teacher.exprerience,
-                    city: teacher.city
+                    city: teacher.city,
                 })
             } else {
                 isTeacher = false
@@ -171,19 +180,28 @@ class authController {
 
     async lightdata(req, res) {
         try {
-            const token = req.headers.authorization.split(" ")[1]
-            if (!token) {
-                return res.status(403).json({ isAuth: false })
+            if (!req.headers.authorization) {
+                return res.status(403).json({ message: "User unauthorized!" })
             }
 
-            const { id: usid, roles: roles } = jwt.verify(token, config.get("server.secret"))
+            const token = req.headers.authorization.split(" ")[1]
+            if (!token) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: user unauthorized!" })
+            }
+
+            const { id: usid, roles: roles } = jwt.verify(
+                token,
+                config.get("server.secret")
+            )
             const user = await User.findOne({ _id: usid })
             return res.json({
                 _id: usid,
                 username: user.username,
                 email: user.email,
                 avatar: user.avatar,
-                roles: roles
+                roles: roles,
             })
         } catch (e) {
             console.log(e)
@@ -195,7 +213,76 @@ class authController {
 
     async logout(req, res) {}
 
-    async edit(req, res) {}
+    async edit(req, res) {
+        try {
+            if (!req.headers.authorization) {
+                return res.status(403).json({ message: "User unauthorized!" })
+            }
+
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ message: "Edit error!", errors })
+            }
+
+            const token = req.headers.authorization.split(" ")[1]
+            if (!token) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: user unauthorized!" })
+            }
+
+            const { id: _id, roles: roles } = jwt.verify(
+                token,
+                config.get("server.secret")
+            )
+
+            let user = await User.findOne({ _id: _id })
+            if (!user) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: can't find user by id!" })
+            }
+
+            const { username, email, dateOfBirth, avatar } = req.body
+            if (!ensureDate(dateOfBirth)) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: invalid date of birth!" })
+            }
+
+            user.username = username
+            user.email = email
+            user.dateOfBirth = dateOfBirth
+            user.avatar = avatar
+            await user.save()
+
+            let teacher
+            roles.forEach(async (role) => {
+                if (role === "TCHR") {
+                    teacher = await Teacher.findOne({ src: _id })
+                    if (!teacher) {
+                        return res.status(403).json({
+                            message: "Error: can't find teacher entity!",
+                        })
+                    }
+                }
+                const { phone, desc, education, experience, city } = req.body
+                teacher.phone = phone
+                teacher.desc = desc
+                teacher.education = education
+                teacher.experience = experience
+                teacher.city = city
+                await teacher.save()
+            })
+
+            return res.json({ message: "Changes applied succesfully!" })
+        } catch (e) {
+            console.log(e)
+            return res
+                .status(400)
+                .json({ message: "Error occured while editing data!" })
+        }
+    }
 }
 
 module.exports = new authController()
