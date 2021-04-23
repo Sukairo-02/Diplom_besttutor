@@ -10,7 +10,7 @@ const secret = config.get("server.secret")
 const generateAccessToken = (id, roles) => {
     const payload = {
         id,
-        roles,
+        roles
     }
 
     return jwt.sign(payload, secret, {
@@ -36,6 +36,7 @@ class authController {
                 isTeacher,
             } = req.body //isTeacher is a boolean value. Is set to true if user decided
             //to register as teacher, false otherwise.
+
             const candidate = await User.findOne({ email: email })
             if (candidate) {
                 return res
@@ -44,7 +45,13 @@ class authController {
             }
 
             const hashPass = bcrypt.hashSync(password, 7)
-            const userRole = await Role.findOne({ value: "USER" })
+            const userRole
+            if(isTeacher) {
+                userRole = await Role.findOne({ value: "TCHR" })
+            } else {
+                uwerRole = await Role.findOne({value: "USER"})
+            }
+
             const user = new User({
                 username: username,
                 password: hashPass,

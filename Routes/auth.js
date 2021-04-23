@@ -36,6 +36,8 @@ router.post("/logout", ensureDate(req.dateOfBirth), controller.logout)
 
 router.post("/edit", ensureAuth, controller.edit)
 
+router.post('/initroles', controller.initRoles)
+
 router.get("/userdata", ensureAuth, controller.userdata)
 
 module.exports = router
