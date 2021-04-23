@@ -1,16 +1,17 @@
-const User = require("./models/User")
-const Teacher = require("./models/Teacher")
-const Role = require("./models/Role")
+const User = require("../../models/User")
+const Teacher = require("../../models/Teacher")
+const Role = require("../../models/Roles")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { validationResult } = require("express-validator")
 const config = require("config")
 const secret = config.get("server.secret")
+const ensureDate = require("../midware/ensureDate")
 
 const generateAccessToken = (id, roles) => {
     const payload = {
         id,
-        roles
+        roles,
     }
 
     return jwt.sign(payload, secret, {
@@ -37,6 +38,12 @@ class authController {
             } = req.body //isTeacher is a boolean value. Is set to true if user decided
             //to register as teacher, false otherwise.
 
+            if (!ensureDate(dateOfBirth)) {
+                return res
+                    .status(403)
+                    .json({ message: "Invalith date of birth!" })
+            }
+
             const candidate = await User.findOne({ email: email })
             if (candidate) {
                 return res
@@ -45,11 +52,11 @@ class authController {
             }
 
             const hashPass = bcrypt.hashSync(password, 7)
-            const userRole
-            if(isTeacher) {
+            let userRole
+            if (isTeacher) {
                 userRole = await Role.findOne({ value: "TCHR" })
             } else {
-                uwerRole = await Role.findOne({value: "USER"})
+                userRole = await Role.findOne({ value: "USER" })
             }
 
             const user = new User({
@@ -57,14 +64,13 @@ class authController {
                 password: hashPass,
                 email: email,
                 dateOfBirth: dateOfBirth,
-                roles: [userRole.value]
+                roles: [userRole.value],
             })
-            
-            if(isTeacher)
-            {
+
+            if (isTeacher) {
                 let tchr = new Teacher()
                 tchr._id = user._id //mongodb has no relations, will use _id to find teacher's data if user is teacher.
-                await tchr.save()  //teacher must be forced into teacher data edit right after registration.
+                await tchr.save() //teacher must be forced into teacher data edit right after registration.
             }
 
             await user.save()
@@ -76,25 +82,31 @@ class authController {
         }
     }
 
-    async initRoles(req, res) { //dev function, will be deleted in prod version. Used to initialize list of available roles.
+    async initRoles(req, res) {
+        //dev function, will be deleted in prod version. Used to initialize list of available roles.
         try {
-            req.roles.foreach(item => {
-                const role = new Roles({value: role})
+            const {roles} = req.body
+            console.log(roles)
+            roles.forEach(async (element) => {     
+                console.log(element)           
+                const role = new Role({ value: element })
                 await role.save()
+                res.json({message: "Roles assigned succesfully!"})
             })
+
         } catch (e) {
             console.log(e)
-            req.status(400).json({message: "Failed to assign roles!"})
+            res.status(400).json({ message: "Failed to assign roles!" })
         }
     }
 
     async login(req, res) {
         try {
-            const { username, password } = req.body
-            const user = await User.findOne({ username: username })
+            const { email, password } = req.body
+            const user = await User.findOne({ email: email })
             if (!user) {
                 return res.status(400).json({
-                    message: `Can't find account with username ${username}!`,
+                    message: `Can't find account with email ${email}!`,
                 })
             }
 
@@ -112,7 +124,7 @@ class authController {
         }
     }
 
-    async getUsers(req, res) {
+    async userdata(req, res) {
         try {
             const users = await User.find()
             res.json(users)
@@ -121,6 +133,15 @@ class authController {
             res.status(400).json({ message: "Info gather failed!" })
         }
     }
+
+    async logout(req, res) {
+
+    }
+    
+    async edit(req, res) {
+
+    }
+    
 }
 
 module.exports = new authController()

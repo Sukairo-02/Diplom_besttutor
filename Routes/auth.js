@@ -16,7 +16,6 @@ router.post(
             "Password must have length between 4 and 24 characters!"
         ).isLength({ min: 4, max: 24 }),
     ],
-    ensureDate(req.dateOfBirth),
     controller.register
 )
 
@@ -32,11 +31,11 @@ router.post(
     controller.login
 )
 
-router.post("/logout", ensureDate(req.dateOfBirth), controller.logout)
+router.post("/logout", controller.logout)
 
 router.post("/edit", ensureAuth, controller.edit)
 
-router.post('/initroles', controller.initRoles)
+router.post("/initroles", controller.initRoles)
 
 router.get("/userdata", ensureAuth, controller.userdata)
 
