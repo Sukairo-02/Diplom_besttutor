@@ -1,5 +1,3 @@
-const config = require("config")
-
 var isDate = function (date) {
     return new Date(date) !== "Invalid Date" && !isNaN(new Date(date))
 }
