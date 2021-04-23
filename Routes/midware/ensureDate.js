@@ -9,7 +9,6 @@ module.exports = async function (req, res, next) {
             return res.status(403).json({message:"Error: missing date of birth!"})
         } else {
             if (!isDate(date)) {
-                console.log(date)
                 return res.status(403).json({message:"Error: invalid date of birth!"})
             } else {
                 let date1 = new Date(date)
