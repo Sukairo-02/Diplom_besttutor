@@ -85,15 +85,14 @@ class authController {
     async initRoles(req, res) {
         //dev function, will be deleted in prod version. Used to initialize list of available roles.
         try {
-            const {roles} = req.body
+            const { roles } = req.body
             console.log(roles)
-            roles.forEach(async (element) => {     
-                console.log(element)           
+            roles.forEach(async (element) => {
+                console.log(element)
                 const role = new Role({ value: element })
                 await role.save()
-                res.json({message: "Roles assigned succesfully!"})
             })
-
+            return res.json({ message: "Roles assigned succesfully!" })
         } catch (e) {
             console.log(e)
             res.status(400).json({ message: "Failed to assign roles!" })
@@ -134,14 +133,9 @@ class authController {
         }
     }
 
-    async logout(req, res) {
+    async logout(req, res) {}
 
-    }
-    
-    async edit(req, res) {
-
-    }
-    
+    async edit(req, res) {}
 }
 
 module.exports = new authController()
