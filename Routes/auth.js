@@ -10,7 +10,7 @@ router.post(
     "/register",
     [
         check("email", "Invalid email!").isEmail(),
-        check("username", "You must enter a username!").isEmpty(),
+        check("username", "You must enter a username!").notEmpty(),
         check(
             "password",
             "Password must have length between 4 and 24 characters!"

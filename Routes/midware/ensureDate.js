@@ -8,9 +8,13 @@ module.exports = function (date) {
             return false
         } else {
             if (!isDate(date)) {
+                console.log(date)
                 return false
             } else {
-                let year = new Date(date).getFullYear() - new Date.getFullYear()
+                let date1 = new Date(date)
+                let date2 = new Date()
+                let year = date2.getFullYear() - date1.getFullYear()
+
                 if (year < 4) {
                     return false
                 }
