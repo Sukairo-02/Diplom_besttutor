@@ -38,11 +38,11 @@ class authController {
             } = req.body //isTeacher is a boolean value. Is set to true if user decided
             //to register as teacher, false otherwise.
 
-            if (!ensureDate(dateOfBirth)) {
-                return res
-                    .status(403)
-                    .json({ message: "Invalith date of birth!" })
-            }
+            // if (!ensureDate(dateOfBirth)) {
+            //     return res
+            //         .status(403)
+            //         .json({ message: "Invalith date of birth!" })
+            // }
 
             const candidate = await User.findOne({ email: email })
             if (candidate) {
@@ -191,7 +191,9 @@ class authController {
         }
     }
 
-    async logout(req, res) {}
+    async logout(req, res) {
+
+    }
 
     async edit(req, res) {
         try {
@@ -220,11 +222,11 @@ class authController {
             }
 
             const { username, dateOfBirth, avatar } = req.body
-            if (!ensureDate(dateOfBirth)) {
-                return res
-                    .status(403)
-                    .json({ message: "Error: invalid date of birth!" })
-            }
+            // if (!ensureDate(dateOfBirth)) {
+            //     return res
+            //         .status(403)
+            //         .json({ message: "Error: invalid date of birth!" })
+            // }
 
             user.username = username
             user.dateOfBirth = dateOfBirth

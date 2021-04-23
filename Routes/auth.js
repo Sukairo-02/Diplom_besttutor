@@ -5,6 +5,7 @@ const { check } = require("express-validator")
 const authMidware = require("./midware/ensureAuth")
 const roleMidware = require("./midware/ensureRoles")
 const ensureAuth = require("./midware/ensureAuth")
+const ensureDate = require("./midware/ensureDate")
 
 router.post(
     "/register",
@@ -15,6 +16,7 @@ router.post(
             "password",
             "Password must have length between 4 and 24 characters!"
         ).isLength({ min: 4, max: 24 }),
+        ensureDate
     ],
     controller.register
 )
@@ -38,6 +40,7 @@ router.post(
     [
         check("username", "You must enter a username!").notEmpty(),
         ensureAuth,
+        ensureDate
     ],
     controller.edit
 )
