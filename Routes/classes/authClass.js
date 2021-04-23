@@ -1,11 +1,11 @@
-const User = require('./models/User')
-const Teacher = require('./models/Teacher')
-const Role = require('./models/Role')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const { validationResult } = require('express-validator')
-const config = require('config')
-const secret = config.get('server.secret')
+const User = require("./models/User")
+const Teacher = require("./models/Teacher")
+const Role = require("./models/Role")
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
+const { validationResult } = require("express-validator")
+const config = require("config")
+const secret = config.get("server.secret")
 
 const generateAccessToken = (id, roles) => {
     const payload = {
@@ -14,41 +14,70 @@ const generateAccessToken = (id, roles) => {
     }
 
     return jwt.sign(payload, secret, {
-        expiresIn: '24h',
+        expiresIn: "24h",
     })
 }
 
 class authController {
-    async registration(req, res) {
+    async register(req, res) {
         try {
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return res
                     .status(400)
-                    .json({ message: 'Registration error!', errors })
+                    .json({ message: "Registration error!", errors })
             }
 
-            const { username, password } = req.body
-            const candidate = await User.findOne({ username })
+            const {
+                username,
+                password,
+                email,
+                dateOfBirth,
+                isTeacher,
+            } = req.body //isTeacher is a boolean value. Is set to true if user decided
+            //to register as teacher, false otherwise.
+            const candidate = await User.findOne({ email: email })
             if (candidate) {
                 return res
                     .status(400)
-                    .json({ message: 'This username is unavailable!' })
+                    .json({ message: "This email is occupied!" })
             }
 
             const hashPass = bcrypt.hashSync(password, 7)
-            const userRole = await Role.findOne({ value: 'USER' })
+            const userRole = await Role.findOne({ value: "USER" })
             const user = new User({
                 username: username,
                 password: hashPass,
-                roles: [userRole.value],
+                email: email,
+                dateOfBirth: dateOfBirth,
+                roles: [userRole.value]
             })
+            
+            if(isTeacher)
+            {
+                let tchr = new Teacher()
+                tchr._id = user._id //mongodb has no relations, will use _id to find teacher's data if user is teacher.
+                await tchr.save()  //teacher must be forced into teacher data edit right after registration.
+            }
+
             await user.save()
 
-            return res.json({ message: 'You\'ve been registered succesfully!' })
+            return res.json({ message: "You've been registered succesfully!" })
         } catch (e) {
             console.log(e)
-            res.status(400).json({ message: 'Registration failed!' })
+            res.status(400).json({ message: "Registration failed!" })
+        }
+    }
+
+    async initRoles(req, res) { //dev function, will be deleted in prod version. Used to initialize list of available roles.
+        try {
+            req.roles.foreach(item => {
+                const role = new Roles({value: role})
+                await role.save()
+            })
+        } catch (e) {
+            console.log(e)
+            req.status(400).json({message: "Failed to assign roles!"})
         }
     }
 
@@ -64,7 +93,7 @@ class authController {
 
             const validPass = bcrypt.compareSync(password, user.password)
             if (!validPass) {
-                return res.status(400).json({ message: 'Invalid password!' })
+                return res.status(400).json({ message: "Invalid password!" })
             }
 
             const token = generateAccessToken(user._id, user.roles)
@@ -72,7 +101,7 @@ class authController {
             return res.json({ token })
         } catch (e) {
             console.log(e)
-            res.status(400).json({ message: 'Login failed!' })
+            res.status(400).json({ message: "Login failed!" })
         }
     }
 
@@ -82,7 +111,7 @@ class authController {
             res.json(users)
         } catch (e) {
             console.log(e)
-            res.status(400).json({ message: 'Info gather failed!' })
+            res.status(400).json({ message: "Info gather failed!" })
         }
     }
 }

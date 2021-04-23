@@ -7,11 +7,11 @@ const User = new Schema({
     dateOfBirth: { type: Date, required: true },
     avatar: { type: String },
     teacher: {
-        phone: { type: String, required: true, unique: true },
+        phone: { type: String, required: true, default: "Insert your phone number.", unique: true },
         desc: { type: String },
         education: { type: String },
         experience: { type: String },
-        city: { type: String, required: true },
+        city: { type: String, required: true, default:"Insert your city." },
     },
     roles: [{ type: String, ref: "Role" }], //possible roles: 'USER', 'TCHR'
 })
