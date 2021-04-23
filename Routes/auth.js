@@ -52,8 +52,6 @@ router.post(
     controller.editteacher
 )
     
-
-
 router.post("/initroles", controller.initRoles)
 
 router.get("/userdata", ensureAuth, controller.userdata)
