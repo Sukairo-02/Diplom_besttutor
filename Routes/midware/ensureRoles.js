@@ -3,11 +3,13 @@ const config = require('config')
 
 module.exports = function (roles) {
     return (req, res, next) => {
-        if(req.method === "OPTIONS"){
-            next()
-        }
-    
         try {
+            if (!req.headers.authorization) {
+                return res
+                .status(403)
+                .json({message: "User unauthorized!"}) 
+            }
+
             const token = req.headers.authorization.split(' ')[1]
             if (!token)
             {
@@ -27,7 +29,7 @@ module.exports = function (roles) {
             if(!hasRole) {
                 return res
                 .status(403)
-                .json({message: "Not enough permissions!"})
+                .json({message: "User is missing required role!"})
             }
 
             next()
