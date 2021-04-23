@@ -5,7 +5,7 @@ const app = express()
 app.use(express.json())
 
 const authRouter = require('./Routes/auth')
-app.use('api/auth', authRouter)
+app.use('/api/auth', authRouter)
 
 
 const PORT = process.env.PORT || config.get("server.PORT")
