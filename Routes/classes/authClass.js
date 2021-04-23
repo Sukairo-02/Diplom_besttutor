@@ -125,17 +125,7 @@ class authController {
 
     async userdata(req, res) {
         try {
-            if (!req.headers.authorization) {
-                return res.status(403).json({ message: "User unauthorized!" })
-            }
-
             const token = req.headers.authorization.split(" ")[1]
-            if (!token) {
-                return res
-                    .status(403)
-                    .json({ message: "Error: user unauthorized!" })
-            }
-
             const { id: usid, roles: roles } = jwt.verify(
                 token,
                 config.get("server.secret")
@@ -180,17 +170,7 @@ class authController {
 
     async lightdata(req, res) {
         try {
-            if (!req.headers.authorization) {
-                return res.status(403).json({ message: "User unauthorized!" })
-            }
-
             const token = req.headers.authorization.split(" ")[1]
-            if (!token) {
-                return res
-                    .status(403)
-                    .json({ message: "Error: user unauthorized!" })
-            }
-
             const { id: usid, roles: roles } = jwt.verify(
                 token,
                 config.get("server.secret")
@@ -215,10 +195,6 @@ class authController {
 
     async edit(req, res) {
         try {
-            if (!req.headers.authorization) {
-                return res.status(403).json({ message: "User unauthorized!" })
-            }
-
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
                 return res.status(400).json({ message: "Edit error!", errors })
@@ -243,7 +219,7 @@ class authController {
                     .json({ message: "Error: can't find user by id!" })
             }
 
-            const { username, email, dateOfBirth, avatar } = req.body
+            const { username, dateOfBirth, avatar } = req.body
             if (!ensureDate(dateOfBirth)) {
                 return res
                     .status(403)
@@ -251,36 +227,65 @@ class authController {
             }
 
             user.username = username
-            user.email = email
             user.dateOfBirth = dateOfBirth
             user.avatar = avatar
             await user.save()
-
-            let teacher
-            roles.forEach(async (role) => {
-                if (role === "TCHR") {
-                    teacher = await Teacher.findOne({ src: _id })
-                    if (!teacher) {
-                        return res.status(403).json({
-                            message: "Error: can't find teacher entity!",
-                        })
-                    }
-                }
-                const { phone, desc, education, experience, city } = req.body
-                teacher.phone = phone
-                teacher.desc = desc
-                teacher.education = education
-                teacher.experience = experience
-                teacher.city = city
-                await teacher.save()
-            })
 
             return res.json({ message: "Changes applied succesfully!" })
         } catch (e) {
             console.log(e)
             return res
                 .status(400)
-                .json({ message: "Error occured while editing data!" })
+                .json({ message: "Error occured while editing user data!" })
+        }
+    }
+
+    async editteacher(req, res) {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ message: "Edit error!", errors })
+            }
+
+            const token = req.headers.authorization.split(" ")[1]
+            if (!token) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: user unauthorized!" })
+            }
+
+            const { id: _id, roles: roles } = jwt.verify(
+                token,
+                config.get("server.secret")
+            )
+            
+            let isTeacher = false
+
+            roles.forEach(async (role) => {
+                if (role === "TCHR") {
+                    isTeacher = true
+                }
+            })
+
+            if(!isTeacher){
+                return res.status(403).json({message: "Error: can't find teacher entity in database!"})
+            }
+
+            let teacher = await Teacher.findOne({ src: _id })
+            const { phone, desc, education, experience, city } = req.body
+            teacher.phone = phone
+            teacher.desc = desc
+            teacher.education = education
+            teacher.experience = experience
+            teacher.city = city
+            await teacher.save()
+
+            return res.json({ message: "Changes applied succesfully!" })
+        } catch (e) {
+            console.log(e)
+            return res
+                .status(400)
+                .json({ message: "Error occured while editing teacher data!" })
         }
     }
 }

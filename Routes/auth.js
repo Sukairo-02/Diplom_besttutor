@@ -36,12 +36,23 @@ router.post("/logout", controller.logout)
 router.post(
     "/edit",
     [
-        check("email", "Invalid email!").isEmail(),
         check("username", "You must enter a username!").notEmpty(),
         ensureAuth,
     ],
     controller.edit
 )
+
+router.post(
+    "/editteacher",
+    [
+        check("phone", "Invalid phone number!").isMobilePhone(),
+        check("city", "You must enter a city!").notEmpty(),
+        ensureAuth,
+    ],
+    controller.editteacher
+)
+    
+
 
 router.post("/initroles", controller.initRoles)
 
