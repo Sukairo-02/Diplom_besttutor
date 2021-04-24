@@ -3,6 +3,10 @@ const config = require('config')
 
 module.exports = function (roles) {
     return (req, res, next) => {
+        if (req.method === "OPTIONS") {
+            return next()
+        }
+    
         try {
             if (!req.headers.authorization) {
                 return res
@@ -32,7 +36,7 @@ module.exports = function (roles) {
                 .json({message: "User is missing required role!"})
             }
 
-            next()
+            return next()
         } catch (e) {
             console.log(e)
             return res
