@@ -109,7 +109,7 @@ class authController {
 
             const token = generateAccessToken(user._id, user.roles)
 
-            return res.json({ token })
+            return res.json({ token: token, id: user._id })
         } catch (e) {
             console.log(e)
             res.status(500).json({ message: "Login failed!" })
