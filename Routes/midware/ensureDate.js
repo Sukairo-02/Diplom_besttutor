@@ -23,6 +23,6 @@ module.exports = async function (req, res, next) {
         next()
     } catch (e) {
         console.log(e)
-        return res.status(400).json({message:"Error occured while ensuring date of birth!"})
+        return res.status(500).json({message:"Error occured while ensuring date of birth!"})
     }
 }
