@@ -68,10 +68,10 @@ class authController {
 
             await user.save()
 
-            return res.json({ message: "You've been registered succesfully!" })
+            return res.status(201).json({ message: "You've been registered succesfully!" })
         } catch (e) {
             console.log(e)
-            res.status(400).json({ message: "Registration failed!" })
+            res.status(500).json({ message: "Registration failed!" })
         }
     }
 
@@ -85,10 +85,10 @@ class authController {
                 const role = new Role({ value: element })
                 await role.save()
             })
-            return res.json({ message: "Roles assigned succesfully!" })
+            return res.status(201).json({ message: "Roles assigned succesfully!" })
         } catch (e) {
             console.log(e)
-            res.status(400).json({ message: "Failed to assign roles!" })
+            res.status(500).json({ message: "Failed to assign roles!" })
         }
     }
 
@@ -112,7 +112,7 @@ class authController {
             return res.json({ token })
         } catch (e) {
             console.log(e)
-            res.status(400).json({ message: "Login failed!" })
+            res.status(500).json({ message: "Login failed!" })
         }
     }
 
@@ -156,7 +156,7 @@ class authController {
         } catch (e) {
             console.log(e)
             return res
-                .status(403)
+                .status(500)
                 .json({ message: "Error occured while getting user's data!" })
         }
     }
@@ -179,7 +179,7 @@ class authController {
         } catch (e) {
             console.log(e)
             return res
-                .status(403)
+                .status(500)
                 .json({ message: "Error occured while getting user's data!" })
         }
     }
@@ -224,7 +224,7 @@ class authController {
         } catch (e) {
             console.log(e)
             return res
-                .status(400)
+                .status(500)
                 .json({ message: "Error occured while editing user data!" })
         }
     }
@@ -273,7 +273,7 @@ class authController {
         } catch (e) {
             console.log(e)
             return res
-                .status(400)
+                .status(500)
                 .json({ message: "Error occured while editing teacher data!" })
         }
     }
