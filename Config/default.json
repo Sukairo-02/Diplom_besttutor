@@ -5,6 +5,7 @@
 
     "server": {
         "PORT": 5353,
-        "secret": "ThisIsAJWTSecretMightChangeLater"
+        "secret": "ThisIsAJWTSecretMightChangeLater",
+        "refreshSecret": "ThisIsARefreshTokensSecret"
     }
 }
