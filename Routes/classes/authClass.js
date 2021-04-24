@@ -44,7 +44,7 @@ class authController {
                     .json({ message: "This email is occupied!" })
             }
 
-            const hashPass = bcrypt.hashSync(password, 7)
+            const hashPass = await bcrypt.hash(password, 7)
             let userRole
             if (isTeacher) {
                 userRole = await Role.findOne({ value: "TCHR" })
@@ -102,7 +102,7 @@ class authController {
                 })
             }
 
-            const validPass = bcrypt.compareSync(password, user.password)
+            const validPass = await bcrypt.compare(password, user.password)
             if (!validPass) {
                 return res.status(401).json({ message: "Invalid password!" })
             }
