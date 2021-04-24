@@ -3,6 +3,10 @@ var isDate = function (date) {
 }
 
 module.exports = async function (req, res, next) {
+    if (req.method === "OPTIONS") {
+        return next()
+    }
+
     try {
         const {dateOfBirth: date} = req.body
         if (!date) {
@@ -20,7 +24,7 @@ module.exports = async function (req, res, next) {
                 }
             }
         }
-        next()
+        return next()
     } catch (e) {
         console.log(e)
         return res.status(500).json({message:"Error occured while ensuring date of birth!"})

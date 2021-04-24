@@ -2,6 +2,10 @@ const jwt = require('jsonwebtoken')
 const config = require('config')
 
 module.exports = function (req, res, next) {
+    if (req.method === "OPTIONS") {
+        return next()
+    }
+
     try {
         if (!req.headers.authorization)
         {
@@ -20,7 +24,7 @@ module.exports = function (req, res, next) {
 
         const decData = jwt.verify(token, config.get('server.secret'))
         req.user = decData
-        next()
+        return next()
     } catch (e) {
         console.log(e)
         return res
