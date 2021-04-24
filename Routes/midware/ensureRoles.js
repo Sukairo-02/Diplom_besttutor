@@ -10,7 +10,7 @@ module.exports = function (roles) {
         try {
             if (!req.headers.authorization) {
                 return res
-                .status(403)
+                .status(401)
                 .json({message: "User unauthorized!"}) 
             }
 
@@ -18,7 +18,7 @@ module.exports = function (roles) {
             if (!token)
             {
                 return res
-                .status(403)
+                .status(401)
                 .json({message: "User unauthorized!"})
             }
             
