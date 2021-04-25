@@ -292,7 +292,7 @@ class authController {
     async token(req, res) {
         try {
             const { refreshToken: refToken } = req.body
-            const candidate = Token.findOne({ value: refToken })
+            const candidate = await Token.findOne({ value: refToken })
             if (!candidate) {
                 return res
                     .status(401)
