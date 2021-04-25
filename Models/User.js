@@ -7,6 +7,7 @@ const User = new Schema({
     dateOfBirth: { type: Date, required: true },
     avatar: { type: String },
     roles: [{ type: String, ref: "Role" }], //possible roles: 'USER', 'TCHR'
+    isActive: { type: Boolean, required: true, default: false }
 })
 
 module.exports = model("User", User)
