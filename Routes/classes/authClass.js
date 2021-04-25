@@ -2,11 +2,20 @@ const User = require("../../models/User")
 const Teacher = require("../../models/Teacher")
 const Role = require("../../models/Roles")
 const Token = require("../../models/Token")
+const Validation = require("../../models/Validation")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { validationResult } = require("express-validator")
 const config = require("config")
 const secret = config.get("server.secret")
+const transporter = require("../mailtransporter/transporter")
+
+// var mailOptions = {
+//     from: "youremail@gmail.com",
+//     to: "myfriend@yahoo.com",
+//     subject: "Sending Email using Node.js",
+//     text: "That was easy!"
+// }
 
 const generateAccessToken = (id, roles) => {
     const payload = {
@@ -69,12 +78,106 @@ class authController {
 
             await user.save()
 
-            return res
-                .status(201)
-                .json({ message: "You've been registered succesfully!" })
+            return res.status(201).json({
+                message:
+                    "You've been registered succesfully. Before continuing, visit your email to verify it.",
+            })
         } catch (e) {
             console.log(e)
             res.status(500).json({ message: "Registration failed!" })
+        }
+    }
+
+    async sendValidation(req, res) {
+        try {
+            const { email } = req.body
+            const user = await User.findOne({ email: email })
+            if (!user) {
+                return res.status(401).json({ message: "Invalid email!" })
+            }
+
+            if (user.isActive) {
+                return res
+                    .status(403)
+                    .json({ message: "You have already validated your email!" })
+            }
+
+            await Validation.findOneAndDelete({ src: user._id })
+
+            const validToken = jwt.sign(
+                { id: user._id, roles: user.roles },
+                config.get("server.mailSecret"),
+                { expiresIn: "15m" }
+            )
+            const validToDB = new Validation({
+                value: validToken,
+                src: user._id,
+            })
+            await validToDB.save()
+
+            await transporter.sendMail(
+                {
+                    from: config.get("email.address"),
+                    to: email,
+                    subject: "Besttutor email verification",
+                    text: `To verify your mail, go to link: ${
+                        config.get("server.address") +
+                        "api/auth/verify/" +
+                        validToken
+                    }`, //Will be a proper front-end link instead of back-end.
+                },
+                function (error, info) {
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        console.log("Email sent: " + info.response)
+                    }
+                }
+            )
+
+            return res.status(201).json({
+                message:
+                    "Validation email has been sent to your e-mail address.",
+            })
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({
+                message: "Error occured while sending validation mail!",
+            })
+        }
+    }
+
+    async verifyEmail(req, res) {
+        try {
+            if (!req.params.token) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: no token found!" })
+            }
+
+            const { token } = req.params
+            const decData = jwt.verify(token, config.get("server.mailSecret"))
+
+            const candidate = await User.findOne({ _id: decData.id })
+            if (!candidate) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: invalid token!" })
+            }
+
+            candidate.isActive = true
+            await candidate.save()
+
+            return res
+                .status(201)
+                .json({
+                    message: "Email verified succesfully. You may log in now.",
+                })
+        } catch (e) {
+            console.log(e)
+            res.status(500).json({
+                message: "Error occured while verifying mail!",
+            })
         }
     }
 
@@ -108,6 +211,12 @@ class authController {
             const validPass = await bcrypt.compare(password, user.password)
             if (!validPass) {
                 return res.status(401).json({ message: "Invalid password!" })
+            }
+
+            if (!user.isActive) {
+                return res
+                    .status(403)
+                    .json({ message: "You must validate your email first!" })
             }
 
             const token = generateAccessToken(user._id, user.roles)

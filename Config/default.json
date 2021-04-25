@@ -12,8 +12,8 @@
     },
 
     "email": {
-        "service": "hotmail",
-        "address": "companymail@hotmail.com",
-        "password": "companymailpass"
+        "service": "gmail",
+        "address": "AndrewMailer.besttutor@gmail.com",
+        "password": "notshowingthat"
     }
 }
