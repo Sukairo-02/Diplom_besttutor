@@ -40,7 +40,7 @@ module.exports = function (roles) {
         } catch (e) {
             console.log(e)
             return res
-            .status(500)
+            .status(401)
             .json({message: "User unauthorized!"})
         }
     }

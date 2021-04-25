@@ -1,6 +1,7 @@
 const User = require("../../models/User")
 const Teacher = require("../../models/Teacher")
 const Role = require("../../models/Roles")
+const Token = require("../../models/Token")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { validationResult } = require("express-validator")
@@ -68,7 +69,9 @@ class authController {
 
             await user.save()
 
-            return res.status(201).json({ message: "You've been registered succesfully!" })
+            return res
+                .status(201)
+                .json({ message: "You've been registered succesfully!" })
         } catch (e) {
             console.log(e)
             res.status(500).json({ message: "Registration failed!" })
@@ -85,7 +88,9 @@ class authController {
                 const role = new Role({ value: element })
                 await role.save()
             })
-            return res.status(201).json({ message: "Roles assigned succesfully!" })
+            return res
+                .status(201)
+                .json({ message: "Roles assigned succesfully!" })
         } catch (e) {
             console.log(e)
             res.status(500).json({ message: "Failed to assign roles!" })
@@ -97,9 +102,7 @@ class authController {
             const { email, password } = req.body
             const user = await User.findOne({ email: email })
             if (!user) {
-                return res.status(401).json({
-                    message: `Can't find account with email ${email}!`,
-                })
+                return res.status(401).json({ message: "Invalid email!" })
             }
 
             const validPass = await bcrypt.compare(password, user.password)
@@ -108,8 +111,23 @@ class authController {
             }
 
             const token = generateAccessToken(user._id, user.roles)
+            const refToken = jwt.sign(
+                {
+                    id: user._id,
+                    roles: user.roles,
+                },
+                config.get("server.refreshSecret")
+            )
 
-            return res.json({ token: token, id: user._id })
+            const refToDB = new Token({ value: refToken, src: user._id })
+            await refToDB.save()
+
+            return res.json({
+                message: "You have succesfully logged in!",
+                token: token,
+                refreshToken: refToken,
+                id: user._id,
+            })
         } catch (e) {
             console.log(e)
             res.status(500).json({ message: "Login failed!" })
@@ -184,10 +202,6 @@ class authController {
         }
     }
 
-    async logout(req, res) {
-
-    }
-
     async edit(req, res) {
         try {
             const errors = validationResult(req)
@@ -202,10 +216,7 @@ class authController {
                     .json({ message: "Error: user unauthorized!" })
             }
 
-            const { id: _id } = jwt.verify(
-                token,
-                config.get("server.secret")
-            )
+            const { id: _id } = jwt.verify(token, config.get("server.secret"))
 
             let user = await User.findOne({ _id: _id })
             if (!user) {
@@ -247,7 +258,7 @@ class authController {
                 token,
                 config.get("server.secret")
             )
-            
+
             let isTeacher = false
 
             roles.forEach(async (role) => {
@@ -256,8 +267,10 @@ class authController {
                 }
             })
 
-            if(!isTeacher){
-                return res.status(403).json({message: "Error: can't find teacher entity in database!"})
+            if (!isTeacher) {
+                return res.status(403).json({
+                    message: "Error: can't find teacher entity in database!",
+                })
             }
 
             let teacher = await Teacher.findOne({ src: _id })
@@ -272,6 +285,63 @@ class authController {
             return res.json({ message: "Changes applied succesfully!" })
         } catch (e) {
             console.log(e)
+            return res
+                .status(500)
+                .json({ message: "Error occured while editing teacher data!" })
+        }
+    }
+
+    async logout(req, res) {
+        try {
+            const { refreshToken: refToken } = req.body
+
+            if (!refToken) {
+                return res
+                    .status(403)
+                    .json({ message: "Error: invalid refresh token!" })
+            }
+
+            await Token.findOneAndDelete({ value: refToken })
+
+            return res
+                .status(205)
+                .json({ message: "You have succesfully logged out!" })
+        } catch (e) {
+            return res
+                .status(500)
+                .json({ message: "Error occured while editing teacher data!" })
+        }
+    }
+
+    async token(req, res) {
+        try {
+            const { refreshToken: refToken } = req.body
+
+            if (!refToken) {
+                return res
+                    .status(401)
+                    .json({ message: "Error: invalid refresh token!" })
+            }
+
+            const candidate = Token.findOne({ value: refToken })
+            if (!candidate) {
+                return res
+                    .status(401)
+                    .json({ message: "Error: invalid refresh token!" })
+            }
+
+            const decToken = jwt.verify(
+                refToken,
+                config.get("server.refreshSecret")
+            )
+
+            const acToken = generateAccessToken(decToken.id, decToken.roles)
+
+            return res.json({
+                message: "Succesfully generated new access token!",
+                token: acToken,
+            })
+        } catch (e) {
             return res
                 .status(500)
                 .json({ message: "Error occured while editing teacher data!" })

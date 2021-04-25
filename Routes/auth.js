@@ -32,7 +32,7 @@ router.post(
     controller.login
 )
 
-router.post("/logout", controller.logout)
+router.delete("/logout", ensureAuth, controller.logout)
 
 router.post(
     "/edit",
@@ -59,5 +59,7 @@ router.post("/initroles", controller.initRoles)
 router.get("/userdata", ensureAuth, controller.userdata)
 
 router.get("/lightdata", ensureAuth, controller.lightdata)
+
+router.post("/token", controller.token)
 
 module.exports = router
