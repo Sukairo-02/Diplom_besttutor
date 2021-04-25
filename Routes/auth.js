@@ -6,6 +6,7 @@ const ensureRoles = require("./midware/ensureRoles")
 const ensureAuth = require("./midware/ensureAuth")
 const ensureDate = require("./midware/ensureDate")
 const ensureReftoken = require("./midware/ensureReftoken")
+const ensureMatchtokens = require("./midware/ensureMatchtokens")
 
 router.post(
     "/register",
@@ -33,7 +34,7 @@ router.post(
     controller.login
 )
 
-router.delete("/logout", [ensureAuth, ensureReftoken], controller.logout)
+router.delete("/logout", [ensureAuth, ensureReftoken, ensureMatchtokens], controller.logout)
 
 router.post(
     "/edit",
@@ -63,6 +64,6 @@ router.get("/lightdata", ensureAuth, controller.lightdata)
 
 router.post("/token", ensureReftoken, controller.token)
 
-router.delete("/killIntruders", [ensureAuth, ensureReftoken], controller.killIntruders)
+router.delete("/killIntruders", [ensureAuth, ensureReftoken, ensureMatchtokens], controller.killIntruders)
 
 module.exports = router
