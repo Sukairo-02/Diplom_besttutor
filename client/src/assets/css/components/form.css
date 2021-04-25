@@ -1,0 +1,131 @@
+.form--sign {
+	width: 100%;
+	max-width: 500px;
+}
+
+.form__title {
+	font-size: 24px;
+	margin: 0 0 30px 0;
+}
+
+.form__fieldset {
+	border: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+}
+
+.form__fieldset--flex {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+}
+
+.form__fieldset--center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.form__label {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 18px;
+	margin-bottom: 10px;
+	color: var(--secondary-text);
+}
+
+.form__link {
+	font-size: 14px;
+	color: var(--accent-color);
+}
+
+.form__btn {
+	height: 50px;
+}
+
+.form__btn:active,
+.form__btn:focus {
+	background-color: var(--accent-color);
+	color: #ffffff;
+}
+
+.form__input,
+.form__select,
+.form__desc {
+	width: 100%;
+	margin-bottom: 20px;
+	padding: 17px 20px;
+	background-color: var(--secondary-bg);
+	border-radius: var(--radius);
+	border: 1px solid var(--borders);
+	outline: none;
+	transition: outline 0.3s ease;
+}
+
+.form__input:focus,
+.form__select:focus,
+.form__desc:focus {
+	box-shadow: var(--outline);
+}
+
+.form__desc {
+	min-height: 120px;
+	resize: vertical;
+}
+
+.form__file {
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	border: 0;
+	padding: 0;
+	white-space: nowrap;
+	-webkit-clip-path: inset(100%);
+	clip-path: inset(100%);
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
+.form__drop-zone {
+	display: flex;
+	align-items: center;
+	position: relative;
+	height: 100px;
+	width: 100px;
+	text-align: center;
+	font-size: 12px;
+	margin-bottom: 40px;
+	border: 1px solid var(--borders);
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.form__img {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.form__edit {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 30px;
+	width: 30px;
+	bottom: -5px;
+	right: 5px;
+	background-color: var(--secondary-bg);
+	border-radius: 50%;
+	padding: 5px;
+	box-shadow: var(--shadow);
+}
+
+.form-mb {
+	margin-bottom: 20px;
+}

@@ -1,0 +1,88 @@
+.calendar {
+	max-width: 400px;
+	background-color: var(--secondary-bg);
+	padding: 40px;
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+}
+
+.calendar__month {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	font-size: 18px;
+	margin-bottom: 30px;
+}
+
+.calendar__left-btn,
+.calendar__right-btn {
+	cursor: pointer;
+	font-size: 20px;
+}
+
+.calendar__days {
+	display: flex;
+	gap: 5px;
+}
+
+.calendar__dates {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	margin-bottom: 30px;
+}
+
+.calendar__day {
+	text-align: center;
+	line-height: 40px;
+	height: 40px;
+	width: 40px;
+}
+
+.calendar__date {
+	height: 40px;
+	width: 40px;
+	display: flex;
+	justify-content: flex-end;
+	position: relative;
+	background-color: var(--calendar-cell);
+	border-style: none;
+	border-radius: var(--radius);
+	padding: 5px;
+	text-align: right;
+	font-size: 14px;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.calendar__date--active::after {
+	content: '';
+	position: absolute;
+	bottom: 5px;
+	left: 50%;
+	transform: translateX(-50%);
+	height: 5px;
+	width: 5px;
+	border-radius: 50%;
+	background-color: var(--event-marker);
+}
+
+.calendar__date:active,
+.calendar__date:focus {
+	background-color: transparent;
+	border: 1px solid var(--accent-color);
+}
+
+.calendar__event {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--event-block);
+	padding: 10px;
+	border-radius: var(--radius);
+	margin-bottom: 10px;
+}
+
+.calendar__event:last-child {
+	margin-bottom: 0;
+}

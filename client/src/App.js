@@ -1,9 +1,12 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { useRoutes } from './routes';
 
 const App = () => {
+	const routes = useRoutes(false);
 	return (
 		<div className='App'>
-			<header className='App-header'>App</header>
+			<Router>{routes}</Router>
 		</div>
 	);
 };

@@ -1,0 +1,33 @@
+.sign {
+	height: 100vh;
+	display: flex;
+}
+
+.sign__bg {
+	height: 100%;
+	width: auto;
+}
+
+.sign__info {
+	width: 100%;
+	padding: 20px 40px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.sign__logo {
+	text-align: right;
+	align-self: flex-end;
+	font-size: 40px;
+	margin: 0;
+}
+
+.sign__footer {
+	padding: 20px 0;
+}
+
+.sign__link {
+	color: var(--accent-color);
+}

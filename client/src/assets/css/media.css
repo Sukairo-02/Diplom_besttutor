@@ -1,0 +1,126 @@
+/* SIGN */
+@media screen and (max-width: 1150px) {
+	.sign__bg {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.sign__info {
+		padding: 20px;
+	}
+}
+
+/* HEADER */
+@media screen and (max-width: 435px) {
+	.header__ul,
+	.header__nav {
+		gap: 20px;
+	}
+}
+
+@media screen and (max-width: 375px) {
+	.header__menu {
+		left: 0;
+		width: max-content;
+	}
+}
+
+/* HEADER & CONTENT */
+@media screen and (max-width: 1280px) {
+	.wrapper {
+		grid-template-columns: 250px repeat(3, 1fr);
+	}
+}
+
+@media screen and (max-width: 700px) {
+	.header {
+		padding: 22px 10px;
+	}
+
+	.container {
+		padding: 20px 10px;
+	}
+}
+
+/* CONTENT */
+@media screen and (max-width: 1185px) {
+	.content {
+		flex-direction: column;
+	}
+
+	.content__aside {
+		flex: 1;
+	}
+}
+
+/* SUBJECT */
+@media screen and (max-width: 1400px) {
+	.subject__title,
+	.subject__count,
+	.subject__price,
+	.subject__schedule {
+		font-size: 16px;
+	}
+}
+
+@media screen and (max-width: 420px) {
+	.calendar {
+		max-width: 300px;
+		padding: 20px;
+	}
+
+	.calendar__month {
+		font-size: 16px;
+		margin-bottom: 20px;
+	}
+
+	.calendar__left-btn,
+	.calendar__right-btn {
+		font-size: 18px;
+	}
+
+	.calendar__dates {
+		margin-bottom: 20px;
+	}
+
+	.calendar__day,
+	.calendar__date {
+		height: 30px;
+		width: 30px;
+	}
+
+	.calendar__day {
+		line-height: 30px;
+	}
+
+	.calendar__event {
+		font-size: 14px;
+	}
+}
+
+/* SUBJECTLIST */
+@media screen and (max-width: 460px) {
+	.subjects-list {
+		justify-content: center;
+	}
+}
+
+/* SCHEDULE */
+@media screen and (max-width: 1200px) {
+	.teacher-big__dop {
+		display: none;
+	}
+}
+
+/* TEACHER-BIG */
+@media screen and (max-width: 750px) {
+	.teacher-big {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.teacher-big__container {
+		width: 100%;
+	}
+}

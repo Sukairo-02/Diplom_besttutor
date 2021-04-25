@@ -1,0 +1,32 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+:root {
+	--main-text: #000000;
+	--secondary-text: #505050;
+	--accent-color: #0070ff;
+
+	--main-bg: #f7f8fa;
+	--secondary-bg: #ffffff;
+
+	--borders: #e8e8e8;
+
+	--main-message: rgba(0, 112, 255, 0.3);
+	--secondary-message: #ececf3;
+
+	--calendar-cell: #ececf3;
+	--secondary-calendar-cell: #f9f9f9;
+	--event-block: #ececf3;
+
+	--event-marker: #ffd600;
+
+	--schedule-cell: #ececf3;
+	--highlight-cell: #66cd30;
+
+	--radius: 5px;
+	--outline: 0 0 0 4px rgba(0, 96, 223, 0.3);
+	--shadow: 0px 2px 7px rgba(0, 0, 0, 0.1);
+}
