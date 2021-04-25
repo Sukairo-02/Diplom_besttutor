@@ -137,10 +137,7 @@ class authController {
     async userdata(req, res) {
         try {
             const token = req.headers.authorization.split(" ")[1]
-            const { id: usid, roles: roles } = jwt.verify(
-                token,
-                config.get("server.secret")
-            )
+            const { id: usid, roles: roles } = req.user
             const user = await User.findOne({ _id: usid })
             let isTeacher
             const teacher = await Teacher.findOne({ src: usid })
@@ -181,11 +178,7 @@ class authController {
 
     async lightdata(req, res) {
         try {
-            const token = req.headers.authorization.split(" ")[1]
-            const { id: usid, roles: roles } = jwt.verify(
-                token,
-                config.get("server.secret")
-            )
+            const { id: usid, roles: roles } = req.user
             const user = await User.findOne({ _id: usid })
             return res.json({
                 _id: usid,
@@ -209,14 +202,7 @@ class authController {
                 return res.status(400).json({ message: "Edit error!", errors })
             }
 
-            const token = req.headers.authorization.split(" ")[1]
-            if (!token) {
-                return res
-                    .status(403)
-                    .json({ message: "Error: user unauthorized!" })
-            }
-
-            const { id: _id } = jwt.verify(token, config.get("server.secret"))
+            const { id: _id } = req.user
 
             let user = await User.findOne({ _id: _id })
             if (!user) {
@@ -247,17 +233,7 @@ class authController {
                 return res.status(400).json({ message: "Edit error!", errors })
             }
 
-            const token = req.headers.authorization.split(" ")[1]
-            if (!token) {
-                return res
-                    .status(403)
-                    .json({ message: "Error: user unauthorized!" })
-            }
-
-            const { id: _id, roles: roles } = jwt.verify(
-                token,
-                config.get("server.secret")
-            )
+            const { id: _id, roles: roles } = req.user
 
             let isTeacher = false
 
@@ -309,20 +285,13 @@ class authController {
         } catch (e) {
             return res
                 .status(500)
-                .json({ message: "Error occured while editing teacher data!" })
+                .json({ message: "Error occured while logging out!" })
         }
     }
 
     async token(req, res) {
         try {
             const { refreshToken: refToken } = req.body
-
-            if (!refToken) {
-                return res
-                    .status(401)
-                    .json({ message: "Error: invalid refresh token!" })
-            }
-
             const candidate = Token.findOne({ value: refToken })
             if (!candidate) {
                 return res
@@ -330,10 +299,7 @@ class authController {
                     .json({ message: "Error: invalid refresh token!" })
             }
 
-            const decToken = jwt.verify(
-                refToken,
-                config.get("server.refreshSecret")
-            )
+            const decToken = req.refreshToken
 
             const acToken = generateAccessToken(decToken.id, decToken.roles)
 
@@ -344,7 +310,27 @@ class authController {
         } catch (e) {
             return res
                 .status(500)
-                .json({ message: "Error occured while editing teacher data!" })
+                .json({ message: "Error occured while getting new token!" })
+        }
+    }
+
+    async killIntruders(req, res) {
+        try {
+            const { refreshToken: refToken } = req.body
+            const decToken = req.refreshToken
+
+            const sessions = await Token.find({ src: decToken.id })
+            sessions.forEach(async (element) => {
+                if (element.value !== refToken) {
+                    await element.delete()
+                }
+            })
+
+            return res.json({ message: "Other sessions have been terminated!" })
+        } catch (e) {
+            return res
+                .status(500)
+                .json({ message: "Error occured while ending other sessions!" })
         }
     }
 }

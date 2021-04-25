@@ -5,6 +5,7 @@ const { check } = require("express-validator")
 const ensureRoles = require("./midware/ensureRoles")
 const ensureAuth = require("./midware/ensureAuth")
 const ensureDate = require("./midware/ensureDate")
+const ensureReftoken = require("./midware/ensureReftoken")
 
 router.post(
     "/register",
@@ -32,7 +33,7 @@ router.post(
     controller.login
 )
 
-router.delete("/logout", ensureAuth, controller.logout)
+router.delete("/logout", [ensureAuth, ensureReftoken], controller.logout)
 
 router.post(
     "/edit",
@@ -60,6 +61,8 @@ router.get("/userdata", ensureAuth, controller.userdata)
 
 router.get("/lightdata", ensureAuth, controller.lightdata)
 
-router.post("/token", controller.token)
+router.post("/token", ensureReftoken, controller.token)
+
+router.delete("/killIntruders", [ensureAuth, ensureReftoken], controller.killIntruders)
 
 module.exports = router
