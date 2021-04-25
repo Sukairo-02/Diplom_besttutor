@@ -8,6 +8,7 @@
         "secret": "ThisIsAJWTSecretMightChangeLater",
         "refreshSecret": "ThisIsARefreshTokensSecret",
         "mailSecret": "ThisIsAMailSecret",
+        "passSecret": "ThisIsAPasswordRestorationSecret",
         "address": "http://localhost:5353/"
     },
 

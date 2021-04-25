@@ -17,7 +17,7 @@ router.post(
             "password",
             "Password must have length between 4 and 24 characters!"
         ).isLength({ min: 4, max: 24 }),
-        ensureDate
+        ensureDate,
     ],
     controller.register
 )
@@ -34,14 +34,18 @@ router.post(
     controller.login
 )
 
-router.delete("/logout", [ensureAuth, ensureReftoken, ensureMatchtokens], controller.logout)
+router.delete(
+    "/logout",
+    [ensureAuth, ensureReftoken, ensureMatchtokens],
+    controller.logout
+)
 
 router.post(
     "/edit",
     [
         check("username", "You must enter a username!").notEmpty(),
         ensureAuth,
-        ensureDate
+        ensureDate,
     ],
     controller.edit
 )
@@ -51,11 +55,11 @@ router.post(
     [
         check("phone", "Invalid phone number!").isMobilePhone(),
         check("city", "You must enter a city!").notEmpty(),
-        ensureRoles(["TCHR"])
+        ensureRoles(["TCHR"]),
     ],
     controller.editteacher
 )
-    
+
 router.post("/initroles", controller.initRoles)
 
 router.get("/userdata", ensureAuth, controller.userdata)
@@ -64,10 +68,27 @@ router.get("/lightdata", ensureAuth, controller.lightdata)
 
 router.post("/token", ensureReftoken, controller.token)
 
-router.delete("/killIntruders", [ensureAuth, ensureReftoken, ensureMatchtokens], controller.killIntruders)
+router.delete(
+    "/killIntruders",
+    [ensureAuth, ensureReftoken, ensureMatchtokens],
+    controller.killIntruders
+)
 
 router.post("/sendValidation", controller.sendValidation)
 
 router.post("/verify/:token", controller.verifyEmail)
+
+router.post("/sendResPassword", controller.sendRestorationEmail)
+
+router.post(
+    "/restorePass",
+    [
+        check(
+            "password",
+            "Password must have length between 4 and 24 characters!"
+        ).isLength({ min: 4, max: 24 }),
+    ],
+    controller.restorePass
+)
 
 module.exports = router

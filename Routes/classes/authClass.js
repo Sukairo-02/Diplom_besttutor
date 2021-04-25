@@ -3,19 +3,13 @@ const Teacher = require("../../models/Teacher")
 const Role = require("../../models/Roles")
 const Token = require("../../models/Token")
 const Validation = require("../../models/Validation")
+const Resetpass = require("../../models/Resetpass")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { validationResult } = require("express-validator")
 const config = require("config")
 const secret = config.get("server.secret")
 const transporter = require("../mailtransporter/transporter")
-
-// var mailOptions = {
-//     from: "youremail@gmail.com",
-//     to: "myfriend@yahoo.com",
-//     subject: "Sending Email using Node.js",
-//     text: "That was easy!"
-// }
 
 const generateAccessToken = (id, roles) => {
     const payload = {
@@ -84,7 +78,7 @@ class authController {
             })
         } catch (e) {
             console.log(e)
-            res.status(500).json({ message: "Registration failed!" })
+            return res.status(500).json({ message: "Registration failed!" })
         }
     }
 
@@ -115,6 +109,8 @@ class authController {
             })
             await validToDB.save()
 
+            let isMailError = false
+
             await transporter.sendMail(
                 {
                     from: config.get("email.address"),
@@ -126,14 +122,21 @@ class authController {
                         validToken
                     }`, //Will be a proper front-end link instead of back-end.
                 },
-                function (error, info) {
-                    if (error) {
-                        console.log(error)
-                    } else {
-                        console.log("Email sent: " + info.response)
-                    }
+            function (error, info) {
+                if (error) {
+                    console.log(error)
+                    isMailError = true
+                } else {
+                    console.log("Email sent: " + info.response)
                 }
-            )
+            }
+        )
+
+        if(isMailError) {
+            return res.status(500).json({
+                message: "Error occured while sending mail. Try again later.",
+            })
+        }
 
             return res.status(201).json({
                 message:
@@ -141,7 +144,7 @@ class authController {
             })
         } catch (e) {
             console.log(e)
-            res.status(500).json({
+            return res.status(500).json({
                 message: "Error occured while sending validation mail!",
             })
         }
@@ -168,14 +171,114 @@ class authController {
             candidate.isActive = true
             await candidate.save()
 
-            return res
-                .status(201)
-                .json({
-                    message: "Email verified succesfully. You may log in now.",
-                })
+            return res.status(201).json({
+                message: "Email verified succesfully. You may log in now.",
+            })
         } catch (e) {
             console.log(e)
-            res.status(500).json({
+            return res.status(500).json({
+                message: "Error occured while verifying mail!",
+            })
+        }
+    }
+
+    async sendRestorationEmail(req, res) {
+        try {
+            const { email } = req.body
+            const user = await User.findOne({ email: email })
+            if (!user) {
+                return res.status(401).json({ message: "Invalid email!" })
+            }
+
+            if (!user.isActive) {
+                return res
+                    .status(403)
+                    .json({ message: "Validate your email first!" })
+            }
+
+            await Resetpass.findOneAndDelete({ src: user._id })
+
+            const validToken = jwt.sign(
+                { id: user._id, roles: user.roles },
+                config.get("server.passSecret"),
+                { expiresIn: "15m" }
+            )
+            const validToDB = new Resetpass({
+                value: validToken,
+                src: user._id,
+            })
+            await validToDB.save()
+
+            let isMailError = false
+            await transporter.sendMail(
+                {
+                    from: config.get("email.address"),
+                    to: email,
+                    subject: "Besttutor password reset code",
+                    text: `To reset your password, use this code: ${validToken}`, //Will be a proper front-end link instead of back-end.
+                },
+                function (error, info) {
+                    if (error) {
+                        console.log(error)
+                        isMailError = true
+                    } else {
+                        console.log("Email sent: " + info.response)
+                    }
+                }
+            )
+
+            if(isMailError) {
+                return res.status(500).json({
+                    message: "Error occured while sending mail. Try again later.",
+                })
+            }
+
+            return res.status(201).json({
+                message:
+                    "Validation email has been sent to your e-mail address.",
+            })
+        } catch (e) {
+            console.log(e)
+            return res.status(500).json({
+                message: "Error occured while verifying mail!",
+            })
+        }
+    }
+
+    async restorePass(req, res) {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) {
+                return res
+                    .status(400)
+                    .json({ message: "Password restoration error!", errors })
+            }
+
+            const { resToken, password } = req.body
+            if (!resToken) {
+                return res.status(403).json({ message: "Invalid token!" })
+            }
+
+            const decData = jwt.verify(
+                resToken,
+                config.get("server.passSecret")
+            )
+
+            const candidate = await User.findOne({ _id: decData.id })
+            if (!candidate) {
+                return res
+                    .status(403)
+                    .json({ message: "This account doesn't exist!" })
+            }
+            candidate.password = await bcrypt.hash(password, 7)
+            await candidate.save()
+
+            return res
+                .status(201)
+                .json({ message: "Password changed succesfully!" })
+        } catch (e) {
+            console.log(e)
+            return res.status(500).json({
                 message: "Error occured while verifying mail!",
             })
         }
@@ -196,7 +299,7 @@ class authController {
                 .json({ message: "Roles assigned succesfully!" })
         } catch (e) {
             console.log(e)
-            res.status(500).json({ message: "Failed to assign roles!" })
+            return res.status(500).json({ message: "Failed to assign roles!" })
         }
     }
 
@@ -239,13 +342,12 @@ class authController {
             })
         } catch (e) {
             console.log(e)
-            res.status(500).json({ message: "Login failed!" })
+            return res.status(500).json({ message: "Login failed!" })
         }
     }
 
     async userdata(req, res) {
         try {
-            const token = req.headers.authorization.split(" ")[1]
             const { id: usid, roles: roles } = req.user
             const user = await User.findOne({ _id: usid })
             let isTeacher
