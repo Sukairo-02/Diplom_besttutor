@@ -21,8 +21,8 @@ module.exports = function (roles) {
                 .status(401)
                 .json({message: "User unauthorized!"})
             }
-            
-            const {roles: userRoles} = jwt.verify(token, config.get('server.secret'))
+            const decData = jwt.verify(token, config.get('server.secret'))
+            const {roles: userRoles} = decData
             let hasRole = false
             userRoles.forEach(role => {
                 if(roles.includes(role)) {
@@ -36,11 +36,12 @@ module.exports = function (roles) {
                 .json({message: "User is missing required role!"})
             }
 
+            req.user = decData
             return next()
         } catch (e) {
             console.log(e)
             return res
-            .status(500)
+            .status(401)
             .json({message: "User unauthorized!"})
         }
     }
