@@ -66,4 +66,8 @@ router.post("/token", ensureReftoken, controller.token)
 
 router.delete("/killIntruders", [ensureAuth, ensureReftoken, ensureMatchtokens], controller.killIntruders)
 
+router.post("/sendValidation", controller.sendValidation)
+
+router.post("/verify/:token", controller.verifyEmail)
+
 module.exports = router

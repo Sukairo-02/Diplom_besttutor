@@ -6,6 +6,14 @@
     "server": {
         "PORT": 5353,
         "secret": "ThisIsAJWTSecretMightChangeLater",
-        "refreshSecret": "ThisIsARefreshTokensSecret"
+        "refreshSecret": "ThisIsARefreshTokensSecret",
+        "mailSecret": "ThisIsAMailSecret",
+        "address": "http://localhost:5353/"
+    },
+
+    "email": {
+        "service": "gmail",
+        "address": "AndrewMailer.besttutor@gmail.com",
+        "password": "notshowingthat"
     }
 }
