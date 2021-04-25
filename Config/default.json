@@ -9,5 +9,11 @@
         "refreshSecret": "ThisIsARefreshTokensSecret",
         "mailSecret": "ThisIsAMailSecret",
         "address": "http://localhost:5353/"
+    },
+
+    "email": {
+        "service": "hotmail",
+        "address": "companymail@hotmail.com",
+        "password": "companymailpass"
     }
 }
