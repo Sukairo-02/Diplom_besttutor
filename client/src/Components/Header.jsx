@@ -1,5 +1,6 @@
 import React from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 import img from '../assets/img/people/1.jpeg';
 
@@ -33,13 +34,13 @@ const Header = () => {
 			<nav className='header__nav'>
 				<ul className='header__ul'>
 					<li className='header__li'>
-						<a href='#'>Предметы</a>
+						<Link to='/subjects'>Предметы</Link>
 					</li>
 					<li className='header__li'>
-						<a href='#'>Учителя</a>
+						<Link to='/teachers'>Учителя</Link>
 					</li>
 					<li className='header__li'>
-						<a href='#'>Оффлайн уроки</a>
+						<Link to='/offlineLessons'>Оффлайн уроки</Link>
 					</li>
 				</ul>
 				<img
@@ -53,13 +54,13 @@ const Header = () => {
 					<div className='header__menu'>
 						<ul>
 							<li>
-								<a href='#'>Чаты</a>
+								<Link to='/chats'>Чаты</Link>
 							</li>
 							<li>
-								<a href='#'>Предметы</a>
+								<Link to='/userSubjects'>Предметы</Link>
 							</li>
 							<li>
-								<a href='#'>Редактировать профиль</a>
+								<Link to='/editProfile'>Редактировать профиль</Link>
 							</li>
 							<li>
 								<a href='/login' onClick={logoutHandler}>

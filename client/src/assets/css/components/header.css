@@ -50,7 +50,7 @@
 }
 
 .header__li a:hover,
-.header__li a:focus {
+.header__li a:active {
 	color: var(--accent-color);
 }
 
