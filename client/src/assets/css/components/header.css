@@ -68,7 +68,6 @@
 }
 
 .header__menu {
-	visibility: hidden;
 	position: absolute;
 	right: 0;
 	top: 130%;

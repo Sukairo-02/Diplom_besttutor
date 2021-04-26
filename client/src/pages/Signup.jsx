@@ -1,14 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { useHttp } from '../hooks/http.hook';
 import img from '../assets/img/2.webp';
 
 const Signup = () => {
+	const { loading, request } = useHttp();
 	const [form, setForm] = React.useState({
-		role: 'Ученик',
+		isTeacher: 'false',
 		email: '',
-		name: '',
-		date: '',
+		username: '',
+		dateOfBirth: '',
 		password: '',
 	});
 
@@ -19,10 +21,18 @@ const Signup = () => {
 		});
 	};
 
-	const formHandler = (event) => {
+	const formHandler = async (event) => {
 		event.preventDefault();
 
-		console.log(form);
+		try {
+			const data = await request('/api/auth/register', 'POST', { ...form });
+			await request('/api/auth/sendValidation', 'POST', {
+				email: form.email,
+			});
+			alert(data.message);
+		} catch (e) {
+			alert(e.message);
+		}
 	};
 
 	return (
@@ -35,17 +45,17 @@ const Signup = () => {
 				<form className='form form--sign' onSubmit={formHandler}>
 					<h2 className='form__title'>Регистрация</h2>
 					<fieldset className='form__fieldset'>
-						<label className='form__label' htmlFor='role'>
+						<label className='form__label' htmlFor='isTeacher'>
 							Ваша роль
 						</label>
 						<select
 							className='form__select'
-							name='role'
-							id='editSubject'
+							name='isTeacher'
+							id='isTeacher'
 							required
 							onChange={inputChangeHandler}>
-							<option value='Ученик'>Ученик</option>
-							<option value='Учитель'>Учитель</option>
+							<option value='false'>Ученик</option>
+							<option value='true'>Учитель</option>
 						</select>
 					</fieldset>
 					<fieldset className='form__fieldset'>
@@ -63,28 +73,28 @@ const Signup = () => {
 					</fieldset>
 					<fieldset className='form__fieldset form__fieldset--flex'>
 						<fieldset className='form__fieldset'>
-							<label className='form__label' htmlFor='name'>
+							<label className='form__label' htmlFor='username'>
 								Имя и Фамилия
 							</label>
 							<input
 								className='form__input'
-								id='name'
+								id='username'
 								type='text'
-								name='name'
+								name='username'
 								required
 								onChange={inputChangeHandler}
 							/>
 						</fieldset>
 					</fieldset>
 					<fieldset className='form__fieldset'>
-						<label className='form__label' htmlFor='date'>
+						<label className='form__label' htmlFor='dateOfBirth'>
 							Дата рождения
 						</label>
 						<input
 							className='form__input'
-							id='date'
+							id='dateOfBirth'
 							type='date'
-							name='date'
+							name='dateOfBirth'
 							required
 							onChange={inputChangeHandler}
 						/>
@@ -102,7 +112,10 @@ const Signup = () => {
 							onChange={inputChangeHandler}
 						/>
 					</fieldset>
-					<button className='btn form__btn w-100' type='submit'>
+					<button
+						className='btn form__btn w-100'
+						type='submit'
+						disabled={loading}>
 						Зарегистрироваться
 					</button>
 				</form>
