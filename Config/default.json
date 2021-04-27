@@ -12,6 +12,10 @@
 		"address": "http://localhost:5353/"
 	},
 
+	"client": {
+		"address": "http://localhost:3000/"
+	},
+
 	"email": {
 		"service": "gmail",
 		"address": "AndrewMailer.besttutor@gmail.com",
