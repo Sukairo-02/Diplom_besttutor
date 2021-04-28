@@ -323,11 +323,9 @@ class authController {
 		try {
 			const { id: usid, roles: roles } = req.user;
 			const user = await User.findOne({ _id: usid });
-			let isTeacher;
 			const teacher = await Teacher.findOne({ src: usid });
 
 			if (teacher) {
-				isTeacher = true;
 				return res.json({
 					_id: usid,
 					username: user.username,
@@ -342,7 +340,6 @@ class authController {
 					city: teacher.city,
 				});
 			} else {
-				isTeacher = false;
 				return res.json({
 					_id: usid,
 					username: user.username,
