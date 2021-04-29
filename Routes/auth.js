@@ -75,7 +75,9 @@ router.get('/userdataID/:id', controller.userdataID) //same but full data
 
 router.get('/lightdataID/:id', controller.lightdataID) //get data by user's id
 
-router.get('userlist/:role', controller.userlist) //get list of users by their role ("TCHR"/"USER"). Returns full list of users if role is not specified.
+router.get('/userlist/:role', controller.userlist) //get list of users by their role ("TCHR"/"USER").
+
+router.get('/userlist/', controller.userlist) //Returns full list of users if role is not specified.
 
 router.post('/token', ensureReftoken, controller.token)
 

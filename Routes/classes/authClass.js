@@ -484,25 +484,27 @@ class authController {
 			let teacher = await Teacher.findOne({ src: _id })
 			const { desc, education, experience, subject } = req.body
 
-			let dbSubject = await Subjects.findOne({ name: subject })
+			const dbSubject = await Subjects.findOne({ name: subject })
 			if (!dbSubject) {
 				return res
 					.status(403)
 					.json({ message: 'Error: non-existent subject!' })
 			}
 
-			if (teacher.subject.name !== dbSubject.name) {
-				let oldSubject = await Subjects.findOne({name: teacher.subject.name})
-				let index = oldSubject.Teachers.indexOf(teacher.src)
-				if (index !== -1) {
-					oldSubject.Teachers.splice(index, 1)
+			if (teacher.subject) {
+				if (teacher.subject !== dbSubject.name) {
+					const oldSubject = await Subjects.findOne({
+						name: teacher.subject
+					})
+
+					oldSubject.Teachers.pull(teacher.src)
 					await oldSubject.save()
 				}
-
-				dbSubject.Teachers.push(teacher.src)
-				await dbSubject.save()
-				teacher.subject = dbSubject
 			}
+
+			dbSubject.Teachers.push(teacher.src)
+			teacher.subject = dbSubject.name
+			await dbSubject.save()
 
 			teacher.desc = desc
 			teacher.education = education

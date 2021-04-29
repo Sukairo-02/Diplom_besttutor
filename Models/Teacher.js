@@ -5,7 +5,7 @@ const Teacher = new Schema({
 	desc: { type: String },
 	education: { type: String },
 	experience: { type: String },
-	subject: { type: String, ref: 'Subjects' },
+	subject: { type: String },
 	isActive: { type: Boolean, required: true, default: false },
 })
 
