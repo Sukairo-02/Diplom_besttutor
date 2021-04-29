@@ -1,7 +1,7 @@
 const Router = require('express')
 const router = new Router()
 const controller = require('./classes/authClass')
-const { check } = require('express-validator')
+const { check, oneOf } = require('express-validator')
 const ensureRoles = require('./midware/ensureRoles')
 const ensureAuth = require('./midware/ensureAuth')
 const ensureDate = require('./midware/ensureDate')
@@ -75,7 +75,7 @@ router.get('/userdataID/:id', controller.userdataID) //same but full data
 
 router.get('/lightdataID/:id', controller.lightdataID) //get data by user's id
 
-router.get('userlist/:role', contoller.userlist) //get list of users by their role ("TCHR"/"USER"). Returns full list of users if role is not specified.
+router.get('userlist/:role', controller.userlist) //get list of users by their role ("TCHR"/"USER"). Returns full list of users if role is not specified.
 
 router.post('/token', ensureReftoken, controller.token)
 
