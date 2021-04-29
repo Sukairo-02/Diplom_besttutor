@@ -1,0 +1,16 @@
+.content {
+	display: flex;
+	gap: 40px;
+}
+
+.content__main {
+	flex: 1 1 auto;
+}
+
+.content__aside {
+	flex: 0 1 400px;
+}
+
+.content__empty {
+	font-size: 22px;
+}

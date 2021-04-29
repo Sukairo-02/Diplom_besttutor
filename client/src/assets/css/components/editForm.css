@@ -1,0 +1,15 @@
+.edit-form {
+	background-color: var(--secondary-bg);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+}
+
+.edit-form--big {
+	/* max-width: 820px; */
+	padding: 20px 60px;
+}
+
+.edit-form--little {
+	/* max-width: 400px; */
+	padding: 20px;
+}

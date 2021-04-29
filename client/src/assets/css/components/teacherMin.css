@@ -1,0 +1,55 @@
+.teacher-min {
+	max-width: 320px;
+	background-color: var(--secondary-bg);
+	padding: 20px;
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+}
+
+.teacher-min__container {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.teacher-min__container--between {
+	justify-content: space-between;
+}
+
+.teacher-min__container:last-child {
+	margin-bottom: 0;
+}
+
+.teacher-min__avatar {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-right: 20px;
+}
+
+.teacher-min__name {
+	font-size: 20px;
+	margin-bottom: 5px;
+}
+
+.teacher-min__subject {
+	font-size: 16px;
+	color: var(--secondary-text);
+}
+
+.teacher-min__info {
+	margin-right: 20px;
+}
+
+.teacher-min__type {
+	margin-bottom: 10px;
+}
+
+.teacher-min__type,
+.teacher-min__rating {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 16px;
+}
