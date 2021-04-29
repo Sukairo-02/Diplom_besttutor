@@ -22,8 +22,8 @@ module.exports = function (roles) {
         } catch (e) {
             console.log(e)
             return res
-            .status(401)
-            .json({message: "User unauthorized!"})
+            .status(500)
+            .json({message: "Error occured while validating teacher's data!"})
         }
     }
 }
