@@ -484,14 +484,14 @@ class authController {
 			let teacher = await Teacher.findOne({ src: _id })
 			const { desc, education, experience, subject } = req.body
 
-			const subject = await Subjects.findOne({ name: subject })
-			if (!subject) {
+			const dbSubject = await Subjects.findOne({ name: subject })
+			if (!dbSubject) {
 				return res
 					.status(403)
 					.json({ message: 'Error: non-existent subject!' })
 			}
 
-			teacher.subject = subject
+			teacher.subject = dbSubject
 			teacher.desc = desc
 			teacher.education = education
 			teacher.experience = experience
@@ -642,7 +642,7 @@ class authController {
 		try {
 			const { role } = req.params
 			let users
-			
+
 			if (role) {
 				const dbRole = await Role.findOne({ value: role })
 				if (!dbRole) {
