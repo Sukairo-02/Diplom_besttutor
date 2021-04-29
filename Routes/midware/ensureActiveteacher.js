@@ -1,7 +1,7 @@
 //SHOULD ONLY BE USED AFTER ensureRoles(['TCHR'...])
 const Teacher = require ('../../models/Teacher')
 
-module.exports = function (roles) {
+module.exports = async function (roles) {
     return (req, res, next) => {
         if (req.method === "OPTIONS") {
             return next()
