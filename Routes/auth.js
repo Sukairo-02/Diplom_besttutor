@@ -44,6 +44,10 @@ router.post(
 	'/edit',
 	[
 		check('username', 'You must enter a username!').notEmpty(),
+		oneOf(
+			[check('phone').isEmpty(), check('phone').isMobilePhone()],
+			'Unable to parse phone number.'
+		),
 		ensureAuth,
 		ensureDate,
 	],
@@ -53,10 +57,11 @@ router.post(
 router.post(
 	'/editteacher',
 	[
-		check('phone', 'Invalid phone number!').isMobilePhone(),
-		check('city', 'You must enter a city!').notEmpty(),
+		check('desc','You must write your description!').notEmpty(),
+		check('education', 'You must specify your education!').notEmpty(),
+		check('experience', 'Write something about your job or experience!').notEmpty(), 
 		ensureRoles(['TCHR']),
-	],
+	], //subject will be checked in function.
 	controller.editteacher
 )
 
@@ -66,9 +71,9 @@ router.get('/userdata', ensureAuth, controller.userdata)
 
 router.get('/lightdata', ensureAuth, controller.lightdata)
 
-router.get('/userdata/:id', controller.userdataID) //same but full data
+router.get('/userdataID/:id', controller.userdataID) //same but full data
 
-router.get('/lightdata/:id', controller.lightdataID) //get data by user's id
+router.get('/lightdataID/:id', controller.lightdataID) //get data by user's id
 
 router.get('userlist/:role', contoller.userlist) //get list of users by their role ("TCHR"/"USER"). Returns full list of users if role is not specified.
 
