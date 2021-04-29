@@ -8,4 +8,6 @@ const ensureActiveteacher = require('./midware/ensureActiveteacher')
 
 router.post('/initSubjects', controller.initSubjects)
 
+router.get('/getSubjects', controller.getSubjects)
+
 module.exports = router
