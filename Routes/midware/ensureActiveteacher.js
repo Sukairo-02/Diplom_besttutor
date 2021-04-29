@@ -17,7 +17,7 @@ module.exports = function (roles) {
                 return res.status(403).json({message:"Error: you must fill out your teacher data first!"})
             }
 
-            res.dbTeacher = candidate
+            req.dbTeacher = candidate
             return next()
         } catch (e) {
             console.log(e)
