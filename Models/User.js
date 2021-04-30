@@ -12,6 +12,7 @@ const User = new Schema({
 	avatar: { type: String },
 	roles: [{ type: String, ref: 'Role' }], //possible roles: 'USER', 'TCHR'
 	isActive: { type: Boolean, required: true, default: false },
+	courses: [{ type: String }], //courses where user participates as student
 })
 
 module.exports = model('User', User)
