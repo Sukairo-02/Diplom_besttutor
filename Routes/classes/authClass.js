@@ -444,6 +444,7 @@ class authController {
 				city,
 				address,
 				phone,
+				password
 			} = req.body
 			user.username = username
 			user.dateOfBirth = dateOfBirth
@@ -452,6 +453,7 @@ class authController {
 			user.city = city
 			user.address = address
 			user.phone = phone
+			user.password = await bcrypt.hash(password, 7)
 			await user.save()
 
 			return res.json({ message: 'Changes applied succesfully!' })
