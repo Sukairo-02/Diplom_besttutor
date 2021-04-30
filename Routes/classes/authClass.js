@@ -369,10 +369,13 @@ class authController {
 					city: user.city,
 					address: user.address,
 					roles: roles,
+					courses: user.courses,
+					balance: user.balance,
 					desc: teacher.desc,
 					education: teacher.education,
 					exprerience: teacher.exprerience,
 					subject: teacher.subject,
+					teacherCourses: teacher.courses
 				})
 			} else {
 				return res.json({
@@ -386,6 +389,8 @@ class authController {
 					city: user.city,
 					address: user.address,
 					roles: roles,
+					courses: user.courses,
+					balance: user.balance
 				})
 			}
 		} catch (e) {
@@ -625,10 +630,12 @@ class authController {
 					city: user.city,
 					address: user.address,
 					roles: user.roles,
+					courses: user.courses,
 					desc: teacher.desc,
 					education: teacher.education,
 					exprerience: teacher.exprerience,
 					subject: teacher.subject,
+					teacherCourses: teacher.courses
 				})
 			} else {
 				return res.json({
@@ -642,6 +649,7 @@ class authController {
 					city: user.city,
 					address: user.address,
 					roles: user.roles,
+					courses: user.courses,
 				})
 			}
 		} catch (e) {
