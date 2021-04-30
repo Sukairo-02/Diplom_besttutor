@@ -5,7 +5,7 @@ const Courses = new Schema({
 	title: { type: String, required: true },
 	desc: { type: String },
 	students: [{ type: String }],
-	price: {type: Number, required: true, default: 0}, 
+	price: { type: Number, required: true, default: 0 },
 	lessons: [
 		{
 			date: { type: Date, required: true },
@@ -17,11 +17,7 @@ const Courses = new Schema({
 			},
 		},
 	],
-	assignments: [
-		{
-			source: { type: String },
-		},
-	],
+	assignments: [{ type: String }],
 })
 
 module.exports = model('Courses', Courses)
