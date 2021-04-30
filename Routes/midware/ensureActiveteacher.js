@@ -14,7 +14,7 @@ module.exports = async function (req, res, next) {
 				.json({ message: 'Error: nonexistent teacher!' })
 		}
 
-		if (!Teacher.isActive) {
+		if (!candidate.isActive) {
 			return res
 				.status(403)
 				.json({
