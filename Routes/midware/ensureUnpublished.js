@@ -1,5 +1,4 @@
 //SHOULD ONLY BE USED AFTER ensureOwner
-const Teacher = require('../../models/Teacher')
 
 module.exports = async function (req, res, next) {
 	if (req.method === 'OPTIONS') {

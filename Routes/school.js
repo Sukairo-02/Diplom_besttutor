@@ -35,6 +35,17 @@ router.post(
 ) //adds new course of current user if user is teacher
 
 router.post(
+	'/editcourse',
+	[
+		check('title', "You must enter course's title!").notEmpty(),
+		ensureRoles(['TCHR']),
+		ensureActiveteacher,
+		ensureOwner,
+	],
+	controller.editcourse
+) //edits existing course with [_id: courseID]
+
+router.post(
 	'/newlesson',
 	[
 		ensureRoles(['TCHR']),
@@ -53,8 +64,8 @@ router.delete(
 		ensureOwner,
 		ensureUnpublished,
 	],
-	controller.newlesson
-) //adds new lesson to the course if user is teacher and owns course
+	controller.dellesson
+) //deletes lesson by it's ID (lessonID)
 
 router.post(
 	'/subscribe/:id',
@@ -77,7 +88,7 @@ router.post(
 ) //refund to all students of course [_id: courseID]
 
 router.post(
-	'/blockcourse/:id',
+	'/blockcourse/',
 	[ensureRoles(['TCHR']), ensureActiveteacher, ensureOwner],
 	controller.blockcourse
 ) //block course with [_id: courseID]

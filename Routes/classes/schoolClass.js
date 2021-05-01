@@ -57,12 +57,14 @@ class schoolController {
 	async courses(req, res) {
 		try {
 			const { id } = req.user
-			const teacher = await Teachers.findOne({ src: id })
+			const teacher = await Teacher.findOne({ src: id })
 			if (!teacher) {
 				return res.status(403).json({ message: 'Error: invalid ID' })
 			}
 
-			const courses = await Courses.find({ id: { $in: teacher.courses } })
+			const courses = await Courses.find({
+				_id: { $in: teacher.courses },
+			})
 			return res.json({ courses })
 		} catch (e) {
 			console.log(e)
@@ -75,12 +77,14 @@ class schoolController {
 	async coursesByID(req, res) {
 		try {
 			const { id } = req.params
-			const teacher = await Teachers.findOne({ src: id })
+			const teacher = await Teacher.findOne({ src: id })
 			if (!teacher) {
 				return res.status(403).json({ message: 'Error: invalid ID' })
 			}
 
-			const courses = await Courses.find({ id: { $in: teacher.courses } })
+			const courses = await Courses.find({
+				_id: { $in: teacher.courses },
+			})
 			return res.json({ courses })
 		} catch (e) {
 			console.log(e)
@@ -169,7 +173,10 @@ class schoolController {
 				desc,
 				price,
 			})
+
 			await candidate.save()
+			await req.dbTeacher.courses.push(candidate._id)
+			await req.dbTeacher.save()
 
 			return res
 				.status(201)
@@ -182,11 +189,39 @@ class schoolController {
 		}
 	}
 
+	async editcourse(req, res) {
+		try {
+			const course = req.course
+			const { title, desc, price } = req.body
+			if (!Number.isInteger(price) || price < 0) {
+				return res
+					.status(403)
+					.json({ message: 'Error: price must be positive integer!' })
+			}
+
+			course.title = title
+			course.desc = desc
+			course.price = price
+
+			await course.save()
+			return res
+				.status(201)
+				.json({ message: 'Course has been succesfully edited!' })
+		} catch (e) {
+			console.log(e)
+			return res.status(500).json({
+				message: 'Error: failed to edit course!',
+			})
+		}
+	}
+
 	async deletecourse(req, res) {
 		try {
 			const course = req.course
+			const teacher = await Teacher.findOne({ src: course.teacher })
+			await teacher.courses.pull(course._id)
 			await course.delete()
-
+			await teacher.save()
 			return res
 				.status(201)
 				.json({ message: 'Course deleted succesfully!' })
@@ -219,9 +254,13 @@ class schoolController {
 
 			let isOverlap = false
 			course.lessons.forEach((e) => {
+				console.log('E.dates: ', e.date.getTime(), e.endDate.getTime())
+				console.log('Dates: ', d1.getTime(), d2.getTime())
 				if (
-					(+d1 >= +e.date && +d1 <= +e.endDate) ||
-					(+d2 >= +e.date && +d2 <= +e.endDate)
+					//for whatever reason this whole section doesn't work
+					(d1.getTime() >= e.date.getTime() &&
+						d1.getTime() <= e.endDate.getTime()) ||
+					(d2 >= e.date.getTime() && d2 <= e.endDate.getTime())
 				) {
 					isOverlap = true
 					return
@@ -252,8 +291,15 @@ class schoolController {
 	async dellesson(req, res) {
 		try {
 			const course = req.course
-			const { date, endDate, location } = req.body
-			await course.lessons.pull({ date, endDate, location })
+			const { lessonID: _id } = req.body
+
+			if (!_id) {
+				return res
+					.status(403)
+					.json({ message: 'Error: empty lesson id!' })
+			}
+
+			await course.lessons.pull({ _id })
 			await course.save()
 
 			return res.json({ message: 'Lesson deleted succesfully!' })
@@ -267,7 +313,7 @@ class schoolController {
 
 	async publishcourse(req, res) {
 		try {
-			course = req.course
+			const course = req.course
 			course.isPublished = true
 			await course.save()
 			return res.json({ message: 'Course has been published!' })
@@ -281,7 +327,7 @@ class schoolController {
 
 	async blockcourse(req, res) {
 		try {
-			course = req.course
+			const course = req.course
 			course.isBlocked = true
 			await course.save()
 			return res.json({ message: 'Course has been blocked!' })
@@ -295,7 +341,7 @@ class schoolController {
 
 	async unblockcourse(req, res) {
 		try {
-			course = req.course
+			const course = req.course
 			course.isBlocked = false
 			await course.save()
 			return res.json({ message: 'Course has been unblocked!' })
@@ -310,20 +356,25 @@ class schoolController {
 	async subscribe(req, res) {
 		try {
 			const { id } = req.user
-			const { course } = req.params.id
 			const user = await User.findOne({ _id: id })
 			if (!user) {
 				return res.status(403).json({ message: 'Error: invalid user!' })
 			}
 
 			const dbTarget = req.course
+			if (id === dbTarget.teacher) {
+				return res.status(403).json({
+					message: "Error: you can't subscribe to your own course!",
+				})
+			}
+
 			if (user.balance < dbTarget.price) {
 				return res
 					.status(403)
 					.json({ message: 'Error: insufficient balance!' })
 			}
 
-			const teacher = User.findOne({ src: dbTarget.teacher })
+			const teacher = await User.findOne({ _id: dbTarget.teacher })
 			if (!teacher) {
 				return res
 					.status(403)
@@ -332,8 +383,10 @@ class schoolController {
 
 			teacher.balance = teacher.balance + dbTarget.price
 			user.balance = user.balance - dbTarget.price
+
 			await teacher.save()
-			await dbTarget.students.push()
+			await dbTarget.students.push(user._id)
+			await dbTarget.save()
 			await user.courses.push({ id: dbTarget._id, price: dbTarget.price })
 			await user.save()
 
@@ -380,7 +433,7 @@ class schoolController {
 					.json({ message: "Error: you didn't subscribe to this!" })
 			}
 
-			const teacher = await Teacher.findOne({ src: course.teacher })
+			const teacher = await User.findOne({ _id: course.teacher })
 			if (!teacher) {
 				return res.status(403).json({
 					message: "Error: can't find teacher of the course!",
@@ -431,7 +484,7 @@ class schoolController {
 				})
 			}
 
-			const teacher = await Teacher.findOne({ src: course.teacher })
+			const teacher = await User.findOne({ _id: course.teacher })
 			if (!teacher) {
 				return res.status(403).json({
 					message: "Error: can't find teacher of the course!",
@@ -441,7 +494,7 @@ class schoolController {
 			students.forEach(async (e) => {
 				let eCourse
 				e.courses.forEach(async (el) => {
-					if (el.id === id) {
+					if (el.id === id.toString()) {
 						eCourse = el
 						return
 					}
@@ -463,6 +516,7 @@ class schoolController {
 					'You have succesfully refunded all users for this course!',
 			})
 		} catch (e) {
+			console.log(e)
 			return res.status(500).json({
 				message: 'Error: failed to refund users for course!',
 			})
@@ -473,14 +527,14 @@ class schoolController {
 		try {
 			const course = req.course
 			const id = course._id
-			const { studID } = req.params
+			const { id: studID } = req.params
 
 			const student = await User.findOne({ _id: studID })
 			if (!student) {
 				return res.json({ message: 'Error: invalid id!' })
 			}
 
-			const teacher = await Teacher.findOne({ src: course.teacher })
+			const teacher = await User.findOne({ _id: course.teacher })
 			if (!teacher) {
 				return res.status(403).json({
 					message: "Error: can't find teacher of the course!",
@@ -489,9 +543,8 @@ class schoolController {
 
 			let eCourse
 			student.courses.forEach(async (el) => {
-				if (el.id === id) {
+				if (el.id === id.toString()) {
 					eCourse = el
-					return
 				}
 			})
 
@@ -506,14 +559,15 @@ class schoolController {
 			await student.courses.pull(eCourse)
 			student.balance += price
 			teacher.balance -= price
-			await e.save()
 
+			await student.save()
 			await course.save()
 			await teacher.save()
 			return res.json({
 				message: 'You have succesfully refunded users for this course!',
 			})
 		} catch (e) {
+			console.log(e)
 			return res.status(500).json({
 				message: 'Error: failed to refund user for course!',
 			})
@@ -534,16 +588,16 @@ class schoolController {
 
 			if (
 				!rating ||
-				!Number.isNumber(rating) ||
+				!Number.isInteger(rating) ||
 				rating > 10 ||
 				rating < 0
 			) {
-				return res.status(403).json({
-					message: 'Error: invalid rating!',
-				})
+				return res
+					.status(403)
+					.json({ message: 'Error: invalid rating!' })
 			}
 
-			const target = await Teacher.findOne({ _id: teacher })
+			const target = await Teacher.findOne({ src: teacher })
 			if (!target) {
 				return res
 					.status(403)
@@ -573,9 +627,10 @@ class schoolController {
 				.status(201)
 				.json({ message: 'Review succesfully published!' })
 		} catch (e) {
-			return res.status(500).json({
-				message: 'Error: failed to leave a review!',
-			})
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to leave a review!' })
 		}
 	}
 
@@ -584,7 +639,7 @@ class schoolController {
 			const { id } = req.user
 			const { teacher } = req.body //teacher's 'src' field/teacher's user id field
 
-			const target = await Teacher.findOne({ _id: teacher })
+			const target = await Teacher.findOne({ src: teacher })
 			if (!target) {
 				return res
 					.status(403)

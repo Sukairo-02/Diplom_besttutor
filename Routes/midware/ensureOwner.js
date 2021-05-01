@@ -1,5 +1,5 @@
 //SHOULD ONLY BE USED AFTER ensureActiveteacher
-const Teacher = require('../../models/Teacher')
+const Courses = require('../../models/Courses')
 
 module.exports = async function (req, res, next) {
 	if (req.method === 'OPTIONS') {
