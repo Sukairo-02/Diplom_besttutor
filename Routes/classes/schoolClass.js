@@ -612,7 +612,7 @@ class schoolController {
 				.json({ message: 'Review succesfully deleted!' })
 		} catch (e) {
 			return res.status(500).json({
-				message: 'Error: failed to leave a review!',
+				message: 'Error: failed to delete a review!',
 			})
 		}
 	}
