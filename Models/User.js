@@ -19,6 +19,7 @@ const User = new Schema({
 			price: { type: Number, required: true, default: 0 },
 		},
 	], //courses where user participates as student
+	chats: [{ type: String }] //private messages, chats will be saved separately to avoid duplication
 })
 
 module.exports = model('User', User)
