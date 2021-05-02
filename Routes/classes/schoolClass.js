@@ -13,7 +13,13 @@ function getMaxDate(a) {
 }
 
 function getMinDate(a) {
-	new Date(Math.min(...a.map((e) => new Date(e.MeasureDate))))
+	let minDate = a[0]
+	a.forEach((el) => {
+		if (el.getTime() < minDate.getTime()) {
+			minDate = el
+		}
+	})
+	return minDate
 }
 
 var isDate = function (date) {
@@ -248,8 +254,7 @@ class schoolController {
 
 			if (d1.getTime() < now.getTime() || d1.getTime() === d2.getTime()) {
 				return res.status(403).json({
-					message:
-						"Error: lesson can't be set in the past!",
+					message: "Error: lesson can't be set in the past!",
 				})
 			}
 
@@ -263,7 +268,6 @@ class schoolController {
 			let isOverlap = false
 			course.lessons.forEach((e) => {
 				if (
-					//for whatever reason this whole section doesn't work
 					(d1.getTime() > e.date.getTime() &&
 						d1.getTime() < e.endDate.getTime()) ||
 					d1.getTime() === e.date.getTime() ||
@@ -379,6 +383,21 @@ class schoolController {
 				})
 			}
 
+			let isSubbed = false
+			user.courses.forEach((el) => {
+				if (el.id === dbTarget.id) {
+					isSubbed = true
+					return
+				}
+			})
+
+			if (isSubbed) {
+				return res.status(403).json({
+					message:
+						'Error: you are already subscribed to this course!',
+				})
+			}
+
 			if (user.balance < dbTarget.price) {
 				return res
 					.status(403)
@@ -451,12 +470,18 @@ class schoolController {
 				})
 			}
 
-			let dates
+			let dates = []
 			course.lessons.forEach((e) => {
 				dates.push(e.date)
 			})
 			let now = new Date()
-			if (+getMinDate(dates) <= +now) {
+			const minDate = getMinDate(dates)
+			console.log(dates)
+			console.log(minDate)
+			if (
+				minDate.getTime() < now.getTime() ||
+				minDate.getTime() === now.getTime()
+			) {
 				return res.status(403).json({
 					message:
 						'Error: too late to unsubscribe! Try requesting refund from a teacher.',
@@ -465,7 +490,7 @@ class schoolController {
 
 			const price = studCourse.price
 			await course.students.pull(userId)
-			await student.courses.pull({ id })
+			await student.courses.pull(studCourse)
 			student.balance += price
 			teacher.balance -= price
 
