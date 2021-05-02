@@ -244,8 +244,16 @@ class schoolController {
 
 			const d1 = new Date(date)
 			const d2 = new Date(endDate)
+			const now = new Date()
 
-			if (+d1 <= +d2) {
+			if (d1.getTime() < now.getTime() || d1.getTime() === d2.getTime()) {
+				return res.status(403).json({
+					message:
+						"Error: lesson can't be set in the past!",
+				})
+			}
+
+			if (d1.getTime() > d2.getTime() || d1.getTime() === d2.getTime()) {
 				return res.status(403).json({
 					message:
 						"Error: date of end can't be less than date of beginning!",
@@ -254,13 +262,16 @@ class schoolController {
 
 			let isOverlap = false
 			course.lessons.forEach((e) => {
-				console.log('E.dates: ', e.date.getTime(), e.endDate.getTime())
-				console.log('Dates: ', d1.getTime(), d2.getTime())
 				if (
 					//for whatever reason this whole section doesn't work
-					(d1.getTime() >= e.date.getTime() &&
-						d1.getTime() <= e.endDate.getTime()) ||
-					(d2 >= e.date.getTime() && d2 <= e.endDate.getTime())
+					(d1.getTime() > e.date.getTime() &&
+						d1.getTime() < e.endDate.getTime()) ||
+					d1.getTime() === e.date.getTime() ||
+					d1.getTime() === e.endDate.getTime() ||
+					(d2.getTime() > e.date.getTime() &&
+						d2.getTime() < e.endDate.getTime()) ||
+					d2.getTime() === e.date.getTime() ||
+					d2.getTime() === e.endDate.getTime()
 				) {
 					isOverlap = true
 					return
