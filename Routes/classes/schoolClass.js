@@ -199,15 +199,20 @@ class schoolController {
 		try {
 			const course = req.course
 			const { title, desc, price } = req.body
-			if (!Number.isInteger(price) || price < 0) {
-				return res
-					.status(403)
-					.json({ message: 'Error: price must be positive integer!' })
+			if (price != undefined) {
+				if (!Number.isInteger(price) || price < 0) {
+					return res.status(403).json({
+						message: 'Error: price must be positive integer!',
+					})
+				}
+				course.price = price
 			}
 
-			course.title = title
+			if (title) {
+				course.title = title
+			}
+
 			course.desc = desc
-			course.price = price
 
 			await course.save()
 			return res
@@ -217,6 +222,30 @@ class schoolController {
 			console.log(e)
 			return res.status(500).json({
 				message: 'Error: failed to edit course!',
+			})
+		}
+	}
+
+	async editprice(req, res) {
+		try {
+			const course = req.course
+			const { price } = req.body
+			if (!Number.isInteger(price) || price < 0) {
+				return res
+					.status(403)
+					.json({ message: 'Error: price must be positive integer!' })
+			}
+
+			course.price = price
+
+			await course.save()
+			return res.status(201).json({
+				message: "Course's price has been succesfully edited!",
+			})
+		} catch (e) {
+			console.log(e)
+			return res.status(500).json({
+				message: 'Error: failed to change price!',
 			})
 		}
 	}
@@ -329,6 +358,9 @@ class schoolController {
 	async publishcourse(req, res) {
 		try {
 			const course = req.course
+			if (!course.lessons.length) {
+				return res.json({ message: 'You must add lessons first!' })
+			}
 			course.isPublished = true
 			await course.save()
 			return res.json({ message: 'Course has been published!' })
@@ -476,8 +508,7 @@ class schoolController {
 			})
 			let now = new Date()
 			const minDate = getMinDate(dates)
-			console.log(dates)
-			console.log(minDate)
+
 			if (
 				minDate.getTime() < now.getTime() ||
 				minDate.getTime() === now.getTime()

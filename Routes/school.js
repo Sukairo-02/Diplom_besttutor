@@ -41,9 +41,21 @@ router.post(
 		ensureRoles(['TCHR']),
 		ensureActiveteacher,
 		ensureOwner,
+		ensureUnpublished,
 	],
 	controller.editcourse
 ) //edits existing course with [_id: courseID]
+
+router.post(
+	'/editprice',
+	[
+		check('title', "You must enter course's title!").notEmpty(),
+		ensureRoles(['TCHR']),
+		ensureActiveteacher,
+		ensureOwner,
+	],
+	controller.editprice
+) //edits existing course's price with [_id: courseID], available even if published
 
 router.post(
 	'/newlesson',
