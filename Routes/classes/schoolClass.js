@@ -1,10 +1,8 @@
 const User = require('../../models/User')
 const Teacher = require('../../models/Teacher')
-const Role = require('../../models/Roles')
 const Subjects = require('../../models/Subjects')
 const Assignments = require('../../models/Assignments')
 const Courses = require('../../models/Courses')
-const jwt = require('jsonwebtoken')
 const { validationResult } = require('express-validator')
 const config = require('config')
 
@@ -24,6 +22,22 @@ function getMinDate(a) {
 
 var isDate = function (date) {
 	return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date))
+}
+
+function shuffle(array) {
+	let counter = array.length
+
+	while (counter > 0) {
+		let index = Math.floor(Math.random() * counter)
+
+		counter--
+		let temp = array[counter]
+
+		array[counter] = array[index]
+		array[index] = temp
+	}
+
+	return array
 }
 
 class schoolController {
@@ -735,6 +749,316 @@ class schoolController {
 		} catch (e) {
 			return res.status(500).json({
 				message: 'Error: failed to delete a review!',
+			})
+		}
+	}
+
+	async newassignment(req, res) {
+		//ensureOwner
+		try {
+			const course = req.course
+			const {
+				title,
+				desc,
+				isShuflled,
+				allowOvertime,
+				date,
+				endDate,
+				questions,
+			} = req.body
+			if (!(title && questions.length > 0)) {
+				return res
+					.status(500)
+					.json({ message: 'Error: insufficient data!' })
+			}
+
+			const d1 = new Date(date)
+			const d2 = new Date(endDate)
+			const now = new Date()
+
+			if (d1.getTime() < now.getTime() || d1.getTime() === d2.getTime()) {
+				return res.status(403).json({
+					message: "Error: assignment can't be set in the past!",
+				})
+			}
+
+			if (d1.getTime() > d2.getTime() || d1.getTime() === d2.getTime()) {
+				return res.status(403).json({
+					message:
+						"Error: date of end can't be less than date of beginning!",
+				})
+			}
+
+			let [isTitles, isPoints, isAnswers] = [false, false, false]
+			let maxPoints = 0
+			questions.forEach((e) => {
+				if (!e.title) {
+					isTitles = true
+					return
+				}
+
+				if (!e.points) {
+					isPoints = true
+					return
+				}
+
+				if (!Number.isInteger(e.points) || e.points < 0) {
+					isPoints = true
+					return
+				}
+
+				maxPoints += points
+
+				if (!e.answers) {
+					isAnswers = true
+					return
+				}
+
+				let hasAnswers = false
+				let answAmount = 0
+				e.answers.forEach((el) => {
+					if (!el.title) {
+						isTitles = true
+						return
+					}
+
+					if (el.isTrue) {
+						hasAnswers = true
+					}
+
+					answAmount++
+				})
+
+				if (answAmount < 2) {
+					isAnswers = true
+					return
+				}
+
+				if (!hasAnswers) {
+					isAnswers = true
+					return
+				}
+			})
+
+			if (isTitles) {
+				return res.status(403).json({
+					message: 'All questions and answers must have a title!',
+				})
+			}
+
+			if (isPoints) {
+				return res.status(403).json({
+					message:
+						'All questions must have positive integer amount of points!',
+				})
+			}
+
+			if (isAnswers) {
+				return res.status(403).json({
+					message: 'All questions must have at least 2 answers!',
+				})
+			}
+
+			const assignment = new Assignments({
+				title,
+				desc,
+				isShuflled,
+				allowOvertime,
+				maxPoints,
+				date,
+				endDate,
+				questions,
+			})
+			await assignment.save()
+			await course.assignments.push(assignment._id)
+			await course.save()
+
+			return res.json({
+				message: 'Assignment has been added succesfully!',
+			})
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to add assignment!' })
+		}
+	}
+
+	async delassignment(req, res) {
+		try {
+			const { assignmentID } = req.body
+			const { id } = req.user
+
+			const assignment = await Assignments.findOne({ _id: assignmentID })
+			if (!assignment) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			const course = await Courses.findOne({ assignments: assignmentID })
+			if (course.teacher !== id) {
+				return res
+					.status(403)
+					.json({ message: "You don't own this course!" })
+			}
+
+			await course.assignments.pull(assignmentID)
+			await assignment.delete()
+			await course.save()
+
+			return res.json({ message: 'Assignment deleted succesfully!' })
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to delete assignment!' })
+		}
+	}
+
+	async getassignment(req, res) {
+		try {
+			const { id } = req.user
+			const { assignmentID } = req.body
+
+			const asg = await Assignments.findOne({ _id: assignmentID })
+			if (!asg) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			const course = await Courses.findOne({ assignments: assignmentID })
+			let isSubbed = false
+			course.students.forEach((e)=> {
+				if(e === id) {
+					isSubbed = true 
+					return
+				}
+			})
+			if (!isSubbed) {
+				return res
+					.status(403)
+					.json({ message: 'You are not subscribed to this course!' })
+			}
+
+			const {
+				title,
+				desc,
+				isShuffled,
+				allowOvertime,
+				maxPoints,
+				date,
+				endDate,
+			} = asg
+
+			let questions = []
+
+			asg.questions.forEach((e) => {
+				let answers = []
+				e.answers.forEach((el) => {
+					answers.push({ nID: el.nID, text: el.text })
+				})
+				questions.push({
+					title: e.title,
+					qID: e.qID,
+					points: e.points,
+					isMulAnswers: e.isMulAnswers,
+					answers,
+				})
+			})
+
+			if (isShuffled) {
+				questions.forEach((e) => {
+					shuffle(e.answers)
+				})
+				shuffle(questions)
+			}
+
+			return res.json({
+				title,
+				desc,
+				isShuffled,
+				allowOvertime,
+				maxPoints,
+				date,
+				endDate,
+				questions,
+			})
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to get assignment!' })
+		}
+	}
+
+	async getassignment_teacher(req, res) {
+		try {
+			const { id } = req.user
+			const { assignmentID } = req.body
+
+			const assignment = await Assignments.findOne({ _id: assignmentID })
+			if (!asg) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			const course = await Courses.findOne({ assignments: assignmentID })
+			if (course.teacher !== id) {
+				return res
+					.status(403)
+					.json({ message: "You are not this course's teacher!" })
+			}
+
+			return res.json({
+				assignment,
+			})
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to get assignment!' })
+		}
+	}
+
+	async getAssignmentSchedule(req, res) {
+		try {
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to add assignment!' })
+		}
+	}
+
+	async submit(req, res) {
+		try {
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to submit assignment!' })
+		}
+	}
+
+	async getsubmit(req, res) {
+		try {
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to get submitted assignment!' })
+		}
+	}
+
+	async getstatistic(req, res) {
+		try {
+		} catch (e) {
+			console.log(e)
+			return res.status(500).json({
+				message: 'Error: failed to get statistics of assignment!',
 			})
 		}
 	}
