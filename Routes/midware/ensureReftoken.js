@@ -2,6 +2,10 @@ const jwt = require("jsonwebtoken")
 const config = require("config")
 
 module.exports = async function (req, res, next) {
+    if (req.method === 'OPTIONS') {
+        return next()
+    }
+
     try {
         const { refreshToken: refToken } = req.body
 
