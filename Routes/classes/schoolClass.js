@@ -1066,7 +1066,7 @@ class schoolController {
 			asg.questions.forEach((e) => {
 				questions.forEach((el) => {
 					if (e.qID !== el.qID) {
-						continue
+						return
 					}
 
 					qLeft--
@@ -1075,7 +1075,7 @@ class schoolController {
 					e.answers.forEach((elem) => {
 						el.answers.forEach((element) => {
 							if (elem.nID !== element.nID) {
-								continue
+								return
 							}
 							element.isCorrect = elem.isTrue && element.isChecked
 							checkedAmt += element.isChecked
