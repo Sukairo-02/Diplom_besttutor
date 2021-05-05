@@ -674,7 +674,7 @@ class authController {
 				users = await User.find({ roles: role })
 				if(role === 'TCHR') {
 					return res.json({
-						_id: usid,
+						_id: user._id,
 						username: user.username,
 						email: user.email,
 						dateOfBirth: user.dateOfBirth,
@@ -694,7 +694,7 @@ class authController {
 				}
 				else {
 					return res.json({
-						_id: usid,
+						_id: user._id,
 						username: user.username,
 						email: user.email,
 						dateOfBirth: user.dateOfBirth,
@@ -707,7 +707,6 @@ class authController {
 						courses: user.courses,
 					})
 				}
-
 			}
 
 			users = await User.find()
