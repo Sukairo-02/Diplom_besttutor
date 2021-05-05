@@ -672,8 +672,42 @@ class authController {
 						.json({ message: "Can't find requested role!" })
 				}
 				users = await User.find({ roles: role })
+				if(role === 'TCHR') {
+					return res.json({
+						_id: usid,
+						username: user.username,
+						email: user.email,
+						dateOfBirth: user.dateOfBirth,
+						avatar: user.avatar,
+						phone: user.phone,
+						area: user.area,
+						city: user.city,
+						address: user.address,
+						roles: user.roles,
+						courses: user.courses,
+						desc: teacher.desc,
+						education: teacher.education,
+						experience: teacher.experience,
+						subject: teacher.subject,
+						teacherCourses: teacher.courses,
+					})
+				}
+				else {
+					return res.json({
+						_id: usid,
+						username: user.username,
+						email: user.email,
+						dateOfBirth: user.dateOfBirth,
+						avatar: user.avatar,
+						phone: user.phone,
+						area: user.area,
+						city: user.city,
+						address: user.address,
+						roles: user.roles,
+						courses: user.courses,
+					})
+				}
 
-				return res.json({ users: users })
 			}
 
 			users = await User.find()
