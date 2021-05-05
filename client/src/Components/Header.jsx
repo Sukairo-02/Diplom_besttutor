@@ -1,11 +1,11 @@
 import React from 'react';
-import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-
-import img from '../assets/img/people/1.jpeg';
+import { createAuthProvider } from '../jwt';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
-	const auth = React.useContext(AuthContext);
+	const { logout } = createAuthProvider();
+	const info = useSelector((state) => state.userInfo.info);
 	const [visibleMenu, setVisibleMenu] = React.useState(false);
 
 	const menuRef = React.useRef();
@@ -25,7 +25,7 @@ const Header = () => {
 	}, []);
 
 	const logoutHandler = () => {
-		auth.logout();
+		logout();
 	};
 
 	return (
@@ -33,6 +33,9 @@ const Header = () => {
 			<div className='header__logo'>Tutor</div>
 			<nav className='header__nav'>
 				<ul className='header__ul'>
+					<li className='header__li'>
+						<Link to='/'>Главная</Link>
+					</li>
 					<li className='header__li'>
 						<Link to='/subjects'>Предметы</Link>
 					</li>
@@ -45,7 +48,7 @@ const Header = () => {
 				</ul>
 				<img
 					ref={menuRef}
-					src={img}
+					src={info.avatar}
 					alt='Аватар'
 					className='header__avatar'
 					onClick={toggleVisiblePopup}
@@ -55,9 +58,6 @@ const Header = () => {
 						<ul>
 							<li>
 								<Link to='/chats'>Чаты</Link>
-							</li>
-							<li>
-								<Link to='/userSubjects'>Предметы</Link>
 							</li>
 							<li>
 								<Link to='/editProfile'>Редактировать профиль</Link>
