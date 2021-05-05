@@ -343,7 +343,6 @@ class authController {
 				message: 'You have succesfully logged in!',
 				token: token,
 				refreshToken: refToken,
-				id: user._id,
 			})
 		} catch (e) {
 			console.log(e)
@@ -375,7 +374,7 @@ class authController {
 					education: teacher.education,
 					exprerience: teacher.exprerience,
 					subject: teacher.subject,
-					teacherCourses: teacher.courses
+					teacherCourses: teacher.courses,
 				})
 			} else {
 				return res.json({
@@ -390,7 +389,7 @@ class authController {
 					address: user.address,
 					roles: roles,
 					courses: user.courses,
-					balance: user.balance
+					balance: user.balance,
 				})
 			}
 		} catch (e) {
@@ -429,7 +428,7 @@ class authController {
 
 			const { id: _id } = req.user
 
-			let user = await User.findOne({ _id: _id })
+			let user = await User.findOne({ _id })
 			if (!user) {
 				return res
 					.status(403)
@@ -499,7 +498,7 @@ class authController {
 			if (teacher.subject) {
 				if (teacher.subject !== dbSubject.name) {
 					const oldSubject = await Subjects.findOne({
-						name: teacher.subject
+						name: teacher.subject,
 					})
 
 					oldSubject.Teachers.pull(teacher.src)
@@ -635,7 +634,7 @@ class authController {
 					education: teacher.education,
 					exprerience: teacher.exprerience,
 					subject: teacher.subject,
-					teacherCourses: teacher.courses
+					teacherCourses: teacher.courses,
 				})
 			} else {
 				return res.json({
