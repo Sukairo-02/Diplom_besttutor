@@ -632,7 +632,7 @@ class authController {
 					courses: user.courses,
 					desc: teacher.desc,
 					education: teacher.education,
-					exprerience: teacher.exprerience,
+					experience: teacher.exprerience,
 					subject: teacher.subject,
 					teacherCourses: teacher.courses,
 				})
