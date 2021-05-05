@@ -659,10 +659,117 @@ class authController {
 		}
 	}
 
+	async lightdataArr(req, res) {
+		try {
+			const { ids } = req.body
+
+			if (!ids) {
+				return res.status(403).json({ message: 'Error: missing IDs!' })
+			}
+
+			const usersRaw = await User.find({ _id: { $in: ids } })
+
+			let users = []
+
+			for (let i = 0; i < usersRaw.length; i++) {
+					users.push({
+						_id: usersRaw[i]._id,
+						username: usersRaw[i].username,
+						email: usersRaw[i].email,
+						avatar: usersRaw[i].avatar,
+						roles: usersRaw[i].roles,
+				})
+			}
+
+			return res.json({ users })
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: "Error occured while getting users' data" })
+		}
+	}
+
+	async userdataArr(req, res) {
+		try {
+			const { ids } = req.body
+
+			if (!ids) {
+				return res.status(403).json({ message: 'Error: missing IDs!' })
+			}
+
+			const usersRaw = await User.find({ _id: { $in: ids } })
+			const teachers = await Teacher.find({ src: { $in: ids } })
+
+			let users = []
+
+			for (let i = 0; i < usersRaw.length; i++) {
+				let isTeacher = false
+				usersRaw[i].roles.forEach((el) => {
+					if (el === 'TCHR') {
+						isTeacher = true
+					}
+				})
+
+				if (isTeacher) {
+					let teacher
+
+					teachers.forEach((el) => {
+						if (el.src === usersRaw[i]._id.toString()) {
+							teacher = el
+
+							return
+						}
+					})
+
+					users.push({
+						_id: usersRaw[i]._id,
+						username: usersRaw[i].username,
+						email: usersRaw[i].email,
+						dateOfBirth: usersRaw[i].dateOfBirth,
+						avatar: usersRaw[i].avatar,
+						phone: usersRaw[i].phone,
+						area: usersRaw[i].area,
+						city: usersRaw[i].city,
+						address: usersRaw[i].address,
+						roles: usersRaw[i].roles,
+						courses: usersRaw[i].courses,
+						desc: teacher.desc,
+						education: teacher.education,
+						experience: teacher.experience,
+						subject: teacher.subject,
+						teacherCourses: teacher.courses,
+					})
+				} else {
+					users.push({
+						_id: usersRaw[i]._id,
+						username: usersRaw[i].username,
+						email: usersRaw[i].email,
+						dateOfBirth: usersRaw[i].dateOfBirth,
+						avatar: usersRaw[i].avatar,
+						phone: usersRaw[i].phone,
+						area: usersRaw[i].area,
+						city: usersRaw[i].city,
+						address: usersRaw[i].address,
+						roles: usersRaw[i].roles,
+						courses: usersRaw[i].courses,
+					})
+				}
+			}
+
+			return res.json({ users })
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: "Error occured while getting users' data" })
+		}
+	}
+
 	async userlist(req, res) {
 		try {
 			const { role } = req.params
-			let users
+			let users = []
 
 			if (role) {
 				const dbRole = await Role.findOne({ value: role })
@@ -671,46 +778,22 @@ class authController {
 						.status(403)
 						.json({ message: "Can't find requested role!" })
 				}
-				users = await User.find({ roles: role })
-				if(role === 'TCHR') {
-					return res.json({
-						_id: user._id,
-						username: user.username,
-						email: user.email,
-						dateOfBirth: user.dateOfBirth,
-						avatar: user.avatar,
-						phone: user.phone,
-						area: user.area,
-						city: user.city,
-						address: user.address,
-						roles: user.roles,
-						courses: user.courses,
-						desc: teacher.desc,
-						education: teacher.education,
-						experience: teacher.experience,
-						subject: teacher.subject,
-						teacherCourses: teacher.courses,
-					})
-				}
-				else {
-					return res.json({
-						_id: user._id,
-						username: user.username,
-						email: user.email,
-						dateOfBirth: user.dateOfBirth,
-						avatar: user.avatar,
-						phone: user.phone,
-						area: user.area,
-						city: user.city,
-						address: user.address,
-						roles: user.roles,
-						courses: user.courses,
-					})
-				}
+				const usersRaw = await User.find({ roles: role })
+
+				usersRaw.forEach((user) => {
+					users.push(user._id)
+				})
+
+				return res.json({ users })
 			}
 
-			users = await User.find()
-			return res.json({ users: users })
+			const usersRaw = await User.find()
+
+			usersRaw.forEach((user) => {
+				users.push(user._id)
+			})
+
+			return res.json({ users })
 		} catch (e) {
 			console.log(e)
 			return res
