@@ -770,7 +770,7 @@ class authController {
 		try {
 			const { role } = req.params
 			let users = []
-
+			let usersRaw
 			if (role) {
 				const dbRole = await Role.findOne({ value: role })
 				if (!dbRole) {
@@ -778,27 +778,71 @@ class authController {
 						.status(403)
 						.json({ message: "Can't find requested role!" })
 				}
-				const usersRaw = await User.find({ roles: role })
-
-				usersRaw.forEach((user) => {
-					users.push(user._id)
-				})
-
-				return res.json({ users })
+				usersRaw = await User.find({ roles: role })
+			} else {
+				usersRaw = await User.find()
 			}
 
-			const usersRaw = await User.find()
+			const teachers = await Teacher.find()
+			
+			for (let i = 0; i < usersRaw.length; i++) {
+				let isTeacher = false
+				usersRaw[i].roles.forEach((el) => {
+					if (el === 'TCHR') {
+						isTeacher = true
+					}
+				})
 
-			usersRaw.forEach((user) => {
-				users.push(user._id)
-			})
+				if (isTeacher) {
+					let teacher
+					teachers.forEach((el) => {
+						if (el.src === usersRaw[i]._id.toString()) {
+							teacher = el
+							return
+						}
+					})
 
+					users.push({
+						_id: usersRaw[i]._id,
+						username: usersRaw[i].username,
+						email: usersRaw[i].email,
+						dateOfBirth: usersRaw[i].dateOfBirth,
+						avatar: usersRaw[i].avatar,
+						phone: usersRaw[i].phone,
+						area: usersRaw[i].area,
+						city: usersRaw[i].city,
+						address: usersRaw[i].address,
+						roles: usersRaw[i].roles,
+						courses: usersRaw[i].courses,
+						desc: teacher.desc,
+						education: teacher.education,
+						experience: teacher.experience,
+						subject: teacher.subject,
+						teacherCourses: teacher.courses,
+					})
+				} else {
+					users.push({
+						_id: usersRaw[i]._id,
+						username: usersRaw[i].username,
+						email: usersRaw[i].email,
+						dateOfBirth: usersRaw[i].dateOfBirth,
+						avatar: usersRaw[i].avatar,
+						phone: usersRaw[i].phone,
+						area: usersRaw[i].area,
+						city: usersRaw[i].city,
+						address: usersRaw[i].address,
+						roles: usersRaw[i].roles,
+						courses: usersRaw[i].courses,
+					})
+				}
+			}
+			
 			return res.json({ users })
 		} catch (e) {
 			console.log(e)
 			return res
 				.status(500)
-				.json({ message: "Error occured while getting user's data" })
+				.json({ message: "Error occured while getting users' data" })
 		}
 	}
 }
