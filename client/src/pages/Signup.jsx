@@ -27,15 +27,14 @@ const Signup = () => {
 	const { loading, request } = useHttp();
 
 	const formHandler = async (values) => {
-		try {
-			const data = await request('/api/auth/register', 'POST', values);
-			await request('/api/auth/sendValidation', 'POST', {
-				email: values.email,
-			});
-			alert(data.message);
-		} catch (e) {
-			alert(e.message);
-		}
+		await request('/api/auth/register', 'POST', values)
+			.then((data) => {
+				request('/api/auth/sendValidation', 'POST', {
+					email: values.email,
+				}).catch((error) => alert(error.message));
+				alert(data.message);
+			})
+			.catch((error) => alert(error.message));
 	};
 
 	return (
