@@ -930,9 +930,9 @@ class schoolController {
 
 			const course = await Courses.findOne({ assignments: assignmentID })
 			let isSubbed = false
-			course.students.forEach((e)=> {
-				if(e === id) {
-					isSubbed = true 
+			course.students.forEach((e) => {
+				if (e === id) {
+					isSubbed = true
 					return
 				}
 			})
@@ -1035,6 +1035,83 @@ class schoolController {
 
 	async submit(req, res) {
 		try {
+			const { id } = req.user
+			const { assignmentID, questions } = req.body
+			const asg = await Assignments.findOne({ _id: assignmentID })
+			if (!asg) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			//let now = new Date().getTime()
+
+			const course = await Courses.findOne({ assignments: assignmentID })
+			let isSubbed = false
+			course.students.forEach((e) => {
+				if (e === id) {
+					isSubbed = true
+					return
+				}
+			})
+			if (!isSubbed) {
+				return res
+					.status(403)
+					.json({ message: 'You are not subscribed to this course!' })
+			}
+
+			let qLeft = asg.questions.length
+			let isAnswers = false
+			let isMulViolation = false
+			asg.questions.forEach((e) => {
+				questions.forEach((el) => {
+					if (e.qID !== el.qID) {
+						continue
+					}
+
+					qLeft--
+					let checkedAmt = 0
+
+					e.answers.forEach((elem) => {
+						el.answers.forEach((element) => {
+							if (elem.nID !== element.nID) {
+								continue
+							}
+							element.isCorrect = elem.isTrue && element.isChecked
+							checkedAmt += element.isChecked
+						})
+					})
+					if (checkedAmt == 0) {
+						isAnswers = true
+						return
+					}
+
+					if (!e.isMulAnswers && checkedAmt > 1) {
+						isMulViolation = true
+						return
+					}
+				})
+				if (isAnswers || isMulViolation) {
+					return
+				}
+			})
+
+			if (qLeft > 0 || !isAnswers) {
+				return res
+					.status(403)
+					.json({ message: 'Error: you must answer all questions!' })
+			}
+
+			if (isMulViolation) {
+				return res.status(403).json({
+					message:
+						"Error: single answer questions can't have multiple answers!",
+				})
+			}
+
+			return res
+				.status(201)
+				.json({ message: 'Assignment submitted succesfully!' })				
 		} catch (e) {
 			console.log(e)
 			return res

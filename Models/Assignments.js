@@ -13,7 +13,7 @@ const Assignments = new Schema({
 			title: { type: String, required: true },
 			qID: Schema.Types.ObjectId,
 			points: { type: Number, default: 0 },
-			isMulAnswers: { type: Boolean, required: true, default: false}, //determines whether question is answered by radio button or checkbox (radio by default)
+			isMulAnswers: { type: Boolean, required: true, default: false }, //determines whether question is answered by radio button or checkbox (radio by default)
 			answers: [
 				{
 					nID: Schema.Types.ObjectId,
@@ -33,6 +33,11 @@ const Assignments = new Schema({
 						{
 							nID: { type: String, required: true },
 							isChecked: {
+								type: Boolean,
+								required: true,
+								default: false,
+							},
+							isCorrect: {
 								type: Boolean,
 								required: true,
 								default: false,
