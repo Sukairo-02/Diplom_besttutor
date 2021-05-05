@@ -372,7 +372,7 @@ class authController {
 					balance: user.balance,
 					desc: teacher.desc,
 					education: teacher.education,
-					exprerience: teacher.exprerience,
+					experience: teacher.experience,
 					subject: teacher.subject,
 					teacherCourses: teacher.courses,
 				})
@@ -632,7 +632,7 @@ class authController {
 					courses: user.courses,
 					desc: teacher.desc,
 					education: teacher.education,
-					experience: teacher.exprerience,
+					experience: teacher.experience,
 					subject: teacher.subject,
 					teacherCourses: teacher.courses,
 				})
