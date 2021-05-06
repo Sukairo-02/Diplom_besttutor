@@ -1044,7 +1044,22 @@ class schoolController {
 					.json({ message: "Can't find assignment!" })
 			}
 
-			//let now = new Date().getTime()
+			let now = new Date().getTime()
+			let dateStart = new Date(asg.date).getTime()
+			let dateEnd = new Date(asg.date).getTime()
+
+			if (now < dateStart) {
+				return res
+					.status(403)
+					.json({ message: "Assignment didn't begin yet!" })
+			}
+
+			if (!asg.allowOvertime && now > dateEnd) {
+				return res.status(403).json({
+					message:
+						"This assignment can't be submitted past it's end time!",
+				})
+			}
 
 			const course = await Courses.findOne({ assignments: assignmentID })
 			let isSubbed = false
@@ -1111,7 +1126,7 @@ class schoolController {
 
 			return res
 				.status(201)
-				.json({ message: 'Assignment submitted succesfully!' })				
+				.json({ message: 'Assignment submitted succesfully!' })
 		} catch (e) {
 			console.log(e)
 			return res
@@ -1120,8 +1135,140 @@ class schoolController {
 		}
 	}
 
+	async delsubmit(req, res) {
+		try {
+			const { id } = req.user
+			const { assignmentID } = req.body
+			const asg = await Assignments.findOne({ _id: assignmentID })
+			if (!asg) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			if (!asg.submits) {
+				return res
+					.status(403)
+					.json({ message: 'There are no submitted assignments.' })
+			}
+
+			let submit
+			asg.submits.every((e) => {
+				if (e.submitter === id) {
+					submit = e.submitter
+					return false
+				}
+				return true
+			})
+
+			if (!submit) {
+				return res.status(403).json({
+					message: "You didn't submit answers to this assignment!",
+				})
+			}
+
+			asg.submits.pull(submit)
+
+			await asg.save()
+
+			return res.json({ submit })
+		} catch (e) {
+			console.log(e)
+			return res.status(500).json({
+				message: 'Error: failed to delete submitted assignment!',
+			})
+		}
+	}
+
 	async getsubmit(req, res) {
 		try {
+			const { id } = req.user
+			const { assignmentID } = req.body
+			const asg = await Assignments.findOne({ _id: assignmentID })
+			if (!asg) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			if (!asg.submits) {
+				return res
+					.status(403)
+					.json({ message: 'There are no submitted assignments.' })
+			}
+
+			let submit
+			asg.submits.every((e) => {
+				if (e.submitter === id) {
+					submit = e.submitter
+					return false
+				}
+				return true
+			})
+
+			if (!submit) {
+				return res.status(403).json({
+					message: "You didn't submit answers to this assignment!",
+				})
+			}
+
+			return res.json({ submit })
+		} catch (e) {
+			console.log(e)
+			return res
+				.status(500)
+				.json({ message: 'Error: failed to get submitted assignment!' })
+		}
+	}
+
+	async getSubmitTeacher(req, res) {
+		try {
+			const { id } = req.user
+			const { assignmentID, submitterID } = req.body
+
+			const asg = await Assignments.findOne({ _id: assignmentID })
+			if (!asg) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			if (!asg.submits) {
+				return res
+					.status(403)
+					.json({ message: 'There are no submitted assignments.' })
+			}
+
+			const course = await Courses.findOne({ assignments: asg._id })
+
+			if (!course) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment's course!" })
+			}
+
+			if (course.teacher !== id) {
+				return res
+					.status(403)
+					.json({ message: "You are not this course's teaher!" })
+			}
+
+			let submit
+			asg.submits.every((e) => {
+				if (e.submitter === submitterID) {
+					submit = e.submitter
+					return false
+				}
+				return true
+			})
+
+			if (!submit) {
+				return res.status(403).json({
+					message: "You didn't submit answers to this assignment!",
+				})
+			}
+
+			return res.json({ submit })
 		} catch (e) {
 			console.log(e)
 			return res

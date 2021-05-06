@@ -132,4 +132,25 @@ router.post('/review', ensureAuth, controller.review) //publish review
 
 router.delete('/delreview', ensureAuth, controller.delreview) //delete review
 
+router.post('/newassignment', [ensureRoles(['TCHR']), ensureOwner], controller.newassignment) //add new assignment to the course: courseID
+
+router.delete('/delassignment', [ensureRoles(['TCHR']), ensureOwner], controller.delassignment) //delete assignment with _id: assignmentID
+
+router.get('/getassignment', ensureAuth, controller.getassignment) //get assignment with _id: assignmentID (for students)
+
+router.get('/getassignment_teacher', ensureRoles(['TCHR']), controller.getassignment_teacher) //get assignment with _id: assignmentID (for teacher)
+
+router.post('/submit', ensureAuth, controller.submit) //submit completed assignment with _id: assignmentID
+
+router.delete('/delsubmit', ensureAuth, controller.delsubmit) //delete your submit of assignment with _id: assignmentID
+
+router.get('/getsubmit', ensureAuth, controller.getsubmit) //get your results for assignment
+
+router.get('/getsubmit_teacher', ensureRoles(['TCHR']), controller.getsubmit) //get assignment's results of user: submitterID
+
+//router.get('/getstatistic', ensureRoles(['TCHR']), controller.getstatistic) //get statistics for assignment with id: assignmentID - TO BE DONE
+
+//router.get('/getassignmentschedule', ensureAuth, controller.getassignmentSchedule) //get info of upcoming assignments of current user - TO BE DONE
+
+
 module.exports = router
