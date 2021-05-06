@@ -8,6 +8,8 @@
 .schedule__time {
 	display: flex;
 	align-items: center;
+	background-color: var(--event-block);
+	padding-left: 5px;
 }
 
 .schedule__cell {
