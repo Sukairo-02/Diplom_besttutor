@@ -1,6 +1,14 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { Home, Subjects, Login, Signup, Teachers, EditProfile } from './pages';
+import {
+	Home,
+	Subjects,
+	Login,
+	Signup,
+	Teachers,
+	EditProfile,
+	Teacher,
+} from './pages';
 import { Header } from './Components';
 
 export const useRoutes = (isAuthenticated) => {
@@ -13,6 +21,7 @@ export const useRoutes = (isAuthenticated) => {
 					<Route path='/subjects' component={Subjects} />
 					<Route path='/teachers' component={Teachers} />
 					<Route path='/editProfile' component={EditProfile} />
+					<Route path='/teacher/:id' component={Teacher} />
 					<Redirect to='/' />
 				</Switch>
 			</>

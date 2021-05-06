@@ -12,7 +12,7 @@
 }
 
 /* HEADER */
-@media screen and (max-width: 435px) {
+@media screen and (max-width: 460px) {
 	.header__ul,
 	.header__nav {
 		gap: 20px;
@@ -113,6 +113,20 @@
 	}
 }
 
+@media screen and (max-width: 420px) {
+	.schedule__row {
+		grid-template-columns: 90px repeat(7, 25px);
+	}
+
+	.schedule__cell {
+		height: 35px;
+	}
+
+	.schedule__time {
+		font-size: 14px;
+	}
+}
+
 /* TEACHER-BIG */
 @media screen and (max-width: 750px) {
 	.teacher-big {
@@ -122,5 +136,34 @@
 
 	.teacher-big__container {
 		width: 100%;
+	}
+}
+
+/* TEACHER-FULL */
+@media screen and (max-width: 750px) {
+	.teacher-full {
+		flex-direction: column;
+		align-items: center;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.teacher-full__summary {
+		flex-direction: column;
+		gap: 20px;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.teacher-full__subject {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 20px;
+	}
+}
+
+@media screen and (max-width: 420px) {
+	.teacher-full__review {
+		flex-direction: column;
 	}
 }

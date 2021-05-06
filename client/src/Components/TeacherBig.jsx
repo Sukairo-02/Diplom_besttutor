@@ -1,26 +1,30 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { fetchTeacher } from '../redux/reducers/teacherSlice';
 import { Star, People } from '../icons';
 
-import img from '../assets/img/people/1.jpeg';
+const TeacherBig = ({ data }) => {
+	const dispatch = useDispatch();
+	const history = useHistory();
 
-const TeacherBig = () => {
+	const profileBtnHandler = async () => {
+		dispatch(fetchTeacher(data._id));
+		history.push(`teacher/${data._id}`);
+	};
+
 	return (
 		<div className='teacher-big'>
-			<img src={img} alt='Аватар' className='teacher-big__avatar' />
+			<img src={data.avatar} alt='Аватар' className='teacher-big__avatar' />
 			<div className='teacher-big__container'>
-				<h3 className='teacher-big__name'>Денис Кудряшев</h3>
-				<div className='teacher-big__subject'>Японский</div>
+				<h3 className='teacher-big__name'>{data.username}</h3>
+				<div className='teacher-big__subject'>{data.subject}</div>
 				<span className='teacher-big__disciple'>
 					<People size={16} />
 					18 учеников
 				</span>
 				<span className='teacher-big__count'>135 уроков</span>
-				<div className='teacher-big__desc'>
-					Репетитор по японскому языку. Опыт преподавания японского языка - 10
-					лет. Занимаюсь языком 20 лет. Учился в Японии 1 год. Свободно владею
-					японским языком. Работаю переводчиком и преподавателем, каждый день
-					использую язык.
-				</div>
+				<div className='teacher-big__desc'>{data.desc}</div>
 			</div>
 			<div className='teacher-big__container teacher-big__container--flex'>
 				<span className='teacher-big__rating'>
@@ -32,7 +36,10 @@ const TeacherBig = () => {
 				<button className='btn teacher-big__btn' type='button'>
 					Пробный урок
 				</button>
-				<button className='btn btn--transparent teacher-big__btn' type='button'>
+				<button
+					onClick={profileBtnHandler}
+					className='btn btn--transparent teacher-big__btn'
+					type='button'>
 					Профиль
 				</button>
 			</div>

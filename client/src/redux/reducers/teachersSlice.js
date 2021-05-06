@@ -3,16 +3,16 @@ import { createAuthProvider } from '../../jwt';
 
 const { authFetch } = createAuthProvider();
 
-export const fetchSubjects = createAsyncThunk(
-	'subjects/fetchSubjects',
+export const fetchTeachers = createAsyncThunk(
+	'teachers/fetchTeachers',
 	async () => {
-		const response = await authFetch('/api/school/getSubjects');
+		const response = await authFetch('/api/auth/userlist/TCHR');
 		return response.json();
 	}
 );
 
-export const subjectsSlice = createSlice({
-	name: 'subjects',
+export const teachersSlice = createSlice({
+	name: 'teachers',
 	initialState: {
 		items: [],
 		loading: 'idle',
@@ -20,18 +20,18 @@ export const subjectsSlice = createSlice({
 	},
 	reducers: {},
 	extraReducers: {
-		[fetchSubjects.pending]: (state) => {
+		[fetchTeachers.pending]: (state) => {
 			if (state.loading === 'idle') {
 				state.loading = 'pending';
 			}
 		},
-		[fetchSubjects.fulfilled]: (state, action) => {
+		[fetchTeachers.fulfilled]: (state, action) => {
 			if (state.loading === 'pending') {
 				state.loading = 'idle';
-				state.items = action.payload.subjects;
+				state.items = action.payload.users;
 			}
 		},
-		[fetchSubjects.rejected]: (state, action) => {
+		[fetchTeachers.rejected]: (state, action) => {
 			if (state.loading === 'pending') {
 				state.loading = 'idle';
 				state.error = action.error;
@@ -40,4 +40,4 @@ export const subjectsSlice = createSlice({
 	},
 });
 
-export default subjectsSlice.reducer;
+export default teachersSlice.reducer;
