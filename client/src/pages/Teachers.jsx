@@ -1,29 +1,32 @@
 import React from 'react';
-import { createAuthProvider } from '../jwt';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTeachers } from '../redux/reducers/teachersSlice';
 import { Schedule, TeacherBig } from '../Components';
 
 const Teachers = () => {
-	const { authFetch } = createAuthProvider();
+	const dispatch = useDispatch();
+	const teachers = useSelector((state) => state.teachers.items);
 
-	React.useEffect(async () => {
-		let response = await authFetch('/api/auth//userlist/TCHR', {
-			method: 'GET',
-		});
-		let result = await response.json();
-		console.log(result);
-	}, []);
+	React.useEffect(() => {
+		if (!teachers.length) {
+			dispatch(fetchTeachers());
+		}
+	});
 
 	return (
 		<main className='main'>
 			<div className='container'>
 				<div className='teachers'>
-					<div className='teachers__item'>
-						<TeacherBig />
-						<div className='teacher-big__dop'>
-							<span>Расписание</span>
-							<Schedule />
-						</div>
-					</div>
+					{teachers &&
+						teachers.map((teacher) => (
+							<div className='teachers__item' key={teacher._id}>
+								<TeacherBig data={teacher} />
+								<div className='teacher-big__dop'>
+									<span>Расписание</span>
+									<Schedule />
+								</div>
+							</div>
+						))}
 				</div>
 			</div>
 		</main>
