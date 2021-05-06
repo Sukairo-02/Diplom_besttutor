@@ -58,7 +58,6 @@ const TeacherForm = ({ data }) => {
 			}}
 			validationSchema={validationSchema}
 			onSubmit={(values) => {
-				console.log(values);
 				formSubmitHandler(values);
 			}}>
 			<Form className='form'>
