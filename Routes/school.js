@@ -152,5 +152,4 @@ router.get('/getsubmit_teacher', ensureRoles(['TCHR']), controller.getsubmit) //
 
 //router.get('/getassignmentschedule', ensureAuth, controller.getassignmentSchedule) //get info of upcoming assignments of current user - TO BE DONE
 
-
 module.exports = router
