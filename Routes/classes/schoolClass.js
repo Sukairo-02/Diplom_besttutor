@@ -122,7 +122,12 @@ class schoolController {
 				return res.status(403).json({ message: 'Error: invalid ID' })
 			}
 
-			const courses = await Courses.find({ id: { $in: user.courses } })
+			const ids = []
+			user.courses.forEach((e) => {
+				ids.push(e)
+			})
+
+			const courses = await Courses.find({ _id: { $in: ids } })
 			return res.json({ courses })
 		} catch (e) {
 			console.log(e)
@@ -139,8 +144,13 @@ class schoolController {
 			if (!user) {
 				return res.status(403).json({ message: 'Error: invalid ID' })
 			}
+			
+			const ids = []
+			user.courses.forEach((e) => {
+				ids.push(e)
+			})
 
-			const courses = await Courses.find({ id: { $in: user.courses } })
+			const courses = await Courses.find({ _id: { $in: ids } })
 			return res.json({ courses })
 		} catch (e) {
 			console.log(e)
@@ -1086,16 +1096,22 @@ class schoolController {
 
 					qLeft--
 					let checkedAmt = 0
-
+					let corrAnsw = 0
 					e.answers.forEach((elem) => {
 						el.answers.forEach((element) => {
 							if (elem.nID !== element.nID) {
 								return
 							}
+							corrAnsw += elem.isTrue
 							element.isCorrect = elem.isTrue && element.isChecked
 							checkedAmt += element.isChecked
 						})
 					})
+
+					if(checkedAmt == corrAnsw) {
+						e.isCorrect = true
+					}
+
 					if (checkedAmt == 0) {
 						isAnswers = true
 						return
@@ -1279,6 +1295,42 @@ class schoolController {
 
 	async getstatistic(req, res) {
 		try {
+			const { assignmentID } = req.params
+
+			const asg = await Assignments.findOne({ _id: assignmentID })
+			if (!asg) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			if (!asg.submits) {
+				return res
+					.status(403)
+					.json({ message: 'There are no submitted assignments to show statistics of.' })
+			}
+
+			const course = await Courses.findOne({ assignments: asg._id })
+
+			if (!course) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment's course!" })
+			}
+
+			if (course.teacher !== id) {
+				return res
+					.status(403)
+					.json({ message: "You are not this course's teaher!" })
+			}
+
+			let statistics = []
+			let qEasiest = []
+			let q
+			for(let i = 0; i < asg.submits.length; i++) {
+
+			}
+
 		} catch (e) {
 			console.log(e)
 			return res.status(500).json({

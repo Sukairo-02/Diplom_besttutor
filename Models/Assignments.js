@@ -26,6 +26,7 @@ const Assignments = new Schema({
 	submits: [
 		{
 			submitter: { type: String, required: true },
+			points: {type: Number, default: 0, required: true},
 			questions: [
 				{
 					qID: { type: String, required: true },
@@ -44,6 +45,7 @@ const Assignments = new Schema({
 							},
 						},
 					],
+					isCorrect: { type: Boolean, default: false },
 				},
 			],
 		},
