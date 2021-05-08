@@ -105,23 +105,23 @@ class schoolController {
 				})
 			})
 
-			courses.forEach(async (e) => {
-				e.usersdata = []
-				e.students.forEach(async (el) => {
-					let student = await User.findOne({ _id: el })
+			for(let i = 0; i < courses.length; i++) {
+				courses[i].usersdata = []
+				for (let j = 0; j < courses[i].students.length; j++) {
+					const student = await User.findOne({ _id: courses[i].students[j] })
 					if (!student) {
 						return res
-							.status(403)
-							.json({ message: 'Error: invalid User id' })
+						.status(403)
+						.json({ message: 'Error: invalid User id' })
 					}
-					e.usersdata.push({
+					courses[i].usersdata[j] = {
 						id: student._id,
 						avatar: student.avatar,
 						username: student.username,
 						email: student.email,
-					})
-				})
-			})
+					}
+				}
+			}
 
 			return res.json({ courses })
 		} catch (e) {
