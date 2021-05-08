@@ -16,6 +16,10 @@
 	margin-bottom: 20px;
 }
 
+.form__fieldset > fieldset {
+	margin-bottom: 0;
+}
+
 .form__fieldset--flex {
 	display: flex;
 	justify-content: space-between;

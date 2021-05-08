@@ -55,15 +55,23 @@
 }
 
 /* SUBJECT */
-@media screen and (max-width: 1400px) {
-	.subject__title,
-	.subject__count,
-	.subject__price,
-	.subject__schedule {
-		font-size: 16px;
+@media screen and (max-width: 650px) {
+	.subject__user {
+		gap: 10px;
 	}
 }
 
+@media screen and (max-width: 520px) {
+	.subject__users {
+		flex-direction: column;
+	}
+
+	.subject__user {
+		width: 100%;
+	}
+}
+
+/* CALENDAR */
 @media screen and (max-width: 420px) {
 	.calendar {
 		max-width: 300px;
