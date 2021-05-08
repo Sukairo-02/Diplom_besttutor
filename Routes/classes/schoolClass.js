@@ -124,7 +124,7 @@ class schoolController {
 
 			let ids = []
 			user.courses.forEach((e) => {
-				ids.push(e)
+				ids.push(e.id)
 			})
 
 			const courses = await Courses.find({ _id: { $in: ids } })
@@ -147,7 +147,7 @@ class schoolController {
 
 			let ids = []
 			user.courses.forEach((e) => {
-				ids.push(e)
+				ids.push(e.id)
 			})
 
 			const courses = await Courses.find({ _id: { $in: ids } })
