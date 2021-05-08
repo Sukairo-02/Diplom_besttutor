@@ -104,10 +104,10 @@ class schoolController {
 				})
 			})
 
-			courses.forEach((e) => {
+			courses.forEach(async (e) => {
 				e.usersdata = []
 				e.students.forEach(async (el) => {
-					const student = await User.findOne({ _id: el })
+					let student = await User.findOne({ _id: el })
 					if (!student) {
 						return res
 							.status(403)
