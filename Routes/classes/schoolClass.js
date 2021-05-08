@@ -5,6 +5,7 @@ const Assignments = require('../../models/Assignments')
 const Courses = require('../../models/Courses')
 const { validationResult } = require('express-validator')
 const config = require('config')
+const e = require('express')
 
 function getMaxDate(a) {
 	new Date(Math.max(...a.map((e) => new Date(e.MeasureDate))))
@@ -86,7 +87,7 @@ class schoolController {
 				_id: { $in: teacher.courses },
 			})
 
-			let courses = []
+			e.courses = []
 			coursesRaw.forEach((e) => {
 				courses.push({
 					teacher: e.teacher,
