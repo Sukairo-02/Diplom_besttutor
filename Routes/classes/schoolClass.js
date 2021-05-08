@@ -87,7 +87,7 @@ class schoolController {
 				_id: { $in: teacher.courses },
 			})
 
-			e.courses = []
+			let courses = []
 			coursesRaw.forEach((e) => {
 				courses.push({
 					teacher: e.teacher,
