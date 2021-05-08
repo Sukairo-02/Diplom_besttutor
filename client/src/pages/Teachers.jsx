@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeachers } from '../redux/reducers/teachersSlice';
-import { Schedule, TeacherBig } from '../Components';
+import { TeacherBig } from '../Components';
 
 const Teachers = () => {
 	const dispatch = useDispatch();
@@ -21,10 +21,6 @@ const Teachers = () => {
 						teachers.map((teacher) => (
 							<div className='teachers__item' key={teacher._id}>
 								<TeacherBig data={teacher} />
-								<div className='teacher-big__dop'>
-									<span>Расписание</span>
-									<Schedule />
-								</div>
 							</div>
 						))}
 				</div>
