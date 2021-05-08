@@ -82,8 +82,25 @@ class schoolController {
 				return res.status(403).json({ message: 'Error: invalid ID' })
 			}
 
-			let courses = await Courses.find({
+			const coursesRaw = await Courses.find({
 				_id: { $in: teacher.courses },
+			})
+
+			let courses = []
+			coursesRaw.forEach((e) => {
+				courses.push({
+					teacher: e.teacher,
+					subject: e.subject,
+					title: e.title,
+					students: e.students,
+					isPublished: e.isPublished,
+					isBlocked: e.isBlocked,
+					price: e.price,
+					chatroomID: e.chatroomID,
+					lessons: e.lessons,
+					assignments: e.assignments,
+					chatroom: e.chatroom,
+				})
 			})
 
 			courses.forEach((e) => {
@@ -1319,12 +1336,10 @@ class schoolController {
 			}
 
 			if (!asg.submits) {
-				return res
-					.status(403)
-					.json({
-						message:
-							'There are no submitted assignments to show statistics of.',
-					})
+				return res.status(403).json({
+					message:
+						'There are no submitted assignments to show statistics of.',
+				})
 			}
 
 			const course = await Courses.findOne({ assignments: asg._id })

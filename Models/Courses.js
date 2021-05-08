@@ -22,22 +22,6 @@ const Courses = new Schema({
 		},
 	],
 	assignments: [{ type: String }],
-	chatroom: [
-		{
-			post: {
-				author: { type: String, required: true }, //sender's ID
-				text: { type: String },
-				images: [{ type: String }], //base64-converted images
-				comments: [
-					{
-						author: { type: String, required: true }, //sender's ID
-						text: { type: String },
-						images: [{ type: String }], //base64-converted images
-					},
-				],
-			},
-		},
-	],
 })
 
 module.exports = model('Courses', Courses)
