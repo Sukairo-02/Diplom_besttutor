@@ -82,7 +82,7 @@ class schoolController {
 				return res.status(403).json({ message: 'Error: invalid ID' })
 			}
 
-			const courses = await Courses.find({
+			let courses = await Courses.find({
 				_id: { $in: teacher.courses },
 			})
 
@@ -103,6 +103,7 @@ class schoolController {
 					})
 				})
 			})
+
 			return res.json({ courses })
 		} catch (e) {
 			console.log(e)
