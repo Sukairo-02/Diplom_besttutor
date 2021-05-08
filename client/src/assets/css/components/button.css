@@ -6,13 +6,21 @@
 	border-radius: var(--radius);
 	border-style: none;
 	cursor: pointer;
-	transition: box-shadow .3s ease;
+	transition: box-shadow 0.3s ease;
+}
+
+.btn--red {
+	background-color: var(--red-color);
 }
 
 .btn--transparent {
 	background-color: transparent;
 	border: 1px solid var(--accent-color);
 	color: var(--main-text);
+}
+
+.btn--rotate {
+	transform: rotate(180deg);
 }
 
 .btn:hover {

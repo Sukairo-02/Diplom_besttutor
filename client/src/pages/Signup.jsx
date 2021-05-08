@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { useHttp } from '../hooks/http.hook';
 import { Formik, Form } from 'formik';
@@ -42,7 +41,7 @@ const Signup = () => {
 			<img className='sign__bg' src={img} alt='Фото ученика за компьютером' />
 
 			<div className='sign__info'>
-				<h1 className='sign__logo'>Tutor</h1>
+				<h1 className='sign__logo'>BestTutor</h1>
 
 				<Formik
 					initialValues={{

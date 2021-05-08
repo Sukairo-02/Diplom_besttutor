@@ -1,7 +1,16 @@
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
+import TeacherProfileSubject from './TeacherProfileSubject';
 
 const TeacherProfile = () => {
-	const info = useSelector((state) => state.userInfo.info);
+	const dispatch = useDispatch();
+	const { info } = useSelector(({ userInfo }) => userInfo);
+
+	React.useEffect(() => {
+		dispatch(fetchTeacherCourses());
+	}, [dispatch]);
+
 	return (
 		<>
 			{!info.teacherCourses.length ? (
@@ -12,7 +21,14 @@ const TeacherProfile = () => {
 					</button>
 				</div>
 			) : (
-				<div>Courses</div>
+				<div className='teacher-profile'>
+					<div className='teacher-profile__subjects'>
+						{typeof info.teacherCourses[0] === 'object' &&
+							info.teacherCourses.map((course) => (
+								<TeacherProfileSubject key={course._id} course={course} />
+							))}
+					</div>
+				</div>
 			)}
 		</>
 	);

@@ -1,12 +1,12 @@
 import React from 'react';
 
 export const useHttp = () => {
-	const [loading, setLoadin] = React.useState(false);
+	const [loading, setLoading] = React.useState(false);
 	const [error, setError] = React.useState(null);
 
 	const request = React.useCallback(
 		async (url, method = 'GET', body = null, headers = {}) => {
-			setLoadin(true);
+			setLoading(true);
 			try {
 				if (body) {
 					body = JSON.stringify(body);
@@ -20,11 +20,11 @@ export const useHttp = () => {
 					throw new Error(data.message || 'Что-то пошло не так');
 				}
 
-				setLoadin(false);
+				setLoading(false);
 
 				return data;
 			} catch (e) {
-				setLoadin(false);
+				setLoading(false);
 				setError(e.messagee);
 				throw e;
 			}
