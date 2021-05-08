@@ -10,4 +10,5 @@ export { default as FormFile } from './FormFile';
 export { default as EditForm } from './EditForm';
 
 export { default as TeacherProfile } from './TeacherProfile';
+export { default as TeacherProfileSubject } from './TeacherProfileSubject';
 export { default as UserProfile } from './UserProfile';

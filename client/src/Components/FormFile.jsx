@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit } from '../icons';
+import { Edit } from '../assets/icons';
 
 const FormFile = ({ setFieldValue, avatar }) => {
 	const [file, setFile] = React.useState();
