@@ -90,6 +90,7 @@ class schoolController {
 			let courses = []
 			coursesRaw.forEach((e) => {
 				courses.push({
+					_id: e._id,
 					teacher: e.teacher,
 					subject: e.subject,
 					title: e.title,
