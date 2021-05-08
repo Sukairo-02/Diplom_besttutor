@@ -122,7 +122,7 @@ class schoolController {
 				return res.status(403).json({ message: 'Error: invalid ID' })
 			}
 
-			const ids = []
+			let ids = []
 			user.courses.forEach((e) => {
 				ids.push(e)
 			})
@@ -144,8 +144,8 @@ class schoolController {
 			if (!user) {
 				return res.status(403).json({ message: 'Error: invalid ID' })
 			}
-			
-			const ids = []
+
+			let ids = []
 			user.courses.forEach((e) => {
 				ids.push(e)
 			})
