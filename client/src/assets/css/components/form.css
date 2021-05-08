@@ -16,6 +16,10 @@
 	margin-bottom: 20px;
 }
 
+.form__fieldset > fieldset {
+	margin-bottom: 0;
+}
+
 .form__fieldset--flex {
 	display: flex;
 	justify-content: space-between;
@@ -61,6 +65,7 @@
 	background-color: var(--secondary-bg);
 	border-radius: var(--radius);
 	border: 1px solid var(--borders);
+	font-size: 16px;
 	outline: none;
 	transition: outline 0.3s ease;
 }

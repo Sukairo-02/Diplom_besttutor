@@ -11,7 +11,15 @@ const User = new Schema({
 	address: { type: String, default: 'TBA' },
 	avatar: { type: String },
 	roles: [{ type: String, ref: 'Role' }], //possible roles: 'USER', 'TCHR'
+	balance: { type: Number, required: true, default: 0 },
 	isActive: { type: Boolean, required: true, default: false },
+	courses: [
+		{
+			id: { type: String, required: true },
+			price: { type: Number, required: true, default: 0 },
+		},
+	], //courses where user participates as student
+	chats: [{ type: String }] //private messages, chats will be saved separately to avoid duplication
 })
 
 module.exports = model('User', User)

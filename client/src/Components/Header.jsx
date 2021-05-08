@@ -1,11 +1,9 @@
 import React from 'react';
-import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-
-import img from '../assets/img/people/1.jpeg';
+import { createAuthProvider } from '../jwt';
 
 const Header = () => {
-	const auth = React.useContext(AuthContext);
+	const { logout } = createAuthProvider();
 	const [visibleMenu, setVisibleMenu] = React.useState(false);
 
 	const menuRef = React.useRef();
@@ -25,40 +23,36 @@ const Header = () => {
 	}, []);
 
 	const logoutHandler = () => {
-		auth.logout();
+		logout();
 	};
 
 	return (
 		<header className='header'>
-			<div className='header__logo'>Tutor</div>
+			<div className='header__logo'>BestTutor</div>
 			<nav className='header__nav'>
 				<ul className='header__ul'>
+					<li className='header__li'>
+						<Link to='/'>Главная</Link>
+					</li>
 					<li className='header__li'>
 						<Link to='/subjects'>Предметы</Link>
 					</li>
 					<li className='header__li'>
 						<Link to='/teachers'>Учителя</Link>
 					</li>
-					<li className='header__li'>
+					{/* <li className='header__li'>
 						<Link to='/offlineLessons'>Оффлайн уроки</Link>
-					</li>
+					</li> */}
 				</ul>
-				<img
-					ref={menuRef}
-					src={img}
-					alt='Аватар'
-					className='header__avatar'
-					onClick={toggleVisiblePopup}
-				/>
+				<button ref={menuRef} onClick={toggleVisiblePopup} className='btn'>
+					Меню
+				</button>
 				{visibleMenu && (
 					<div className='header__menu'>
 						<ul>
-							<li>
+							{/* <li>
 								<Link to='/chats'>Чаты</Link>
-							</li>
-							<li>
-								<Link to='/userSubjects'>Предметы</Link>
-							</li>
+							</li> */}
 							<li>
 								<Link to='/editProfile'>Редактировать профиль</Link>
 							</li>

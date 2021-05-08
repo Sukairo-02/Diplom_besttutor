@@ -1,11 +1,10 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { useHttp } from '../hooks/http.hook';
-import { AuthContext } from '../context/AuthContext';
 import { Formik, Form } from 'formik';
 import { FormInput } from '../Components';
 import * as yup from 'yup';
 import img from '../assets/img/1.webp';
+import { createAuthProvider } from '../jwt';
 
 const validationSchema = yup.object({
 	email: yup
@@ -15,20 +14,20 @@ const validationSchema = yup.object({
 	password: yup
 		.string()
 		.min(6, 'Минимальная длина 6')
-		.required('Password обязательное поле'),
+		.required('Пароль обязательное поле'),
 });
 
 const Login = () => {
-	const auth = React.useContext(AuthContext);
 	const { loading, request } = useHttp();
+	const { login } = createAuthProvider();
 
-	const formHandler = async (values) => {
-		try {
-			const data = await request('/api/auth/login', 'POST', values);
-			auth.login(data.token, data.id);
-		} catch (e) {
-			alert(e.message);
-		}
+	const formHandler = (values) => {
+		request('/api/auth/login', 'POST', values)
+			.then((data) => {
+				login(data);
+				document.location.reload();
+			})
+			.catch((error) => alert(error.message));
 	};
 
 	return (
@@ -36,7 +35,7 @@ const Login = () => {
 			<img className='sign__bg' src={img} alt='Фото ученика за компьютером' />
 
 			<div className='sign__info'>
-				<h1 className='sign__logo'>Tutor</h1>
+				<h1 className='sign__logo'>BestTutor</h1>
 
 				<Formik
 					initialValues={{

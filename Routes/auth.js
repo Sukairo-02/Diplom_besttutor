@@ -71,9 +71,13 @@ router.get('/userdata', ensureAuth, controller.userdata)
 
 router.get('/lightdata', ensureAuth, controller.lightdata)
 
+router.get('/lightdataID/:id', controller.lightdataID) //get data by user's id
+
 router.get('/userdataID/:id', controller.userdataID) //same but full data
 
-router.get('/lightdataID/:id', controller.lightdataID) //get data by user's id
+router.post('/userdataArr/', controller.userdataArr) //userdata by array of ids
+
+router.post('/lightdataArr/', controller.lightdataArr) //lightdata by array of ids
 
 router.get('/userlist/:role', controller.userlist) //get list of users by their role ("TCHR"/"USER").
 

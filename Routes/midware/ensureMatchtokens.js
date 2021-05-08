@@ -2,6 +2,10 @@ const jwt = require("jsonwebtoken")
 const config = require("config")
 
 module.exports = async function (req, res, next) {
+    if (req.method === 'OPTIONS') {
+        return next()
+    }
+
     try {
         if (!(req.user && req.refreshToken)) {
             return res.status(500).json({ message: "Error: can't find all needed tokens!"})
