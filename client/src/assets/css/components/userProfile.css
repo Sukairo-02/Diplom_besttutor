@@ -1,0 +1,11 @@
+.user-profile {
+	max-width: 700px;
+}
+
+.user-profile__subject {
+	margin-bottom: 20px;
+}
+
+.user-profile__subject:last-child {
+	margin-bottom: 0;
+}

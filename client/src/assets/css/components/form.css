@@ -23,7 +23,6 @@
 .form__fieldset--flex {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
 	gap: 20px;
 }
 
@@ -61,6 +60,7 @@
 .form__select,
 .form__desc {
 	width: 100%;
+	font-family: 'Roboto', sans-serif;
 	padding: 17px 20px;
 	background-color: var(--secondary-bg);
 	border-radius: var(--radius);
