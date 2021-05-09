@@ -1,17 +1,18 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { UserProfileSubject } from './index';
 
 const UserProfile = () => {
 	const history = useHistory();
 	const info = useSelector((state) => state.userInfo.info);
 
 	const btnHandler = React.useCallback(() => {
-		history.push('/subjects');
+		history.push('/teachers');
 	}, [history]);
 
 	return (
-		<div>
+		<>
 			{!info.courses.length ? (
 				<div className='content__empty'>
 					У вас пока нет предмета и учителя.
@@ -22,9 +23,15 @@ const UserProfile = () => {
 					</button>
 				</div>
 			) : (
-				<div>Courses</div>
+				<div className='user-profile'>
+					<div className='user-profile__subjects'>
+						{info.courses.map((course) => (
+							<UserProfileSubject key={course._id} course={course} />
+						))}
+					</div>
+				</div>
 			)}
-		</div>
+		</>
 	);
 };
 

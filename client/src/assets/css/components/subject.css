@@ -20,12 +20,7 @@
 	gap: 20px;
 }
 
-.subject__row--mb {
-	margin-bottom: 20px;
-}
-
-.subject__form label,
-input {
+.subject__form label {
 	font-size: 16px;
 }
 
@@ -56,6 +51,23 @@ input {
 .subject__info {
 	overflow: hidden;
 	transition: max-height 0.6s ease;
+}
+
+.subject__info--active {
+	margin-top: 20px;
+	padding: 0 5px;
+}
+
+.subject__desc {
+	margin-bottom: 20px;
+}
+
+.subject__btns {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 20px;
 }
 
 .subject__lessons {
