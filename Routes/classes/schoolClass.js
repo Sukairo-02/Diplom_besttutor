@@ -94,6 +94,7 @@ class schoolController {
 					teacher: e.teacher,
 					subject: e.subject,
 					title: e.title,
+					desc: e.desc,
 					students: e.students,
 					isPublished: e.isPublished,
 					isBlocked: e.isBlocked,
@@ -1155,7 +1156,8 @@ class schoolController {
 								continue
 							}
 
-							questions[j].answers[m].text = asg.questions[i].answers[n].text
+							questions[j].answers[m].text =
+								asg.questions[i].answers[n].text
 							questions[j].answers[m].isCorrect =
 								asg.questions[i].answers[n] &&
 								questions[j].answers[m].isChecked
@@ -1392,7 +1394,78 @@ class schoolController {
 					.json({ message: "You are not this course's teaher!" })
 			}
 
-			let statistics = []
+			let statistics
+			statistics.best_students = []
+			statistics.hardest_questions = []
+			statistics.most_popular_answers = []
+			for (let i = 0; i < asg.submits.length; i++) {
+				let submit = asg.submits[i]
+
+				let student = await Students.findOne({ _id: submit.submitter })
+				if (!student) {
+					return res
+						.status(403)
+						.json({
+							message: 'Found submit from non-existing student!',
+						})
+				}
+				statistics.best_students[i] = {
+					points: submit.points,
+					_id: student._id,
+					username: student.username,
+					avatar: user.avatar,
+					email: user.email,
+				}
+				for (let j = 0; j < submit.questions.length; j++) {
+					let question = submit.questions[j]
+					let existsHQ = -1
+					for (let n = 0; n < statistics.hardest_questions; n++) {
+						if (
+							statistics.hardest_questions[n].qID === question.qID
+						) {
+							existsHQ = n
+							break
+						}
+					}
+
+					let existsMPA = -1
+					for (let n = 0; n < statistics.most_popular_answers; n++) {
+						if (
+							statistics.most_popular_answers[n].qID ===
+							question.qID
+						) {
+							existsMPA = n
+							break
+						}
+					}
+
+					if (existsHQ > -1) {
+						statistics.hardest_questions[i].correct_answers +=
+							question.isCorrect
+					} else {
+						let answers = []
+						for (let n = 0; n < question.answers.length; n++) {
+							let cAnswer = question.answers[n]
+							answers[n] = {
+								text: cAnswer.text,
+								nID: cAnswer.nID,
+								isTrue:
+									(cAnswer.isChecked && cAnswer.isCorrect) ||
+									(!cAnswer.isChecked && !cAnswer.isCorrect),
+							}
+						}
+						statistics.hardest_questions[
+							statistics.hardest_questions.length
+						] = {
+							title: question.title,
+							qID: question.qID,
+							correct_answers: 0 + question.isCorrect,
+							points: question.points,
+							answers,
+						}
+					}
+				}
+			}
 
 			for (let i = 0; i < asg.submits.length; i++) {}
 		} catch (e) {
@@ -1403,5 +1476,7 @@ class schoolController {
 		}
 	}
 }
+
+//statistics: Users by points, questions by ansers
 
 module.exports = new schoolController()
