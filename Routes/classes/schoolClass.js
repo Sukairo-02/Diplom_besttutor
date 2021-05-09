@@ -805,13 +805,12 @@ class schoolController {
 	}
 
 	async newassignment(req, res) {
-		//ensureOwner
 		try {
 			const course = req.course
 			const {
 				title,
 				desc,
-				isShuflled,
+				isShuffled,
 				allowOvertime,
 				date,
 				endDate,
@@ -840,7 +839,12 @@ class schoolController {
 				})
 			}
 
-			let [isTitles, isPoints, isAnswers] = [false, false, false]
+			let [isTitles, isPoints, isAnswers, isMulviol] = [
+				false,
+				false,
+				false,
+				false,
+			]
 			let maxPoints = 0
 			questions.forEach((e) => {
 				if (!e.title) {
@@ -858,7 +862,7 @@ class schoolController {
 					return
 				}
 
-				maxPoints += points
+				maxPoints += e.points
 
 				if (!e.answers) {
 					isAnswers = true
@@ -866,19 +870,26 @@ class schoolController {
 				}
 
 				let hasAnswers = false
+				let trueAmt = 0
 				let answAmount = 0
 				e.answers.forEach((el) => {
-					if (!el.title) {
+					if (!el.text) {
 						isTitles = true
 						return
 					}
 
 					if (el.isTrue) {
 						hasAnswers = true
+						trueAmt++
 					}
 
 					answAmount++
 				})
+
+				if (!e.isMulAnswers && trueAmt > 1) {
+					isMulviol = true
+					return
+				}
 
 				if (answAmount < 2) {
 					isAnswers = true
@@ -890,6 +901,13 @@ class schoolController {
 					return
 				}
 			})
+
+			if (isMulviol) {
+				return res.status(403).json({
+					message:
+						"Single answer questions can't have multiple true answers!",
+				})
+			}
 
 			if (isTitles) {
 				return res.status(403).json({
@@ -913,13 +931,21 @@ class schoolController {
 			const assignment = new Assignments({
 				title,
 				desc,
-				isShuflled,
+				isShuffled,
 				allowOvertime,
 				maxPoints,
 				date,
 				endDate,
 				questions,
 			})
+
+			assignment.questions.forEach((e) => {
+				e.qID = e._id
+				e.answers.forEach((el) => {
+					el.nID = el._id
+				})
+			})
+
 			await assignment.save()
 			await course.assignments.push(assignment._id)
 			await course.save()
@@ -994,6 +1020,7 @@ class schoolController {
 			}
 
 			const {
+				_id,
 				title,
 				desc,
 				isShuffled,
@@ -1027,6 +1054,7 @@ class schoolController {
 			}
 
 			return res.json({
+				_id,
 				title,
 				desc,
 				isShuffled,
@@ -1050,7 +1078,7 @@ class schoolController {
 			const { assignmentID } = req.body
 
 			const assignment = await Assignments.findOne({ _id: assignmentID })
-			if (!asg) {
+			if (!assignment) {
 				return res
 					.status(403)
 					.json({ message: "Can't find assignment!" })
@@ -1128,76 +1156,70 @@ class schoolController {
 					.json({ message: 'You are not subscribed to this course!' })
 			}
 
-			let qLeft = asg.questions.length
+			let qLeft = asg.questions.length 
 			let points = 0
 			for (let i = 0; i < asg.questions.length; i++) {
 				for (let j = 0; j < questions.length; j++) {
-					if (asg.questions[i].qID !== questions[j].qID) {
-						continue
-					}
+					if (asg.questions[i].qID === questions[j].qID) {
 
-					questions[j].title = asg.questions[i].title
+						questions[j].title = asg.questions[i].title
+						questions[j].points = asg.questions[i].points
 
-					let ansCnt = 0
-					let corAnsCnt = 0
-					let isMul = asg.questions[i].isMulAnswers
+						let ansCnt = 0
+						let corAnsCnt = 0
+						let isMul = asg.questions[i].isMulAnswers
 
-					for (let n = 0; n < asg.questions[i].answers.length; n++) {
-						conAnsCnt += asg.questions[i].answers[n].isTrue
-						for (
-							let m = 0;
-							m < asg.questions[i].answers.length;
-							m++
-						) {
-							if (
-								asg.questions[i].answers[n].qID !==
-								questions[j].answers[m].qID
-							) {
-								continue
+						for (let n = 0; n < asg.questions[i].answers.length; n++) {
+							for (let m = 0; m < asg.questions[i].answers.length; m++) {
+								if (asg.questions[i].answers[n].nID === questions[j].answers[m].nID) {
+									questions[j].answers[m].text =
+										asg.questions[i].answers[n].text
+									questions[j].answers[m].isCorrect =
+										asg.questions[i].answers[n].isTrue ==
+										questions[j].answers[m].isChecked
+									corAnsCnt +=
+										questions[j].answers[m].isCorrect 
+									ansCnt +=
+										questions[j].answers[m].isChecked
+								}
 							}
-
-							questions[j].answers[m].text =
-								asg.questions[i].answers[n].text
-							questions[j].answers[m].isCorrect =
-								asg.questions[i].answers[n] &&
-								questions[j].answers[m].isChecked
-							corAnsCnt += questions[j].answers[m].isCorrect
-							ansCnt += questions[j].answers[m].isChecked
 						}
-					}
 
-					if (!ansCnt) {
-						return res.status(403).json({
-							message:
-								'Each question must have at least 1 answer!',
-						})
-					}
+						if (!ansCnt) {
+							return res.status(403).json({
+								message:
+									'Each question must have at least 1 answer!',
+							})
+						}
 
-					questions[j].points = asg.questions[i].points
-					questions[j].isCorrect = ansCnt == corAnsCnt
-					if (questions[j].isCorrect) {
-						points += questions[j].points
-					}
+						if (!isMul && ansCnt > 1) {
+							console.log(questions[j].answers, ansCnt, corAnsCnt)
+							return res.status(403).json({
+								message:
+									"Error: single answer question can't have multiple answers!",
+							})
+						}
 
-					if (!isMul && ansCnt > 1) {
-						return res.status(403).json({
-							message:
-								"Error: single answer question can't have multiple answers!",
-						})
-					}
+						questions[j].isCorrect = asg.questions[i].answers.length == corAnsCnt
+						if (questions[j].isCorrect) {
+							points += asg.questions[i].points
+						}
+						console.log(asg.questions[i].answers.length)
+						console.log(corAnsCnt)
 
-					qLeft--
+						qLeft--
+					}
 				}
 			}
 
-			if (!qLeft) {
+			if (qLeft) {
 				return res
 					.status(403)
 					.json({ message: 'You must answer every question!' })
 			}
 
 			let oldSubmit
-			assignment.submits.forEach((e) => {
+			asg.submits.forEach((e) => {
 				if (e.submitter === id) {
 					oldSubmit = e
 				}
@@ -1285,7 +1307,7 @@ class schoolController {
 			let submit
 			asg.submits.every((e) => {
 				if (e.submitter === id) {
-					submit = e.submitter
+					submit = e
 					return false
 				}
 				return true
@@ -1341,7 +1363,7 @@ class schoolController {
 			let submit
 			asg.submits.every((e) => {
 				if (e.submitter === submitterID) {
-					submit = e.submitter
+					submit = e
 					return false
 				}
 				return true
@@ -1349,7 +1371,7 @@ class schoolController {
 
 			if (!submit) {
 				return res.status(403).json({
-					message: "You didn't submit answers to this assignment!",
+					message: "User didn't submit answers to this assignment!",
 				})
 			}
 
@@ -1364,7 +1386,8 @@ class schoolController {
 
 	async getstatistic(req, res) {
 		try {
-			const { assignmentID } = req.params
+			const { id } = req.user
+			const { assignmentID } = req.body
 
 			const asg = await Assignments.findOne({ _id: assignmentID })
 			if (!asg) {
@@ -1394,30 +1417,29 @@ class schoolController {
 					.json({ message: "You are not this course's teaher!" })
 			}
 
-			let statistics
-			statistics.best_students = []
-			statistics.hardest_questions = []
-			statistics.most_popular_answers = []
+			let statistics = {
+				best_students: [],
+				hardest_questions: []
+			}
 			for (let i = 0; i < asg.submits.length; i++) {
 				let submit = asg.submits[i]
 
-				let student = await Students.findOne({ _id: submit.submitter })
+				let student = await User.findOne({ _id: submit.submitter })
 				if (!student) {
-					return res
-						.status(403)
-						.json({
-							message: 'Found submit from non-existing student!',
-						})
+					return res.status(403).json({
+						message: 'Found submit from non-existing student!',
+					})
 				}
 				statistics.best_students[i] = {
 					points: submit.points,
 					_id: student._id,
 					username: student.username,
-					avatar: user.avatar,
-					email: user.email,
+					avatar: student.avatar,
+					email: student.email,
 				}
 				for (let j = 0; j < submit.questions.length; j++) {
 					let question = submit.questions[j]
+
 					let existsHQ = -1
 					for (let n = 0; n < statistics.hardest_questions; n++) {
 						if (
@@ -1428,20 +1450,27 @@ class schoolController {
 						}
 					}
 
-					let existsMPA = -1
-					for (let n = 0; n < statistics.most_popular_answers; n++) {
-						if (
-							statistics.most_popular_answers[n].qID ===
-							question.qID
-						) {
-							existsMPA = n
-							break
-						}
-					}
-
 					if (existsHQ > -1) {
 						statistics.hardest_questions[i].correct_answers +=
 							question.isCorrect
+						for (
+							let n = 0;
+							statistics.hardest_questions[i].answers.length;
+							n++
+						) {
+							for (let m = 0; m < question.answers.length; m++) {
+								if (
+									statistics.hardest_questions[i].answers[n]
+										.nID !== question.answers[m].nID
+								) {
+									continue
+								}
+
+								statistics.hardest_questions[i].answers[
+									n
+								].picked += question.answers[m].isChecked
+							}
+						}
 					} else {
 						let answers = []
 						for (let n = 0; n < question.answers.length; n++) {
@@ -1449,9 +1478,8 @@ class schoolController {
 							answers[n] = {
 								text: cAnswer.text,
 								nID: cAnswer.nID,
-								isTrue:
-									(cAnswer.isChecked && cAnswer.isCorrect) ||
-									(!cAnswer.isChecked && !cAnswer.isCorrect),
+								isTrue: cAnswer.isChecked == cAnswer.isCorrect,
+								picked: 0 + cAnswer.isChecked,
 							}
 						}
 						statistics.hardest_questions[
@@ -1467,7 +1495,29 @@ class schoolController {
 				}
 			}
 
-			for (let i = 0; i < asg.submits.length; i++) {}
+			statistics.best_students.sort((a, b) => {
+				return a.points < b.points ? 1 : a.points > b.points ? -1 : 0
+			})
+
+			statistics.hardest_questions.sort((a, b) => {
+				return a.correct_answers > b.correct_answers
+					? 1
+					: a.correct_answers < b.correct_answers
+					? -1
+					: 0
+			})
+
+			statistics.hardest_questions.forEach((e) => {
+				e.answers.sort((a, b) => {
+					return a.picked < b.picked
+						? 1
+						: a.picked > b.picked
+						? -1
+						: 0
+				})
+			})
+
+			return res.json({ statistics })
 		} catch (e) {
 			console.log(e)
 			return res.status(500).json({

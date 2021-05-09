@@ -11,12 +11,12 @@ const Assignments = new Schema({
 	questions: [
 		{
 			title: { type: String, required: true },
-			qID: Schema.Types.ObjectId,
+			qID: { type: String },
 			points: { type: Number, default: 0 },
 			isMulAnswers: { type: Boolean, required: true, default: false }, //determines whether question is answered by radio button or checkbox (radio by default)
 			answers: [
 				{
-					nID: Schema.Types.ObjectId,
+					nID: { type: String },
 					text: { type: String, required: true },
 					isTrue: { type: Boolean, required: true, default: false },
 				},
@@ -26,12 +26,12 @@ const Assignments = new Schema({
 	submits: [
 		{
 			submitter: { type: String, required: true },
-			points: {type: Number, default: 0, required: true},
+			points: { type: Number, default: 0, required: true },
 			questions: [
 				{
-					title: { type: String, required: true},
+					title: { type: String, required: true },
 					qID: { type: String, required: true },
-					points: { type: Number, required: true},
+					points: { type: Number, required: true },
 					isCorrect: { type: Boolean, default: false },
 					answers: [
 						{
