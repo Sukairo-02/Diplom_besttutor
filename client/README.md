@@ -1,12 +1,12 @@
 # Dependencies
 
-@reduxjs/toolkit
-formik
-react
-react-dom
-react-redux
-react-router-dom
-yup
+- @reduxjs/toolkit
+- formik
+- react
+- react-dom
+- react-redux
+- react-router-dom
+- yup
 
 ## Script for start project
 
