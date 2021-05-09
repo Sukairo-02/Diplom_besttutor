@@ -94,6 +94,7 @@ class schoolController {
 					teacher: e.teacher,
 					subject: e.subject,
 					title: e.title,
+					desc: e.desc,
 					students: e.students,
 					isPublished: e.isPublished,
 					isBlocked: e.isBlocked,
@@ -105,14 +106,16 @@ class schoolController {
 				})
 			})
 
-			for(let i = 0; i < courses.length; i++) {
+			for (let i = 0; i < courses.length; i++) {
 				courses[i].usersdata = []
 				for (let j = 0; j < courses[i].students.length; j++) {
-					const student = await User.findOne({ _id: courses[i].students[j] })
+					const student = await User.findOne({
+						_id: courses[i].students[j],
+					})
 					if (!student) {
 						return res
-						.status(403)
-						.json({ message: 'Error: invalid User id' })
+							.status(403)
+							.json({ message: 'Error: invalid User id' })
 					}
 					courses[i].usersdata[j] = {
 						id: student._id,
@@ -1083,99 +1086,132 @@ class schoolController {
 
 	async submit(req, res) {
 		try {
-			// 	const { id } = req.user
-			// 	const { assignmentID, questions } = req.body
-			// 	const asg = await Assignments.findOne({ _id: assignmentID })
-			// 	if (!asg) {
-			// 		return res
-			// 			.status(403)
-			// 			.json({ message: "Can't find assignment!" })
-			// 	}
-			// 	let now = new Date().getTime()
-			// 	let dateStart = new Date(asg.date).getTime()
-			// 	let dateEnd = new Date(asg.date).getTime()
-			// 	if (now < dateStart) {
-			// 		return res
-			// 			.status(403)
-			// 			.json({ message: "Assignment didn't begin yet!" })
-			// 	}
-			// 	if (!asg.allowOvertime && now > dateEnd) {
-			// 		return res.status(403).json({
-			// 			message:
-			// 				"This assignment can't be submitted past it's end time!",
-			// 		})
-			// 	}
-			// 	const course = await Courses.findOne({ assignments: assignmentID })
-			// 	let isSubbed = false
-			// 	course.students.forEach((e) => {
-			// 		if (e === id) {
-			// 			isSubbed = true
-			// 			return
-			// 		}
-			// 	})
-			// 	if (!isSubbed) {
-			// 		return res
-			// 			.status(403)
-			// 			.json({ message: 'You are not subscribed to this course!' })
-			// 	}
-			// 	let qLeft = asg.questions.length
-			// 	let isAnswers = false
-			// 	let isMulViolation = false
-			// 	asg.questions.forEach((e) => {
-			// 		questions.forEach((el) => {
-			// 			if (e.qID !== el.qID) {
-			// 				return
-			// 			}
-			// 			qLeft--
-			// 			let checkedAmt = 0
-			// 			let corrAnsw = 0
-			// 			e.answers.forEach((elem) => {
-			// 				el.answers.forEach((element) => {
-			// 					if (elem.nID !== element.nID) {
-			// 						return
-			// 					}
-			// 					corrAnsw += elem.isTrue
-			// 					element.isCorrect = elem.isTrue && element.isChecked
-			// 					checkedAmt += element.isChecked
-			// 				})
-			// 			})
-			// 			if(checkedAmt == corrAnsw) {
-			// 				el.isCorrect = true
-			// 			}
-			// 			if (checkedAmt == 0) {
-			// 				isAnswers = true
-			// 				return
-			// 			}
-			// 			if (!e.isMulAnswers && checkedAmt > 1) {
-			// 				isMulViolation = true
-			// 				return
-			// 			}
-			// 		})
-			// 		if (isAnswers || isMulViolation) {
-			// 			return
-			// 		}
-			// 	})
-			// 	if (qLeft > 0 || !isAnswers) {
-			// 		return res
-			// 			.status(403)
-			// 			.json({ message: 'Error: you must answer all questions!' })
-			// 	}
-			// 	if (isMulViolation) {
-			// 		return res.status(403).json({
-			// 			message:
-			// 				"Error: single answer questions can't have multiple answers!",
-			// 		})
-			// 	}
-			// 	let oldSubmit
-			// 	assignment.submits.forEach((e) => {
-			// 		if (e.submitter === id) {
-			// 			oldSubmit = e
-			// 		}
-			// 	})
-			// 	if
-			// 	return res
-			// 		.status(201)
-			// 		.json({ message: 'Assignment submitted succesfully!' })
+			const { id } = req.user
+			const { assignmentID, questions } = req.body
+
+			const asg = await Assignments.findOne({ _id: assignmentID })
+			if (!asg) {
+				return res
+					.status(403)
+					.json({ message: "Can't find assignment!" })
+			}
+
+			let now = new Date().getTime()
+			let dateStart = new Date(asg.date).getTime()
+			let dateEnd = new Date(asg.date).getTime()
+
+			if (now < dateStart) {
+				return res
+					.status(403)
+					.json({ message: "Assignment didn't begin yet!" })
+			}
+
+			if (!asg.allowOvertime && now > dateEnd) {
+				return res.status(403).json({
+					message:
+						"This assignment can't be submitted past it's end time!",
+				})
+			}
+
+			const course = await Courses.findOne({ assignments: assignmentID })
+			let isSubbed = false
+			course.students.forEach((e) => {
+				if (e === id) {
+					isSubbed = true
+					return
+				}
+			})
+
+			if (!isSubbed) {
+				return res
+					.status(403)
+					.json({ message: 'You are not subscribed to this course!' })
+			}
+
+			let qLeft = asg.questions.length
+			let points = 0
+			for (let i = 0; i < asg.questions.length; i++) {
+				for (let j = 0; j < questions.length; j++) {
+					if (asg.questions[i].qID !== questions[j].qID) {
+						continue
+					}
+
+					questions[j].title = asg.questions[i].title
+
+					let ansCnt = 0
+					let corAnsCnt = 0
+					let isMul = asg.questions[i].isMulAnswers
+
+					for (let n = 0; n < asg.questions[i].answers.length; n++) {
+						conAnsCnt += asg.questions[i].answers[n].isTrue
+						for (
+							let m = 0;
+							m < asg.questions[i].answers.length;
+							m++
+						) {
+							if (
+								asg.questions[i].answers[n].qID !==
+								questions[j].answers[m].qID
+							) {
+								continue
+							}
+
+							questions[j].answers[m].text =
+								asg.questions[i].answers[n].text
+							questions[j].answers[m].isCorrect =
+								asg.questions[i].answers[n] &&
+								questions[j].answers[m].isChecked
+							corAnsCnt += questions[j].answers[m].isCorrect
+							ansCnt += questions[j].answers[m].isChecked
+						}
+					}
+
+					if (!ansCnt) {
+						return res.status(403).json({
+							message:
+								'Each question must have at least 1 answer!',
+						})
+					}
+
+					questions[j].points = asg.questions[i].points
+					questions[j].isCorrect = ansCnt == corAnsCnt
+					if (questions[j].isCorrect) {
+						points += questions[j].points
+					}
+
+					if (!isMul && ansCnt > 1) {
+						return res.status(403).json({
+							message:
+								"Error: single answer question can't have multiple answers!",
+						})
+					}
+
+					qLeft--
+				}
+			}
+
+			if (!qLeft) {
+				return res
+					.status(403)
+					.json({ message: 'You must answer every question!' })
+			}
+
+			let oldSubmit
+			assignment.submits.forEach((e) => {
+				if (e.submitter === id) {
+					oldSubmit = e
+				}
+			})
+
+			if (oldSubmit) {
+				asg.submits.pull(oldSubmit)
+			}
+
+			asg.submits.push({ submitter: id, points, questions })
+			await asg.save()
+			return res
+				.status(201)
+				.json({ message: 'Assignment submitted succesfully!' })
 		} catch (e) {
 			console.log(e)
 			return res
@@ -1358,9 +1394,79 @@ class schoolController {
 					.json({ message: "You are not this course's teaher!" })
 			}
 
-			let statistics = []
-			let qEasiest = []
-			let q
+			let statistics
+			statistics.best_students = []
+			statistics.hardest_questions = []
+			statistics.most_popular_answers = []
+			for (let i = 0; i < asg.submits.length; i++) {
+				let submit = asg.submits[i]
+
+				let student = await Students.findOne({ _id: submit.submitter })
+				if (!student) {
+					return res
+						.status(403)
+						.json({
+							message: 'Found submit from non-existing student!',
+						})
+				}
+				statistics.best_students[i] = {
+					points: submit.points,
+					_id: student._id,
+					username: student.username,
+					avatar: user.avatar,
+					email: user.email,
+				}
+				for (let j = 0; j < submit.questions.length; j++) {
+					let question = submit.questions[j]
+					let existsHQ = -1
+					for (let n = 0; n < statistics.hardest_questions; n++) {
+						if (
+							statistics.hardest_questions[n].qID === question.qID
+						) {
+							existsHQ = n
+							break
+						}
+					}
+
+					let existsMPA = -1
+					for (let n = 0; n < statistics.most_popular_answers; n++) {
+						if (
+							statistics.most_popular_answers[n].qID ===
+							question.qID
+						) {
+							existsMPA = n
+							break
+						}
+					}
+
+					if (existsHQ > -1) {
+						statistics.hardest_questions[i].correct_answers +=
+							question.isCorrect
+					} else {
+						let answers = []
+						for (let n = 0; n < question.answers.length; n++) {
+							let cAnswer = question.answers[n]
+							answers[n] = {
+								text: cAnswer.text,
+								nID: cAnswer.nID,
+								isTrue:
+									(cAnswer.isChecked && cAnswer.isCorrect) ||
+									(!cAnswer.isChecked && !cAnswer.isCorrect),
+							}
+						}
+						statistics.hardest_questions[
+							statistics.hardest_questions.length
+						] = {
+							title: question.title,
+							qID: question.qID,
+							correct_answers: 0 + question.isCorrect,
+							points: question.points,
+							answers,
+						}
+					}
+				}
+			}
+
 			for (let i = 0; i < asg.submits.length; i++) {}
 		} catch (e) {
 			console.log(e)
@@ -1370,5 +1476,7 @@ class schoolController {
 		}
 	}
 }
+
+//statistics: Users by points, questions by ansers
 
 module.exports = new schoolController()

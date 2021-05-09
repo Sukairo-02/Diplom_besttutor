@@ -1,3 +1,21 @@
 .teacher-profile {
 	max-width: 700px;
 }
+
+.teacher-profile__form {
+	width: 100%;
+	background-color: var(--secondary-bg);
+	border-radius: var(--radius);
+	border: 1px solid var(--borders);
+	box-shadow: var(--shadow);
+	padding: 10px 20px;
+	margin-bottom: 20px;
+}
+
+.teacher-profile__form label {
+	font-size: 16px;
+}
+
+.teacher-profile__form input {
+	font-size: 14px;
+}

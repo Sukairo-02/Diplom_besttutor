@@ -29,9 +29,13 @@ const Assignments = new Schema({
 			points: {type: Number, default: 0, required: true},
 			questions: [
 				{
+					title: { type: String, required: true},
 					qID: { type: String, required: true },
+					points: { type: Number, required: true},
+					isCorrect: { type: Boolean, default: false },
 					answers: [
 						{
+							text: { type: String, required: true },
 							nID: { type: String, required: true },
 							isChecked: {
 								type: Boolean,
@@ -45,7 +49,6 @@ const Assignments = new Schema({
 							},
 						},
 					],
-					isCorrect: { type: Boolean, default: false },
 				},
 			],
 		},

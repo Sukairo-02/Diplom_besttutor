@@ -20,20 +20,9 @@ const Home = () => {
 	return (
 		<main className='main'>
 			<div className='container'>
-				<div className='content'>
-					<div className='content__main'>
-						{Object.keys(info).length !== 0 && (
-							<>
-								{info.roles[0] === 'TCHR' ? (
-									<TeacherProfile />
-								) : (
-									<UserProfile />
-								)}
-							</>
-						)}
-					</div>
-					<div className='content__aside'></div>
-				</div>
+				{Object.keys(info).length !== 0 && (
+					<>{info.roles[0] === 'TCHR' ? <TeacherProfile /> : <UserProfile />}</>
+				)}
 			</div>
 		</main>
 	);

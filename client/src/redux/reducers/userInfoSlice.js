@@ -30,14 +30,6 @@ export const fetchTeacherCourses = createAsyncThunk(
 	}
 );
 
-export const fetchUserCourses = createAsyncThunk(
-	'userInfo/fetchUserCourses',
-	async () => {
-		const response = await authFetch('/api/school/usercourses/');
-		return response.json();
-	}
-);
-
 export const userInfoSlice = createSlice({
 	name: 'userInfo',
 	initialState: {
@@ -77,24 +69,6 @@ export const userInfoSlice = createSlice({
 			}
 		},
 		[fetchTeacherCourses.rejected]: (state, action) => {
-			if (state.loading === 'pending') {
-				state.loading = 'idle';
-				state.error = action.error;
-			}
-		},
-
-		[fetchUserCourses.pending]: (state) => {
-			if (state.loading === 'idle') {
-				state.loading = 'pending';
-			}
-		},
-		[fetchUserCourses.fulfilled]: (state, action) => {
-			if (state.loading === 'pending') {
-				state.loading = 'idle';
-				state.info.courses = action.payload.courses;
-			}
-		},
-		[fetchUserCourses.rejected]: (state, action) => {
 			if (state.loading === 'pending') {
 				state.loading = 'idle';
 				state.error = action.error;

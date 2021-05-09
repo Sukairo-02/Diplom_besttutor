@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
-import TeacherProfileSubject from './TeacherProfileSubject';
+import { TeacherProfileSubject, TeacherProfileForm } from './index';
 
 const TeacherProfile = () => {
 	const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const TeacherProfile = () => {
 	}, [dispatch]);
 
 	return (
-		<>
+		<div className='content'>
 			{!info.teacherCourses.length ? (
 				<div className='content__empty'>
 					У вас пока нет предметов и учеников.
@@ -21,16 +21,23 @@ const TeacherProfile = () => {
 					</button>
 				</div>
 			) : (
-				<div className='teacher-profile'>
-					<div className='teacher-profile__subjects'>
-						{typeof info.teacherCourses[0] === 'object' &&
-							info.teacherCourses.map((course) => (
-								<TeacherProfileSubject key={course._id} course={course} />
-							))}
+				<>
+					<div className='content__main'>
+						<div className='teacher-profile'>
+							<div className='teacher-profile__subjects'>
+								{typeof info.teacherCourses[0] === 'object' &&
+									info.teacherCourses.map((course) => (
+										<TeacherProfileSubject key={course._id} course={course} />
+									))}
+							</div>
+						</div>
 					</div>
-				</div>
+					<div className='content__aside'>
+						<TeacherProfileForm />
+					</div>
+				</>
 			)}
-		</>
+		</div>
 	);
 };
 
