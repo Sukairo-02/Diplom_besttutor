@@ -86,7 +86,17 @@ class schoolController {
 			})
 
 			let courses = []
-			coursesRaw.forEach((e) => {
+			for(let i = 0; i < coursesRaw.length; i++) {
+				let e = coursesRaw[i]
+				const asgs = await Assignments.find({ _id: { $in: e.assignments } })
+				let assigns = []
+				asgs.forEach((el) => {
+					assigns.push({
+						_id: el._id,
+						title: el.title
+					})
+				}) 
+
 				courses.push({
 					_id: e._id,
 					teacher: e.teacher,
@@ -99,10 +109,10 @@ class schoolController {
 					price: e.price,
 					chatroomID: e.chatroomID,
 					lessons: e.lessons,
-					assignments: e.assignments,
+					assignments: assigns,
 					chatroom: e.chatroom,
 				})
-			})
+			} 
 
 			for (let i = 0; i < courses.length; i++) {
 				courses[i].usersdata = []
