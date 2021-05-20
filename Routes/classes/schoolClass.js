@@ -171,12 +171,67 @@ class schoolController {
 				return res.status(403).json({ message: 'Ошибка: неверный id' })
 			}
 
-			let ids = []
+			let usercourses = []
 			user.courses.forEach((e) => {
-				ids.push(e.id)
+				usercourses.push(e.id)
 			})
 
-			const courses = await Courses.find({ _id: { $in: ids } })
+			const coursesRaw = await Courses.find({
+				_id: { $in: usercourses },
+			})
+			console.log(coursesRaw)
+			let courses = []
+			for(let i = 0; i < coursesRaw.length; i++) {
+				let e = coursesRaw[i]
+				const asgs = await Assignments.find({ _id: { $in: e.assignments } })
+				let assigns = []
+				asgs.forEach((el) => {
+					assigns.push({
+						_id: el._id,
+						title: el.title
+					})
+				}) 
+
+				courses.push({
+					_id: e._id,
+					teacher: e.teacher,
+					subject: e.subject,
+					title: e.title,
+					desc: e.desc,
+					students: e.students,
+					isPublished: e.isPublished,
+					isBlocked: e.isBlocked,
+					price: e.price,
+					chatroomID: e.chatroomID,
+					lessons: e.lessons,
+					assignments: assigns,
+					chatroom: e.chatroom,
+				})
+			} 
+
+			console.log(courses)
+
+			for (let i = 0; i < courses.length; i++) {
+				courses[i].usersdata = []
+				for (let j = 0; j < courses[i].students.length; j++) {
+					const student = await User.findOne({
+						_id: courses[i].students[j],
+					})
+					if (!student) {
+						return res
+							.status(403)
+							.json({ message: 'Ошибка: неверный id пользователя' })
+					}
+					courses[i].usersdata[j] = {
+						id: student._id,
+						avatar: student.avatar,
+						username: student.username,
+						email: student.email,
+					}
+				}
+			}
+
+			console.log(courses)
 			return res.json({ courses })
 		} catch (e) {
 			console.log(e)
