@@ -15,7 +15,7 @@ router.post(
 		check('username', 'You must enter a username!').notEmpty(),
 		check(
 			'password',
-			'Password must have length between 4 and 24 characters!'
+			'Пароль должен иметь размер от 4 до 24 символов!'
 		).isLength({ min: 4, max: 24 }),
 		ensureDate,
 	],
@@ -28,7 +28,7 @@ router.post(
 		check('email', 'Invalid email!').isEmail(),
 		check(
 			'password',
-			'Password must have length between 4 and 24 characters!'
+			'Пароль должен иметь размер от 4 до 24 символов!'
 		).isLength({ min: 4, max: 24 }),
 	],
 	controller.login
@@ -43,10 +43,10 @@ router.delete(
 router.post(
 	'/edit',
 	[
-		check('username', 'You must enter a username!').notEmpty(),
+		check('username', 'Вы должны ввести имя пользователя!').notEmpty(),
 		oneOf(
 			[check('phone').isEmpty(), check('phone').isMobilePhone()],
-			'Unable to parse phone number.'
+			'Невозможно распознать номер телефона'
 		),
 		ensureAuth,
 		ensureDate,
@@ -57,9 +57,9 @@ router.post(
 router.post(
 	'/editteacher',
 	[
-		check('desc','You must write your description!').notEmpty(),
-		check('education', 'You must specify your education!').notEmpty(),
-		check('experience', 'Write something about your job or experience!').notEmpty(), 
+		check('desc', 'Вы должны заполнить описание!').notEmpty(),
+		check('education', 'Укажите образование!').notEmpty(),
+		check('experience', 'Укажите работу\\опыт!').notEmpty(), 
 		ensureRoles(['TCHR']),
 	], //subject will be checked in function.
 	controller.editteacher
@@ -102,7 +102,7 @@ router.post(
 	[
 		check(
 			'password',
-			'Password must have length between 4 and 24 characters!'
+			'Пароль должен иметь размер от 4 до 24 символов!'
 		).isLength({ min: 4, max: 24 }),
 	],
 	controller.restorePass

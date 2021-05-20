@@ -11,7 +11,7 @@ module.exports = async function (req, res, next) {
 		if (!candidate) {
 			return res
 				.status(403)
-				.json({ message: 'Error: nonexistent teacher!' })
+				.json({ message: 'Ошибка: несуществующий учитель!' })
 		}
 
 		if (!candidate.isActive) {
@@ -19,7 +19,7 @@ module.exports = async function (req, res, next) {
 				.status(403)
 				.json({
 					message:
-						'Error: you must fill out your teacher data first!',
+						'Ошибка: сначала заполните свои учительские данные!',
 				})
 		}
 
@@ -29,6 +29,6 @@ module.exports = async function (req, res, next) {
 		console.log(e)
 		return res
 			.status(500)
-			.json({ message: "Error occured while validating teacher's data!" })
+			.json({ message: "Во время получения учительских данных произошла ошибка" })
 	}
 }

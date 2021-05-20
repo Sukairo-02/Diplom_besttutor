@@ -11,9 +11,7 @@ module.exports = async function (req, res, next) {
 		if (course.isPublished) {
 			return res
 				.status(403)
-				.json({
-					message: "Error: can't delete or edit published course!",
-				})
+				.json({	message: 'Ошибка: нельзя редактировать опубликованый курс!'	})
 		}
 
 		return next()
@@ -21,6 +19,6 @@ module.exports = async function (req, res, next) {
 		console.log(e)
 		return res
 			.status(500)
-			.json({ message: "Error occured while validating course's published state!" })
+			.json({ message: 'Произошла ошибка во время валидации статуса курса' })
 	}
 }

@@ -11,7 +11,7 @@ module.exports = function (roles) {
             if (!req.headers.authorization) {
                 return res
                 .status(401)
-                .json({message: "User unauthorized!"}) 
+                .json({message: "Ошибка: вы не авторизованы!"}) 
             }
 
             const token = req.headers.authorization.split(' ')[1]
@@ -19,7 +19,7 @@ module.exports = function (roles) {
             {
                 return res
                 .status(401)
-                .json({message: "User unauthorized!"})
+                .json({message: "Ошибка: вы не авторизованы!"})
             }
             const decData = jwt.verify(token, config.get('server.secret'))
             const {roles: userRoles} = decData
@@ -33,7 +33,7 @@ module.exports = function (roles) {
             if(!hasRole) {
                 return res
                 .status(403)
-                .json({message: "User is missing required role!"})
+                .json({message: "Ошибка: недостаточно прав!"})
             }
 
             req.user = decData
@@ -42,7 +42,7 @@ module.exports = function (roles) {
             console.log(e)
             return res
             .status(401)
-            .json({message: "User unauthorized!"})
+            .json({message: "Ошибка: вы не авторизованы!"})
         }
     }
 }
