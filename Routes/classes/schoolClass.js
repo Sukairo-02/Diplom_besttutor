@@ -1321,7 +1321,7 @@ class schoolController {
 			let submit
 			asg.submits.every((e) => {
 				if (e.submitter === id) {
-					submit = e.submitter
+					submit = e
 					return false
 				}
 				return true
@@ -1333,7 +1333,7 @@ class schoolController {
 				})
 			}
 
-			asg.submits.pull(submit)
+			await asg.submits.pull(submit)
 
 			await asg.save()
 
