@@ -1271,8 +1271,6 @@ class schoolController {
 						if (questions[j].isCorrect) {
 							points += asg.questions[i].points
 						}
-						console.log(asg.questions[i].answers.length)
-						console.log(corAnsCnt)
 
 						qLeft--
 					}
@@ -1298,7 +1296,7 @@ class schoolController {
 
 			asg.submits.push({ submitter: id, points, questions })
 			await asg.save()
-			return res.status(201).json({ message: 'Задание сданно успешно!' })
+			return res.status(201).json({ message: 'Задание сдано успешно!' })
 		} catch (e) {
 			console.log(e)
 			return res
@@ -1343,7 +1341,7 @@ class schoolController {
 		} catch (e) {
 			console.log(e)
 			return res.status(500).json({
-				message: 'При удалении сданного задания произошла ошибка!',
+				message: 'При удалении сданого задания произошла ошибка!',
 			})
 		}
 	}
@@ -1382,7 +1380,7 @@ class schoolController {
 			return res
 				.status(500)
 				.json({
-					message: 'При получении сданного задания произошла ошибка',
+					message: 'При получении сданого задания произошла ошибка',
 				})
 		}
 	}
