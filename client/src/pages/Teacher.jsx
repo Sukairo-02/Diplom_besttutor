@@ -1,10 +1,44 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
+import { createAuthProvider } from '../jwt';
 import { declOfNum, countRating, countStudents } from '../util';
 import { Star, People } from '../assets/icons';
 
 const Teacher = () => {
+	const [state, setState] = React.useState();
+	const dispatch = useDispatch();
+	const { authFetch } = createAuthProvider();
 	const { teacher } = useSelector(({ teachers }) => teachers);
+	const info = useSelector((state) => state.userInfo.info);
+
+	React.useEffect(() => {
+		if (Object.keys(info).length === 0) {
+			dispatch(fetchUserInfo());
+		}
+	});
+
+	const deleteBtnHandler = async () => {
+		setState('Loading');
+		try {
+			const result = await authFetch('/api/school/delreview', 'DELETE', {
+				teacher: teacher._id,
+			});
+			setState(result.message);
+		} catch (err) {
+			setState(err.message);
+		}
+	};
+
+	const subscribeToCourse = async (id) => {
+		try {
+			const data = await authFetch(`/api/school/subscribe/${id}`, 'POST');
+			dispatch(fetchUserInfo());
+			alert(data.message);
+		} catch (err) {
+			alert(err.message);
+		}
+	};
 
 	return (
 		<main className='main'>
@@ -16,7 +50,7 @@ const Teacher = () => {
 							alt='Аватар'
 							className='teacher-full__avatar'
 						/>
-						<div className='teacher-full__container'>
+						<div className='teacher-full__container teacher-full__container--flex'>
 							<h3 className='teacher-full__name'>{teacher.username}</h3>
 							<div className='teacher-full__discipline'>{teacher.subject}</div>
 							<span className='teacher-full__disciple'>
@@ -68,7 +102,11 @@ const Teacher = () => {
 													])}
 												</div>
 											</div>
-											<button className='btn'>{course.price} грн</button>
+											<button
+												className='btn'
+												onClick={() => subscribeToCourse(course._id)}>
+												{course.price} грн
+											</button>
 										</div>
 									))}
 							</div>
@@ -101,13 +139,22 @@ const Teacher = () => {
 													{review.text}
 												</p>
 											</div>
+											{review.author === info._id && (
+												<div
+													className='teacher-full__review-del'
+													title='Удалить отзыв'
+													onClick={deleteBtnHandler}>
+													&#215;
+												</div>
+											)}
 										</div>
 									))}
 							</div>
+							<div>{state}</div>
 						</div>
 					</div>
 				) : (
-					'Loading'
+					<span>Ошибка, попробуйте еще раз</span>
 				)}
 			</div>
 		</main>
