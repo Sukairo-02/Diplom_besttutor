@@ -13,7 +13,7 @@ const validationSchema = yup.object({
 		.required('Email обязательное поле'),
 	password: yup
 		.string()
-		.min(6, 'Минимальная длина 6')
+		.min(4, 'Минимальная длина 6')
 		.required('Пароль обязательное поле'),
 });
 
