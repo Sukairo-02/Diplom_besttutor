@@ -1242,7 +1242,8 @@ class schoolController {
 									questions[j].answers[m].text =
 										asg.questions[i].answers[n].text
 									questions[j].answers[m].isCorrect =
-										asg.questions[i].answers[n].isTrue
+										asg.questions[i].answers[n].isTrue ==
+										questions[j].answers[m].isChecked
 									corAnsCnt +=
 										questions[j].answers[m].isCorrect
 									ansCnt += questions[j].answers[m].isChecked
@@ -1336,7 +1337,7 @@ class schoolController {
 
 			await asg.save()
 
-			return res.json({ submit })
+			return res.json({ message: 'Сданое задание было успешно удалено!' })
 		} catch (e) {
 			console.log(e)
 			return res.status(500).json({
@@ -1503,7 +1504,7 @@ class schoolController {
 					let question = submit.questions[j]
 
 					let existsHQ = -1
-					for (let n = 0; n < statistics.hardest_questions; n++) {
+					for (let n = 0; n < statistics.hardest_questions.length; n++) {
 						if (
 							statistics.hardest_questions[n].qID === question.qID
 						) {
@@ -1513,22 +1514,22 @@ class schoolController {
 					}
 
 					if (existsHQ > -1) {
-						statistics.hardest_questions[i].correct_answers +=
+						statistics.hardest_questions[existsHQ].correct_answers +=
 							question.isCorrect
 						for (
 							let n = 0;
-							statistics.hardest_questions[i].answers.length;
+							n < statistics.hardest_questions[existsHQ].answers.length;
 							n++
 						) {
 							for (let m = 0; m < question.answers.length; m++) {
 								if (
-									statistics.hardest_questions[i].answers[n]
+									statistics.hardest_questions[existsHQ].answers[n]
 										.nID !== question.answers[m].nID
 								) {
 									continue
 								}
 
-								statistics.hardest_questions[i].answers[
+								statistics.hardest_questions[existsHQ].answers[
 									n
 								].picked += question.answers[m].isChecked
 							}
