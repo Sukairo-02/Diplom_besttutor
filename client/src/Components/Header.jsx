@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { createAuthProvider } from '../jwt';
 
 const Header = () => {
+	const { info } = useSelector(({ userInfo }) => userInfo);
 	const { logout } = createAuthProvider();
 	const [visibleMenu, setVisibleMenu] = React.useState(false);
 
@@ -53,6 +55,13 @@ const Header = () => {
 							{/* <li>
 								<Link to='/chats'>Чаты</Link>
 							</li> */}
+							{info.roles[0] === 'TCHR' ? (
+								<li>
+									<Link to='/tasks'>Тесты</Link>
+								</li>
+							) : (
+								''
+							)}
 							<li>
 								<Link to='/editProfile'>Редактировать профиль</Link>
 							</li>

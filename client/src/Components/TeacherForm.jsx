@@ -30,19 +30,10 @@ const TeacherForm = ({ data }) => {
 	const formSubmitHandler = async (data) => {
 		setState('Loading');
 		try {
-			let response = await authFetch('/api/auth/editteacher', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
-			let result = await response.json();
+			const result = await authFetch('/api/auth/editteacher', 'POST', data);
 			setState(result.message);
 
 			dispatch(fetchUserInfo());
-
-			return result.message;
 		} catch (err) {
 			setState(err.message);
 		}

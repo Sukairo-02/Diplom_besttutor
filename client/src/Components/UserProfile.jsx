@@ -24,6 +24,7 @@ const UserProfile = () => {
 				</div>
 			) : (
 				<div className='user-profile'>
+					<h2>Купленные курсы</h2>
 					<div className='user-profile__subjects'>
 						{info.courses.map((course) => (
 							<UserProfileSubject key={course._id} course={course} />

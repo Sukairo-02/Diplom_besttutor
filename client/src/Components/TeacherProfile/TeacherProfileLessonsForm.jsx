@@ -1,15 +1,15 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
+import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
 import { Formik, Form } from 'formik';
-import { FormInput, FormSelect } from '../Components';
+import { FormInput, FormSelect } from '../index';
+import { createAuthProvider } from '../../jwt';
 import * as yup from 'yup';
-import { createAuthProvider } from '../jwt';
 
 const validationSchema = yup.object({
 	location: yup.string().required('Выберите тип урока'),
-	date: yup.string().required('Выберите начало урока'),
-	endDate: yup.string().required('Выберите конец урока'),
+	date: yup.date().required('Выберите начало урока'),
+	endDate: yup.date().required('Выберите конец урока'),
 });
 
 const TeacherProfileLessonsForm = ({ id }) => {
@@ -20,17 +20,10 @@ const TeacherProfileLessonsForm = ({ id }) => {
 	const formSubmitHandler = async (data) => {
 		setState('Loading');
 		try {
-			let response = await authFetch('/api/school/newlesson/', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
-			let result = await response.json();
-			dispatch(fetchTeacherCourses());
-
+			const result = await authFetch('/api/school/newlesson/', 'POST', data);
 			setState(result.message);
+
+			dispatch(fetchTeacherCourses());
 		} catch (err) {
 			setState(err.message);
 		}

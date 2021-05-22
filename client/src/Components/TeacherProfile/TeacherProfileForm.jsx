@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
+import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
 import { Formik, Form } from 'formik';
-import { FormInput, FormTextarea } from '../Components';
+import { FormInput, FormTextarea } from '../index';
+import { createAuthProvider } from '../../jwt';
 import * as yup from 'yup';
-import { createAuthProvider } from '../jwt';
 
 const validationSchema = yup.object({
 	title: yup.string().required('Название курса обязательно'),
@@ -23,17 +23,10 @@ const TeacherProfileForm = () => {
 	const formSubmitHandler = async (data) => {
 		setState('Loading');
 		try {
-			let response = await authFetch('/api/school/newcourse', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
-			let result = await response.json();
-			dispatch(fetchTeacherCourses());
-
+			const result = await authFetch('/api/school/newcourse', 'POST', data);
 			setState(result.message);
+
+			dispatch(fetchTeacherCourses());
 		} catch (err) {
 			setState(err.message);
 		}
