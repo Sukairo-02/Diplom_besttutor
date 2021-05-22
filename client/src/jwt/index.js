@@ -93,17 +93,24 @@ export const createAuthProvider = () => {
 		tokenProvider.setToken(null);
 	};
 
-	const authFetch = async (input, init) => {
+	const authFetch = async (url, method = 'GET', body = null, headers = {}) => {
 		const token = await tokenProvider.getToken();
 
-		init = init || {};
+		headers['Authorization'] = `Bearer ${token}`;
 
-		init.headers = {
-			...init.headers,
-			Authorization: `Bearer ${token}`,
-		};
+		if (body) {
+			body = JSON.stringify(body);
+			headers['Content-Type'] = 'application/json';
+		}
 
-		return fetch(input, init);
+		const response = await fetch(url, { method, body, headers });
+		const data = await response.json();
+
+		if (!response.ok) {
+			throw new Error(data.message || 'Что-то пошло не так');
+		}
+
+		return data;
 	};
 
 	const useAuth = () => {
