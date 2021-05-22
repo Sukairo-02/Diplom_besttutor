@@ -79,14 +79,23 @@
 }
 
 .subject__lesson {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: 5px;
 }
 
+.subject__lesson-del {
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 18px;
+	cursor: pointer;
+}
+
 .subject__users {
 	display: flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 20px;
@@ -96,11 +105,10 @@
 	border: 1px solid var(--borders);
 	box-shadow: var(--shadow);
 	padding: 10px 20px;
-	margin-bottom: 20px;
 }
 
 .subject__user {
-	width: 45%;
+	width: 47%;
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
@@ -123,4 +131,21 @@
 
 .subject__user-email {
 	color: var(--secondary-text);
+}
+
+.subject__tasks {
+	margin: 20px 0;
+}
+
+.subject__task {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.subject__task:last-child {
+	margin-bottom: 0;
 }

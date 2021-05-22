@@ -148,7 +148,7 @@
 }
 
 /* TEACHER-FULL */
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 790px) {
 	.teacher-full {
 		flex-direction: column;
 		align-items: center;

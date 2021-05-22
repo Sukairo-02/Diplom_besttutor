@@ -1,0 +1,76 @@
+.statistic {
+	background-color: var(--secondary-bg);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	padding: 20px;
+}
+
+.statistic__title {
+	display: inline-block;
+	position: relative;
+	margin: 0;
+	margin-bottom: 20px;
+}
+
+.statistic__title::after {
+	position: absolute;
+	content: '';
+	bottom: 0;
+	left: 0;
+	height: 1px;
+	width: 100%;
+	background-color: var(--accent-color);
+}
+
+.statistic__students {
+	margin-bottom: 20px;
+}
+
+.statistic__student {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	background-color: var(--secondary-bg);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+.statistic__student:last-child {
+	margin-bottom: 0;
+}
+
+.statistic__avatar {
+	max-width: 40px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.statistic__question {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 10px;
+	background-color: var(--secondary-bg);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow);
+	padding: 10px;
+	margin-bottom: 20px;
+}
+
+.statistic__question:last-child {
+	margin-bottom: 0;
+}
+
+.statistic__question > h4 {
+	margin: 0;
+}
+
+.statistic__question > div {
+	font-size: 14px;
+}
