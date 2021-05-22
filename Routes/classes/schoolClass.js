@@ -52,7 +52,9 @@ class schoolController {
 				}
 			})
 
-			return res.json({ message: 'Предметы были успешно инициализированы' })
+			return res.json({
+				message: 'Предметы были успешно инициализированы',
+			})
 		} catch (e) {
 			console.log(e)
 			return res.status(500).json({
@@ -86,16 +88,18 @@ class schoolController {
 			})
 
 			let courses = []
-			for(let i = 0; i < coursesRaw.length; i++) {
+			for (let i = 0; i < coursesRaw.length; i++) {
 				let e = coursesRaw[i]
-				const asgs = await Assignments.find({ _id: { $in: e.assignments } })
+				const asgs = await Assignments.find({
+					_id: { $in: e.assignments },
+				})
 				let assigns = []
 				asgs.forEach((el) => {
 					assigns.push({
 						_id: el._id,
-						title: el.title
+						title: el.title,
 					})
-				}) 
+				})
 
 				courses.push({
 					_id: e._id,
@@ -112,18 +116,32 @@ class schoolController {
 					assignments: assigns,
 					chatroom: e.chatroom,
 				})
-			} 
+			}
 
 			for (let i = 0; i < courses.length; i++) {
 				courses[i].usersdata = []
+				const students = await User.find({
+					_id: { $in: courses[i].students },
+				})
 				for (let j = 0; j < courses[i].students.length; j++) {
-					const student = await User.findOne({
-						_id: courses[i].students[j],
-					})
+					let student
+
+					for (let n = 0; n < students.length; n++) {
+						if (
+							students[n]._id.toString() ===
+							courses[i].students[j]
+						) {
+							student = students[n]
+							break
+						}
+					}
+
 					if (!student) {
 						return res
 							.status(403)
-							.json({ message: 'Ошибка: неверный id пользователя' })
+							.json({
+								message: 'Ошибка: неверный id пользователя',
+							})
 					}
 					courses[i].usersdata[j] = {
 						id: student._id,
@@ -179,18 +197,19 @@ class schoolController {
 			const coursesRaw = await Courses.find({
 				_id: { $in: usercourses },
 			})
-			console.log(coursesRaw)
 			let courses = []
-			for(let i = 0; i < coursesRaw.length; i++) {
+			for (let i = 0; i < coursesRaw.length; i++) {
 				let e = coursesRaw[i]
-				const asgs = await Assignments.find({ _id: { $in: e.assignments } })
+				const asgs = await Assignments.find({
+					_id: { $in: e.assignments },
+				})
 				let assigns = []
 				asgs.forEach((el) => {
 					assigns.push({
 						_id: el._id,
-						title: el.title
+						title: el.title,
 					})
-				}) 
+				})
 
 				courses.push({
 					_id: e._id,
@@ -207,21 +226,34 @@ class schoolController {
 					assignments: assigns,
 					chatroom: e.chatroom,
 				})
-			} 
-
-			console.log(courses)
+			}
 
 			for (let i = 0; i < courses.length; i++) {
 				courses[i].usersdata = []
+				const students = await User.find({
+					_id: { $in: courses[i].students }
+				})
 				for (let j = 0; j < courses[i].students.length; j++) {
-					const student = await User.findOne({
-						_id: courses[i].students[j],
-					})
+					let student
+
+					for (let n = 0; n < students.length; n++) {
+						if (
+							students[n]._id.toString() ===
+							courses[i].students[j]
+						) {
+							student = students[n]
+							break
+						}
+					}
+
 					if (!student) {
 						return res
 							.status(403)
-							.json({ message: 'Ошибка: неверный id пользователя' })
+							.json({
+								message: 'Ошибка: неверный id пользователя',
+							})
 					}
+
 					courses[i].usersdata[j] = {
 						id: student._id,
 						avatar: student.avatar,
@@ -231,7 +263,6 @@ class schoolController {
 				}
 			}
 
-			console.log(courses)
 			return res.json({ courses })
 		} catch (e) {
 			console.log(e)
@@ -276,7 +307,7 @@ class schoolController {
 		} catch (e) {
 			console.log(e)
 			return res.status(500).json({
-				message: "При получении данных курса произошла ошибка",
+				message: 'При получении данных курса произошла ошибка',
 			})
 		}
 	}
@@ -295,7 +326,10 @@ class schoolController {
 			if (!Number.isInteger(price) || price < 0) {
 				return res
 					.status(403)
-					.json({ message: 'Ошибка: цена курса должна быть целым положительным числом!' })
+					.json({
+						message:
+							'Ошибка: цена курса должна быть целым положительным числом!',
+					})
 			}
 
 			const { subject } = req.dbTeacher
@@ -312,9 +346,7 @@ class schoolController {
 			await req.dbTeacher.courses.push(candidate._id)
 			await req.dbTeacher.save()
 
-			return res
-				.status(201)
-				.json({ message: 'Курс был успешно создан!' })
+			return res.status(201).json({ message: 'Курс был успешно создан!' })
 		} catch (e) {
 			console.log(e)
 			return res.status(500).json({
@@ -330,7 +362,8 @@ class schoolController {
 			if (price != undefined) {
 				if (!Number.isInteger(price) || price < 0) {
 					return res.status(403).json({
-						message: 'Ошибка: цена курса должна быть целым положительным числом!',
+						message:
+							'Ошибка: цена курса должна быть целым положительным числом!',
 					})
 				}
 				course.price = price
@@ -361,14 +394,17 @@ class schoolController {
 			if (!Number.isInteger(price) || price < 0) {
 				return res
 					.status(403)
-					.json({ message: 'Ошибка: цена курса должна быть целым положительным числом!' })
+					.json({
+						message:
+							'Ошибка: цена курса должна быть целым положительным числом!',
+					})
 			}
 
 			course.price = price
 
 			await course.save()
 			return res.status(201).json({
-				message: "Вы успешно изменили цену курса!",
+				message: 'Вы успешно изменили цену курса!',
 			})
 		} catch (e) {
 			console.log(e)
@@ -385,9 +421,7 @@ class schoolController {
 			await teacher.courses.pull(course._id)
 			await course.delete()
 			await teacher.save()
-			return res
-				.status(201)
-				.json({ message: 'Курс был успешно удалён!' })
+			return res.status(201).json({ message: 'Курс был успешно удалён!' })
 		} catch (e) {
 			console.log(e)
 			return res.status(500).json({
@@ -402,7 +436,9 @@ class schoolController {
 			//send course's _id in field 'courseID'
 			const { date, endDate, location } = req.body //if lesson is online, location can be left empty
 			if (!(isDate(date) && isDate(endDate))) {
-				return res.status(403).json({ message: 'Ошибка: неверная дата!' })
+				return res
+					.status(403)
+					.json({ message: 'Ошибка: неверная дата!' })
 			}
 
 			const d1 = new Date(date)
@@ -411,14 +447,14 @@ class schoolController {
 
 			if (d1.getTime() < now.getTime() || d1.getTime() === d2.getTime()) {
 				return res.status(403).json({
-					message: "Ошибка: нельзя назначать уроки в прошлом!",
+					message: 'Ошибка: нельзя назначать уроки в прошлом!',
 				})
 			}
 
 			if (d1.getTime() > d2.getTime() || d1.getTime() === d2.getTime()) {
 				return res.status(403).json({
 					message:
-						"Ошибка: дата окончания не может быть ранее даты начала!",
+						'Ошибка: дата окончания не может быть ранее даты начала!',
 				})
 			}
 
@@ -533,13 +569,16 @@ class schoolController {
 			const { id } = req.user
 			const user = await User.findOne({ _id: id })
 			if (!user) {
-				return res.status(403).json({ message: 'Ошибка: неверный пользователь!' })
+				return res
+					.status(403)
+					.json({ message: 'Ошибка: неверный пользователь!' })
 			}
 
 			const dbTarget = req.course
 			if (id === dbTarget.teacher) {
 				return res.status(403).json({
-					message: "Ошибка: вы не можете подписаться на собственный курс!",
+					message:
+						'Ошибка: вы не можете подписаться на собственный курс!',
 				})
 			}
 
@@ -553,8 +592,7 @@ class schoolController {
 
 			if (isSubbed) {
 				return res.status(403).json({
-					message:
-						'Ошибка: вы уже подписаны на этот курс!',
+					message: 'Ошибка: вы уже подписаны на этот курс!',
 				})
 			}
 
@@ -568,7 +606,7 @@ class schoolController {
 			if (!teacher) {
 				return res
 					.status(403)
-					.json({ message: "Ошибка: не найден учитель курса!" })
+					.json({ message: 'Ошибка: не найден учитель курса!' })
 			}
 
 			teacher.balance = teacher.balance + dbTarget.price
@@ -598,7 +636,7 @@ class schoolController {
 			if (!id) {
 				return res
 					.status(403)
-					.json({ message: "Ошибка: вы должны указать id курса!" })
+					.json({ message: 'Ошибка: вы должны указать id курса!' })
 			}
 
 			const course = await Courses.findOne({ _id: id })
@@ -620,13 +658,13 @@ class schoolController {
 			if (!studCourse) {
 				return res
 					.status(403)
-					.json({ message: "Ошибка: вы не подписаны на этот курс!" })
+					.json({ message: 'Ошибка: вы не подписаны на этот курс!' })
 			}
 
 			const teacher = await User.findOne({ _id: course.teacher })
 			if (!teacher) {
 				return res.status(403).json({
-					message: "Ошибка: учитель курса не найден",
+					message: 'Ошибка: учитель курса не найден',
 				})
 			}
 
@@ -682,7 +720,7 @@ class schoolController {
 			const teacher = await User.findOne({ _id: course.teacher })
 			if (!teacher) {
 				return res.status(403).json({
-					message: "Ошибка: учитель курса не найден",
+					message: 'Ошибка: учитель курса не найден',
 				})
 			}
 
@@ -707,8 +745,7 @@ class schoolController {
 			await course.save()
 			await teacher.save()
 			return res.json({
-				message:
-					'Вы успешно вернули средства за этот курс!',
+				message: 'Вы успешно вернули средства за этот курс!',
 			})
 		} catch (e) {
 			console.log(e)
@@ -732,7 +769,7 @@ class schoolController {
 			const teacher = await User.findOne({ _id: course.teacher })
 			if (!teacher) {
 				return res.status(403).json({
-					message: "Ошибка: учитель курса не найден",
+					message: 'Ошибка: учитель курса не найден',
 				})
 			}
 
@@ -745,7 +782,8 @@ class schoolController {
 
 			if (!eCourse) {
 				return res.status(403).json({
-					message: "Ошибка: курс не найден в списке курсов пользователя",
+					message:
+						'Ошибка: курс не найден в списке курсов пользователя',
 				})
 			}
 
@@ -777,7 +815,7 @@ class schoolController {
 			if (id === teacher) {
 				return res.status(403).json({
 					message:
-						"Ошибка: нельзя оставлять отзывы в собственном профиле!",
+						'Ошибка: нельзя оставлять отзывы в собственном профиле!',
 				})
 			}
 
@@ -796,7 +834,7 @@ class schoolController {
 			if (!target) {
 				return res
 					.status(403)
-					.json({ message: "Ошибка: неверный id учителя!" })
+					.json({ message: 'Ошибка: неверный id учителя!' })
 			}
 
 			let old
@@ -838,7 +876,7 @@ class schoolController {
 			if (!target) {
 				return res
 					.status(403)
-					.json({ message: "Ошибка: неверный id учителя!" })
+					.json({ message: 'Ошибка: неверный id учителя!' })
 			}
 
 			let old
@@ -891,14 +929,13 @@ class schoolController {
 
 			if (d1.getTime() < now.getTime() || d1.getTime() === d2.getTime()) {
 				return res.status(403).json({
-					message: "Задание нельзя назначить в прошлом!",
+					message: 'Задание нельзя назначить в прошлом!',
 				})
 			}
 
 			if (d1.getTime() > d2.getTime() || d1.getTime() === d2.getTime()) {
 				return res.status(403).json({
-					message:
-						"Дата окончания не может быть ранее даты начала!",
+					message: 'Дата окончания не может быть ранее даты начала!',
 				})
 			}
 
@@ -968,7 +1005,7 @@ class schoolController {
 			if (isMulviol) {
 				return res.status(403).json({
 					message:
-						"Одноответные вопросы не могут иметь несколько верных ответов!",
+						'Одноответные вопросы не могут иметь несколько верных ответов!',
 				})
 			}
 
@@ -980,14 +1017,14 @@ class schoolController {
 
 			if (isPoints) {
 				return res.status(403).json({
-					message:
-						'У всех вопросов должна быть оценка!',
+					message: 'У всех вопросов должна быть оценка!',
 				})
 			}
 
 			if (isAnswers) {
 				return res.status(403).json({
-					message: 'Все вопросы должны иметь хотя-бы 2 варианта ответа!',
+					message:
+						'Все вопросы должны иметь хотя-бы 2 варианта ответа!',
 				})
 			}
 
@@ -1038,7 +1075,9 @@ class schoolController {
 			if (course.teacher !== id) {
 				return res
 					.status(403)
-					.json({ message: "Вы не являетесь владельцем данного курса!" })
+					.json({
+						message: 'Вы не являетесь владельцем данного курса!',
+					})
 			}
 
 			await course.assignments.pull(assignmentID)
@@ -1143,11 +1182,9 @@ class schoolController {
 
 			const course = await Courses.findOne({ assignments: assignmentID })
 			if (course.teacher !== id) {
-				return res
-					.status(403)
-					.json({
-						message: 'Вы не являетесь учителем данного курса!',
-					})
+				return res.status(403).json({
+					message: 'Вы не являетесь учителем данного курса!',
+				})
 			}
 
 			return res.json({
@@ -1259,7 +1296,6 @@ class schoolController {
 						}
 
 						if (!isMul && ansCnt > 1) {
-							console.log(questions[j].answers, ansCnt, corAnsCnt)
 							return res.status(403).json({
 								message:
 									'Ошибка: вопросы с одним ответом не могут иметь несколько ответов!',
@@ -1377,11 +1413,9 @@ class schoolController {
 			return res.json({ submit })
 		} catch (e) {
 			console.log(e)
-			return res
-				.status(500)
-				.json({
-					message: 'При получении сданого задания произошла ошибка',
-				})
+			return res.status(500).json({
+				message: 'При получении сданого задания произошла ошибка',
+			})
 		}
 	}
 
@@ -1410,12 +1444,9 @@ class schoolController {
 			}
 
 			if (course.teacher !== id) {
-				return res
-					.status(403)
-					.json({
-						message:
-							'Ошибка: вы не являетесь учителем данного курса!',
-					})
+				return res.status(403).json({
+					message: 'Ошибка: вы не являетесь учителем данного курса!',
+				})
 			}
 
 			let submit
@@ -1436,11 +1467,9 @@ class schoolController {
 			return res.json({ submit })
 		} catch (e) {
 			console.log(e)
-			return res
-				.status(500)
-				.json({
-					message: 'При получении сданного задания произошла ошибка!',
-				})
+			return res.status(500).json({
+				message: 'При получении сданного задания произошла ошибка!',
+			})
 		}
 	}
 
@@ -1471,12 +1500,9 @@ class schoolController {
 			}
 
 			if (course.teacher !== id) {
-				return res
-					.status(403)
-					.json({
-						message:
-							'Ошибка: вы не являетесь учителем этого курса!',
-					})
+				return res.status(403).json({
+					message: 'Ошибка: вы не являетесь учителем этого курса!',
+				})
 			}
 
 			let statistics = {
@@ -1504,7 +1530,11 @@ class schoolController {
 					let question = submit.questions[j]
 
 					let existsHQ = -1
-					for (let n = 0; n < statistics.hardest_questions.length; n++) {
+					for (
+						let n = 0;
+						n < statistics.hardest_questions.length;
+						n++
+					) {
 						if (
 							statistics.hardest_questions[n].qID === question.qID
 						) {
@@ -1514,17 +1544,21 @@ class schoolController {
 					}
 
 					if (existsHQ > -1) {
-						statistics.hardest_questions[existsHQ].correct_answers +=
-							question.isCorrect
+						statistics.hardest_questions[
+							existsHQ
+						].correct_answers += question.isCorrect
 						for (
 							let n = 0;
-							n < statistics.hardest_questions[existsHQ].answers.length;
+							n <
+							statistics.hardest_questions[existsHQ].answers
+								.length;
 							n++
 						) {
 							for (let m = 0; m < question.answers.length; m++) {
 								if (
-									statistics.hardest_questions[existsHQ].answers[n]
-										.nID !== question.answers[m].nID
+									statistics.hardest_questions[existsHQ]
+										.answers[n].nID !==
+									question.answers[m].nID
 								) {
 									continue
 								}
