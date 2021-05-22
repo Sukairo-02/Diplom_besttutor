@@ -1242,8 +1242,7 @@ class schoolController {
 									questions[j].answers[m].text =
 										asg.questions[i].answers[n].text
 									questions[j].answers[m].isCorrect =
-										asg.questions[i].answers[n].isTrue ==
-										questions[j].answers[m].isChecked
+										asg.questions[i].answers[n].isTrue
 									corAnsCnt +=
 										questions[j].answers[m].isCorrect
 									ansCnt += questions[j].answers[m].isChecked
