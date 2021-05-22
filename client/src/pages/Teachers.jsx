@@ -17,12 +17,15 @@ const Teachers = () => {
 		<main className='main'>
 			<div className='container'>
 				<div className='teachers'>
-					{teachers &&
+					{teachers ? (
 						teachers.map((teacher) => (
 							<div className='teachers__item' key={teacher._id}>
 								<TeacherBig data={teacher} />
 							</div>
-						))}
+						))
+					) : (
+						<span>Загрузка учителей</span>
+					)}
 				</div>
 			</div>
 		</main>
