@@ -6,16 +6,16 @@ const { authFetch } = createAuthProvider();
 export const fetchTeachers = createAsyncThunk(
 	'teachers/fetchTeachers',
 	async () => {
-		const response = await authFetch('/api/auth/userlist/TCHR');
-		return response.json();
+		const data = await authFetch('/api/auth/userlist/TCHR');
+		return data;
 	}
 );
 
 export const fetchTeacherCourses = createAsyncThunk(
 	'teachers/fetchTeacherCourses',
 	async (id) => {
-		const response = await authFetch(`/api/school/courses/${id}`);
-		return response.json();
+		const data = await authFetch(`/api/school/courses/${id}`);
+		return data;
 	}
 );
 
@@ -27,14 +27,9 @@ export const fetchTeacherReviews = createAsyncThunk(
 		} = getState().teachers;
 		const usersIds = reviews.map((review) => review.author);
 
-		const response = await authFetch('/api/auth/lightdataArr/', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ ids: usersIds }),
+		const data = await authFetch('/api/auth/lightdataArr/', 'POST', {
+			ids: usersIds,
 		});
-		let data = await response.json();
 
 		const newReviews = [];
 

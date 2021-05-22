@@ -6,16 +6,16 @@ const { authFetch } = createAuthProvider();
 export const fetchUserInfo = createAsyncThunk(
 	'userInfo/fetchUserInfo',
 	async () => {
-		const response = await authFetch('/api/auth/userdata');
-		const data = await response.json();
+		const data = await authFetch('/api/auth/userdata');
 
 		if (data.courses.length) {
 			const userCourses = await authFetch('/api/school/usercourses/');
-			const userCoursesData = await userCourses.json();
+			data.courses = userCourses.courses;
+		}
 
-			data.courses = userCoursesData.courses;
-
-			return data;
+		if (data?.teacherCourses?.length) {
+			const teacherCourses = await authFetch('/api/school/courses/');
+			data.teacherCourses = teacherCourses.courses;
 		}
 
 		return data;
@@ -25,8 +25,8 @@ export const fetchUserInfo = createAsyncThunk(
 export const fetchTeacherCourses = createAsyncThunk(
 	'userInfo/fetchTeacherCourses',
 	async () => {
-		const response = await authFetch('/api/school/courses/');
-		return response.json();
+		const data = await authFetch('/api/school/courses/');
+		return data;
 	}
 );
 
