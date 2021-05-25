@@ -1,12 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import TeacherProfileForm from './TeacherProfileForm';
 import TeacherProfileSubject from './TeacherProfileSubject';
-import TeacherProfileSimpleSubjects from './TeacherProfileSimpleSubjects';
+import { BoughtSubject } from '../index';
 
-const TeacherProfile = () => {
-	const { info } = useSelector(({ userInfo }) => userInfo);
-
+const TeacherProfile = ({ info }) => {
 	return (
 		<div className='content'>
 			<div className='content__main'>
@@ -23,10 +20,7 @@ const TeacherProfile = () => {
 					<div className='teacher-profile__subjects'>
 						{info.courses.length
 							? info.courses.map((course) => (
-									<TeacherProfileSimpleSubjects
-										key={course._id}
-										course={course}
-									/>
+									<BoughtSubject key={course._id} course={course} />
 							  ))
 							: ''}
 					</div>

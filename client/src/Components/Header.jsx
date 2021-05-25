@@ -37,14 +37,8 @@ const Header = () => {
 						<Link to='/'>Главная</Link>
 					</li>
 					<li className='header__li'>
-						<Link to='/subjects'>Предметы</Link>
-					</li>
-					<li className='header__li'>
 						<Link to='/teachers'>Учителя</Link>
 					</li>
-					{/* <li className='header__li'>
-						<Link to='/offlineLessons'>Оффлайн уроки</Link>
-					</li> */}
 				</ul>
 				<button ref={menuRef} onClick={toggleVisiblePopup} className='btn'>
 					Меню
@@ -52,9 +46,6 @@ const Header = () => {
 				{visibleMenu && (
 					<div className='header__menu'>
 						<ul>
-							{/* <li>
-								<Link to='/chats'>Чаты</Link>
-							</li> */}
 							{info.roles[0] === 'TCHR' ? (
 								<li>
 									<Link to='/tasks'>Тесты</Link>

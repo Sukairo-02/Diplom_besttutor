@@ -21,7 +21,7 @@ const TaskResults = ({ results }) => {
 								}
 								key={answer._id}>
 								<div>{answer.text}</div>
-								<div>{answer.isCorrect == answer.isChecked ? '✔️' : '❌'}</div>
+								<div>{answer.isCorrect === answer.isChecked ? '✔️' : '❌'}</div>
 							</div>
 						))}
 					</div>

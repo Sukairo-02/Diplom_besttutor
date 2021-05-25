@@ -1,3 +1,4 @@
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
@@ -8,7 +9,7 @@ import {
 import { declOfNum, countRating } from '../util';
 import { Star } from '../assets/icons';
 
-const TeacherBig = ({ data }) => {
+const TeacherBig = React.memo(({ data }) => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
@@ -49,6 +50,6 @@ const TeacherBig = ({ data }) => {
 			</div>
 		</div>
 	);
-};
+});
 
 export default TeacherBig;

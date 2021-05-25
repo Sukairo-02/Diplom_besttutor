@@ -1,11 +1,9 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { UserProfileSubject } from './index';
+import { BoughtSubject } from './index';
 
-const UserProfile = () => {
+const UserProfile = ({ info }) => {
 	const history = useHistory();
-	const info = useSelector((state) => state.userInfo.info);
 
 	const btnHandler = React.useCallback(() => {
 		history.push('/teachers');
@@ -27,7 +25,7 @@ const UserProfile = () => {
 					<h2>Купленные курсы</h2>
 					<div className='user-profile__subjects'>
 						{info.courses.map((course) => (
-							<UserProfileSubject key={course._id} course={course} />
+							<BoughtSubject key={course._id} course={course} />
 						))}
 					</div>
 				</div>
