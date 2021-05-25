@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { createAuthProvider } from '../../jwt';
+import { countRating, byField } from '../../util';
 
 const { authFetch } = createAuthProvider();
 
@@ -54,6 +55,7 @@ export const teachersSlice = createSlice({
 	name: 'teachers',
 	initialState: {
 		items: [],
+		filter: '',
 		teacher: {},
 		loading: 'idle',
 		error: null,
@@ -62,6 +64,36 @@ export const teachersSlice = createSlice({
 		setTeacher: (state, action) => {
 			const teacher = state.items.find((item) => item._id === action.payload);
 			state.teacher = teacher;
+		},
+		setFilter: (state, action) => {
+			state.filter = action.payload;
+		},
+		sortItems: (state, action) => {
+			switch (action.payload) {
+				case 'pointsAsc':
+					state.items.sort(
+						byField('reviews', true, (item) => countRating(item))
+					);
+					break;
+				case 'pointsDesc':
+					state.items.sort(
+						byField('reviews', false, (item) => countRating(item))
+					);
+					break;
+				case 'reviews':
+					state.items.sort(byField('reviews', true, (item) => item.length));
+					break;
+				case 'corses':
+					state.items.sort(
+						byField('teacherCourses', true, (item) => item.length)
+					);
+					break;
+				default:
+					state.items.sort(
+						byField('reviews', true, (item) => countRating(item))
+					);
+					break;
+			}
 		},
 	},
 	extraReducers: {
@@ -121,6 +153,6 @@ export const teachersSlice = createSlice({
 	},
 });
 
-export const { setTeacher } = teachersSlice.actions;
+export const { setTeacher, sortItems, setFilter } = teachersSlice.actions;
 
 export default teachersSlice.reducer;
