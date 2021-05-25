@@ -75,14 +75,14 @@ const Teacher = () => {
 							<p className='teacher-full__desc'>{teacher.desc}</p>
 							<span className='teacher-full__title'>Резюме</span>
 							<div className='teacher-full__summary'>
-								<pre className='teacher-full__work'>
+								<div className='teacher-full__work'>
 									<div className='teacher-full__mini-title'>Работа</div>
 									{teacher.experience}
-								</pre>
-								<pre className='teacher-full_education'>
+								</div>
+								<div className='teacher-full_education'>
 									<div className='teacher-full__mini-title'>Образование</div>
 									{teacher.education}
-								</pre>
+								</div>
 							</div>
 							<span className='teacher-full__title'>Типы курсов</span>
 							<div className='teacher-full__subjects'>
@@ -103,6 +103,8 @@ const Teacher = () => {
 												</div>
 											</div>
 											<button
+												type='button'
+												title='Купить курс'
 												className='btn'
 												onClick={() => subscribeToCourse(course._id)}>
 												{course.price} грн

@@ -1,9 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	fetchUserInfo,
-	fetchTeacherCourses,
-} from '../redux/reducers/userInfoSlice';
+import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
 import {
 	fetchTaskForTeacher,
 	fetchStatisticForTeacher,
@@ -70,12 +67,6 @@ const Tasks = () => {
 
 	const info = useSelector((state) => state.userInfo.info);
 	const [state, setState] = React.useState('');
-
-	React.useEffect(() => {
-		if (Object.keys(info).length === 0) {
-			dispatch(fetchUserInfo());
-		}
-	});
 
 	const taskBtnHandeler = async (taskId, courseId) => {
 		await dispatch(fetchTaskForTeacher(taskId));
