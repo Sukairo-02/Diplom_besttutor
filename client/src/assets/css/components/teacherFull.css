@@ -7,6 +7,7 @@ pre {
 	display: flex;
 	gap: 20px;
 	max-width: 820px;
+	margin: 0 auto;
 	padding: 20px;
 	background-color: var(--secondary-bg);
 	border-radius: var(--radius);
@@ -88,8 +89,10 @@ pre {
 	background-color: var(--accent-color);
 }
 
-.teacher-full__work {
+.teacher-full__work,
+.teacher-full_education {
 	line-height: 22px;
+	white-space: pre-wrap;
 }
 
 .teacher-full__mini-title {

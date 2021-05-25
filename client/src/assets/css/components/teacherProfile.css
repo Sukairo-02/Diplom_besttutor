@@ -2,6 +2,10 @@
 	max-width: 820px;
 }
 
+.teacher-profile > h2 {
+	margin-top: 0;
+}
+
 .teacher-profile__form {
 	width: 100%;
 	background-color: var(--secondary-bg);

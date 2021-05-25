@@ -1,142 +1,51 @@
-/* SIGN */
-@media screen and (max-width: 1150px) {
-	.sign__bg {
-		display: none;
-	}
-}
-
-@media screen and (max-width: 500px) {
-	.sign__info {
-		padding: 20px;
-	}
-}
-
-/* HEADER */
-@media screen and (max-width: 460px) {
-	.header__ul,
-	.header__nav {
-		gap: 20px;
-	}
-}
-
-@media screen and (max-width: 375px) {
-	.header__menu {
-		left: 0;
-		width: max-content;
-	}
-}
-
-/* HEADER & CONTENT */
-@media screen and (max-width: 1280px) {
-	.wrapper {
-		grid-template-columns: 250px repeat(3, 1fr);
-	}
-}
-
-@media screen and (max-width: 700px) {
-	.header {
-		padding: 22px 10px;
-	}
-
-	.container {
-		padding: 20px 10px;
-	}
-}
-
-/* CONTENT */
 @media screen and (max-width: 1185px) {
+	/* CONTENT */
 	.content {
 		flex-direction: column;
 	}
 
 	.content__aside {
-		flex: 1;
-	}
-}
-
-/* SUBJECT */
-@media screen and (max-width: 650px) {
-	.subject__user {
-		gap: 10px;
-	}
-}
-
-@media screen and (max-width: 520px) {
-	.subject__users {
-		flex-direction: column;
+		flex: 0 1 auto;
+		order: -1;
 	}
 
-	.subject__user {
-		width: 100%;
+	.content__aside > * {
+		max-width: 820px;
+		margin: 0 auto;
 	}
-}
 
-/* CALENDAR */
-@media screen and (max-width: 420px) {
-	.calendar {
-		max-width: 300px;
+	/* TEACHER-BIG */
+	.teachers__item {
+		margin: 0 auto 20px auto;
+	}
+
+	.teacher-big {
 		padding: 20px;
 	}
 
-	.calendar__month {
-		font-size: 16px;
-		margin-bottom: 20px;
-	}
-
-	.calendar__left-btn,
-	.calendar__right-btn {
-		font-size: 18px;
-	}
-
-	.calendar__dates {
-		margin-bottom: 20px;
-	}
-
-	.calendar__day,
-	.calendar__date {
-		height: 30px;
-		width: 30px;
-	}
-
-	.calendar__day {
-		line-height: 30px;
-	}
-
-	.calendar__event {
-		font-size: 14px;
+	/* TEACHER-PROFILE */
+	.teacher-profile {
+		margin: 0 auto;
 	}
 }
 
-/* SUBJECTLIST */
-@media screen and (max-width: 460px) {
-	.subjects-list {
-		justify-content: center;
-	}
-}
-
-/* SCHEDULE */
-@media screen and (max-width: 1200px) {
-	.teacher-big__dop {
+@media screen and (max-width: 1150px) {
+	/* SIGN */
+	.sign__bg {
 		display: none;
 	}
 }
 
-@media screen and (max-width: 420px) {
-	.schedule__row {
-		grid-template-columns: 90px repeat(7, 25px);
-	}
-
-	.schedule__cell {
-		height: 35px;
-	}
-
-	.schedule__time {
-		font-size: 14px;
+@media screen and (max-width: 790px) {
+	/* TEACHER-FULL */
+	.teacher-full {
+		flex-direction: column;
+		align-items: center;
 	}
 }
 
-/* TEACHER-BIG */
 @media screen and (max-width: 750px) {
+	/* TEACHER-BIG */
 	.teacher-big {
 		flex-direction: column;
 		align-items: center;
@@ -147,22 +56,73 @@
 	}
 }
 
-/* TEACHER-FULL */
-@media screen and (max-width: 790px) {
-	.teacher-full {
+@media screen and (max-width: 700px) {
+	/* HEADER */
+	.header {
+		padding: 22px 10px;
+	}
+
+	/* GRID */
+	.container {
+		padding: 20px 10px;
+	}
+}
+
+@media screen and (max-width: 670px) {
+	/* FORM */
+	.form__fieldset--flex {
 		flex-direction: column;
-		align-items: center;
+	}
+}
+
+@media screen and (max-width: 650px) {
+	/* SUBJECT */
+	.subject__user {
+		gap: 10px;
 	}
 }
 
 @media screen and (max-width: 600px) {
+	/* TEACHER-FULL */
 	.teacher-full__summary {
 		flex-direction: column;
 		gap: 20px;
 	}
 }
 
+@media screen and (max-width: 520px) {
+	/* SUBJECT */
+	.subject__users {
+		flex-direction: column;
+	}
+
+	.subject__user {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	/* SIGN */
+	.sign__info {
+		padding: 20px;
+	}
+}
+
+@media screen and (max-width: 460px) {
+	/* HEADER */
+	.header__ul,
+	.header__nav {
+		gap: 20px;
+	}
+
+	/* SUBJECTLIST */
+	.subjects-list {
+		justify-content: center;
+	}
+}
+
 @media screen and (max-width: 450px) {
+	/* TEACHER-FULL */
 	.teacher-full__subject {
 		flex-direction: column;
 		align-items: stretch;
@@ -171,7 +131,23 @@
 }
 
 @media screen and (max-width: 420px) {
+	/* TEACHER-FULL */
 	.teacher-full__review {
 		flex-direction: column;
+	}
+}
+
+@media screen and (max-width: 380px) {
+	/* EDIT-FORM */
+	.edit-form--big {
+		padding: 20px;
+	}
+}
+
+@media screen and (max-width: 375px) {
+	/* HEADER */
+	.header__menu {
+		left: 0;
+		width: max-content;
 	}
 }
