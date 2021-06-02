@@ -9,7 +9,7 @@ export const fetchTaskForTeacher = createAsyncThunk(
 		const data = await authFetch('/api/school/getassignment_teacher', 'POST', {
 			assignmentID: id,
 		});
-		return data;
+		return data.assignment;
 	}
 );
 
@@ -29,13 +29,6 @@ export const fetchTaskForStudent = createAsyncThunk(
 		const data = await authFetch('/api/school/getassignment', 'POST', {
 			assignmentID: id,
 		});
-
-		data.questions.forEach((question) => {
-			question.answers.forEach((answer) => {
-				answer.isChecked = false;
-			});
-		});
-
 		return data;
 	}
 );
@@ -58,7 +51,11 @@ export const taskSlice = createSlice({
 		[fetchTaskForTeacher.fulfilled]: (state, action) => {
 			if (state.loading === 'pending') {
 				state.loading = 'idle';
-				state.item = action.payload.assignment;
+
+				action.payload.date = action.payload.date.slice(0, 10);
+				action.payload.endDate = action.payload.endDate.slice(0, 10);
+
+				state.item = action.payload;
 			}
 		},
 		[fetchTaskForTeacher.rejected]: (state, action) => {
@@ -94,6 +91,16 @@ export const taskSlice = createSlice({
 		[fetchTaskForStudent.fulfilled]: (state, action) => {
 			if (state.loading === 'pending') {
 				state.loading = 'idle';
+
+				action.payload.date = action.payload.date.slice(0, 10);
+				action.payload.endDate = action.payload.endDate.slice(0, 10);
+
+				action.payload.questions.forEach((question) => {
+					question.answers.forEach((answer) => {
+						answer.isChecked = false;
+					});
+				});
+
 				state.item = action.payload;
 			}
 		},
