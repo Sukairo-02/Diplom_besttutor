@@ -6,20 +6,7 @@
 }
 
 .statistic__title {
-	display: inline-block;
-	position: relative;
-	margin: 0;
 	margin-bottom: 20px;
-}
-
-.statistic__title::after {
-	position: absolute;
-	content: '';
-	bottom: 0;
-	left: 0;
-	height: 1px;
-	width: 100%;
-	background-color: var(--accent-color);
 }
 
 .statistic__students {
@@ -51,6 +38,10 @@
 	object-fit: cover;
 }
 
+.statistic__email {
+	font-weight: 300;
+}
+
 .statistic__question {
 	display: flex;
 	align-items: center;
@@ -65,10 +56,6 @@
 
 .statistic__question:last-child {
 	margin-bottom: 0;
-}
-
-.statistic__question > h4 {
-	margin: 0;
 }
 
 .statistic__question > div {

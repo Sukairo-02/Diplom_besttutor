@@ -1,5 +1,6 @@
 @import 'body.css';
 @import 'grid.css';
+@import 'headings.css';
 @import 'button.css';
 @import 'form.css';
 @import 'sign.css';
@@ -13,6 +14,6 @@
 @import 'userProfile.css';
 @import 'editForm.css';
 @import 'tasks.css';
-@import 'previewTask.css';
+@import 'task.css';
 @import 'statistic.css';
 @import 'teachers.css';

@@ -93,6 +93,10 @@
 	cursor: pointer;
 }
 
+.subject__lesson-time {
+	font-weight: 300;
+}
+
 .subject__users {
 	display: flex;
 	justify-content: space-between;
@@ -130,6 +134,7 @@
 }
 
 .subject__user-email {
+	font-weight: 300;
 	color: var(--secondary-text);
 }
 

@@ -13,8 +13,3 @@
 	box-shadow: var(--shadow);
 	padding: 20px;
 }
-
-.teachers__filtration > h3 {
-	margin: 0;
-	margin-bottom: 10px;
-}

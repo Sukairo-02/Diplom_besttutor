@@ -26,24 +26,14 @@
 }
 
 .teacher-big__name {
-	font-size: 20px;
-	margin: 0;
-}
-
-.teacher-big__name,
-.teacher-big__subject,
-.teacher-big__disciple,
-.teacher-big__count {
 	margin-bottom: 10px;
 }
 
-.teacher-big__disciple,
+.teacher-big__subject,
 .teacher-big__count {
 	display: inline-block;
-}
-
-.teacher-big__disciple {
-	margin-right: 20px;
+	margin: 0 10px 10px 0;
+	font-weight: 300;
 }
 
 .teacher-big__rating,

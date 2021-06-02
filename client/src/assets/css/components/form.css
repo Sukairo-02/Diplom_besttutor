@@ -4,8 +4,7 @@
 }
 
 .form__title {
-	font-size: 24px;
-	margin: 0 0 30px 0;
+	margin-bottom: 20px;
 }
 
 .form__fieldset {
@@ -70,21 +69,23 @@
 	transition: box-shadow 0.3s ease;
 }
 
-.form__input:focus,
-.form__select:focus,
-.form__desc:focus {
-	box-shadow: var(--outline);
-}
-
 .form__desc {
 	min-height: 120px;
 	resize: vertical;
 }
 
 .form__checkbox {
-	height: 10px;
-	width: 10px;
+	height: 15px;
+	width: 15px;
 	margin: 0;
+	transition: box-shadow 0.3s ease;
+}
+
+.form__input:focus,
+.form__select:focus,
+.form__desc:focus,
+.form__checkbox:focus {
+	box-shadow: var(--outline);
 }
 
 .form__file {

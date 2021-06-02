@@ -9,3 +9,7 @@
 .user-profile__subject:last-child {
 	margin-bottom: 0;
 }
+
+.user-profile__title {
+	margin-bottom: 20px;
+}
