@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	fetchTeachers,
@@ -6,6 +7,12 @@ import {
 	setFilter,
 } from '../redux/reducers/teachersSlice';
 import { fetchSubjects } from '../redux/reducers/subjectsSlice';
+import {
+	setTeacher,
+	fetchTeacherCourses,
+	fetchTeacherReviews,
+} from '../redux/reducers/teachersSlice';
+import { getSubjects } from '../redux/selectors';
 import { TeacherBig } from '../Components';
 
 const parametersItems = [
@@ -17,6 +24,8 @@ const parametersItems = [
 
 const Teachers = () => {
 	const dispatch = useDispatch();
+	const history = useHistory();
+
 	const teachers = useSelector((state) => {
 		const filter = state.teachers.filter;
 		const all = state.teachers.items;
@@ -28,7 +37,7 @@ const Teachers = () => {
 
 		return all;
 	});
-	const subjects = useSelector((state) => state.subjects.items);
+	const subjects = useSelector(getSubjects);
 
 	React.useEffect(() => {
 		async function loadData() {
@@ -49,6 +58,17 @@ const Teachers = () => {
 		dispatch(setFilter(name));
 	};
 
+	const profileBtnHandler = React.useCallback(
+		async (id) => {
+			await dispatch(setTeacher(id));
+			await dispatch(fetchTeacherCourses(id));
+			await dispatch(fetchTeacherReviews());
+
+			history.push(`teacher/${id}`);
+		},
+		[dispatch, history]
+	);
+
 	return (
 		<main className='main'>
 			<div className='container'>
@@ -58,7 +78,10 @@ const Teachers = () => {
 							{teachers.length ? (
 								teachers.map((teacher) => (
 									<div className='teachers__item' key={teacher._id}>
-										<TeacherBig data={teacher} />
+										<TeacherBig
+											data={teacher}
+											profileBtnHandler={profileBtnHandler}
+										/>
 									</div>
 								))
 							) : (
@@ -68,7 +91,7 @@ const Teachers = () => {
 					</div>
 					<div className='content__aside'>
 						<div className='teachers__filtration'>
-							<h3>Фильтрация</h3>
+							<h3 className='form__title'>Фильтрация</h3>
 							<form className='form'>
 								<fieldset className='form__fieldset'>
 									<label className='form__label' htmlFor='filterSubjects'>

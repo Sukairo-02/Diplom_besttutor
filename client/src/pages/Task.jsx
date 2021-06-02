@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { getTask } from '../redux/selectors';
 import { createAuthProvider } from '../jwt';
 import { TaskForm, TaskResults } from '../Components';
 
@@ -8,7 +9,7 @@ const Task = () => {
 	const [submit, setSubmit] = React.useState(false);
 	const [results, setResults] = React.useState();
 
-	const { item } = useSelector(({ task }) => task);
+	const item = useSelector(getTask);
 	const { authFetch } = createAuthProvider();
 
 	const deleteBtnHandler = async () => {
@@ -37,32 +38,28 @@ const Task = () => {
 	return (
 		<main className='main'>
 			<div className='container'>
-				<div className='previewTask'>
-					<h2 className='previewTask__title'>{item.title}</h2>
-					<p className='previewTask__desc'>{item.desc}</p>
-					<span className='previewTask__min-title'>Описание</span>
-					<div className='previewTask__info'>
+				<div className='task'>
+					<h2 className='task__title'>{item.title}</h2>
+					<p className='task__desc'>{item.desc}</p>
+					<span className='task__min-title'>Описание</span>
+					<div className='task__info'>
 						<div>Перемешано: {item.isShuffled ? '✅' : '❌'}</div>
 						<div>Поздняя сдача: {item.allowOvertime ? '✅' : '❌'}</div>
-						<div className='previewTask__points'>
+						<div className='task__points'>
 							Максимально баллов: {item.maxPoints}
 						</div>
 					</div>
-					<span className='previewTask__min-title'>Время</span>
-					<div className='previewTask__dates'>
-						<div className='previewTask__date'>
-							Начало теста: {item.date.slice(0, 10)}
-						</div>
-						<div className='previewTask__date'>
-							Конец теста: {item.endDate.slice(0, 10)}
-						</div>
+					<span className='task__min-title'>Время</span>
+					<div className='task__times'>
+						<div className='task__time'>Начало теста: {item.date}</div>
+						<div className='task__time'>Конец теста: {item.endDate}</div>
 					</div>
-					<span className='previewTask__min-title'>Вопросы</span>
+					<span className='task__min-title'>Вопросы</span>
 					{!submit && <TaskForm item={item} setSubmit={setSubmit} />}
 					{submit && results && <TaskResults results={results} />}
 					{submit && (
 						<>
-							<div className='previewTask__btns'>
+							<div className='task__btns'>
 								<button
 									className='btn'
 									type='button'

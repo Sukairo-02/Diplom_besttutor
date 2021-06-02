@@ -1,9 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { getUserInfo } from '../redux/selectors';
 import { EditForm, TeacherForm } from '../Components';
 
 const EditProfile = () => {
-	const info = useSelector((state) => state.userInfo.info);
+	const info = useSelector(getUserInfo);
 
 	return (
 		<main className='main'>

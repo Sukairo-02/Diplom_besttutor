@@ -5,6 +5,7 @@ import {
 	fetchTaskForTeacher,
 	fetchStatisticForTeacher,
 } from '../redux/reducers/taskSlice';
+import { getUserInfo } from '../redux/selectors';
 import { Formik, Form, FieldArray } from 'formik';
 import { createAuthProvider } from '../jwt';
 import { useHistory } from 'react-router-dom';
@@ -65,7 +66,7 @@ const Tasks = () => {
 	const { authFetch } = createAuthProvider();
 	const history = useHistory();
 
-	const info = useSelector((state) => state.userInfo.info);
+	const info = useSelector(getUserInfo);
 	const [state, setState] = React.useState('');
 
 	const taskBtnHandeler = async (taskId, courseId) => {
@@ -108,7 +109,7 @@ const Tasks = () => {
 								}}>
 								{({ values, errors }) => (
 									<Form className='form tasks__form'>
-										<h3>Добавить новое задание</h3>
+										<h3 className='form__title'>Добавить новое задание</h3>
 										<fieldset className='form__fieldset'>
 											<FormSelect label='Выбирете прдемет' name='courseID'>
 												<option value=''>Выберите предмет</option>
@@ -196,7 +197,9 @@ const Tasks = () => {
 														<span className='mr-10'>{course.price} грн</span>
 													</div>
 												</div>
-												<div className='subject__tasks'>
+												<div
+													className='subject__tasks'
+													style={{ marginBottom: 0 }}>
 													{course.assignments.length ? (
 														course.assignments.map((assignment) => (
 															<div

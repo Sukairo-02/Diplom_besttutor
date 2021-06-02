@@ -1,11 +1,13 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { getTask, getStatistic } from '../redux/selectors';
 import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
 import { createAuthProvider } from '../jwt';
 
 const PreviewTask = ({ location }) => {
 	const dispatch = useDispatch();
-	const { item, statistic } = useSelector(({ task }) => task);
+	const item = useSelector(getTask);
+	const statistic = useSelector(getStatistic);
 	const { authFetch } = createAuthProvider();
 
 	const [state, setState] = React.useState('');
@@ -29,28 +31,24 @@ const PreviewTask = ({ location }) => {
 			<div className='container'>
 				<div className='content'>
 					<div className='content__main'>
-						<div className='previewTask'>
-							<h2 className='previewTask__title'>{item.title}</h2>
-							<p className='previewTask__desc'>{item.desc}</p>
-							<span className='previewTask__min-title'>Описание</span>
-							<div className='previewTask__info'>
+						<div className='task'>
+							<h2 className='task__title'>{item.title}</h2>
+							<p className='task__desc'>{item.desc}</p>
+							<span className='task__min-title'>Описание</span>
+							<div className='task__info'>
 								<div>Перемешано: {item.isShuffled ? '✅' : '❌'}</div>
 								<div>Поздняя сдача: {item.allowOvertime ? '✅' : '❌'}</div>
-								<div className='previewTask__points'>
+								<div className='task__points'>
 									Максимально баллов: {item.maxPoints}
 								</div>
 								<div>Сдано: {item.submits.length}</div>
 							</div>
-							<span className='previewTask__min-title'>Время</span>
-							<div className='previewTask__dates'>
-								<div className='previewTask__date'>
-									Начало теста: {item.date.slice(0, 10)}
-								</div>
-								<div className='previewTask__date'>
-									Конец теста: {item.endDate.slice(0, 10)}
-								</div>
+							<span className='task__min-title'>Время</span>
+							<div className='task__times'>
+								<div className='task__time'>Начало теста: {item.date}</div>
+								<div className='task__time'>Конец теста: {item.endDate}</div>
 							</div>
-							<span className='previewTask__min-title'>Вопросы</span>
+							<span className='task__min-title'>Вопросы</span>
 							<div className='questions'>
 								{item.questions.map((question) => (
 									<div className='question' key={question._id}>
@@ -97,8 +95,10 @@ const PreviewTask = ({ location }) => {
 												alt='Аватар'
 											/>
 											<div className='statistic__container'>
-												<div>{student.username}</div>
-												<div>{student.email}</div>
+												<div className='statistic__name'>
+													{student.username}
+												</div>
+												<div className='statistic__email'>{student.email}</div>
 											</div>
 											<div>Баллов: {student.points}</div>
 										</div>
@@ -111,9 +111,9 @@ const PreviewTask = ({ location }) => {
 							<div className='statistic__questions'>
 								{statistic.hardest_questions.length ? (
 									statistic.hardest_questions.map((question) => (
-										<div className='statistic__question'>
-											<h4>{question.title}</h4>
-											<div>Количество баллов: {question.points}</div>
+										<div className='statistic__question' key={question.qID}>
+											<h5>{question.title}</h5>
+											<div>Баллов: {question.points}</div>
 											<div>Правильных ответов: {question.correct_answers}</div>
 										</div>
 									))

@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
 import { createAuthProvider } from '../jwt';
 import { declOfNum, countRating, countStudents } from '../util';
+import { getUserInfo, getTeacher } from '../redux/selectors';
 import { Star, People } from '../assets/icons';
 
 const Teacher = () => {
 	const [state, setState] = React.useState();
 	const dispatch = useDispatch();
 	const { authFetch } = createAuthProvider();
-	const { teacher } = useSelector(({ teachers }) => teachers);
-	const info = useSelector((state) => state.userInfo.info);
+	const teacher = useSelector(getTeacher);
+	const info = useSelector(getUserInfo);
 
 	React.useEffect(() => {
 		if (Object.keys(info).length === 0) {
@@ -51,8 +52,10 @@ const Teacher = () => {
 							className='teacher-full__avatar'
 						/>
 						<div className='teacher-full__container teacher-full__container--flex'>
-							<h3 className='teacher-full__name'>{teacher.username}</h3>
-							<div className='teacher-full__discipline'>{teacher.subject}</div>
+							<h2 className='teacher-full__name'>{teacher.username}</h2>
+							<span className='teacher-full__discipline'>
+								{teacher.subject}
+							</span>
 							<span className='teacher-full__disciple'>
 								<People size={16} /> {countStudents(teacher.teacherCourses)}{' '}
 								{declOfNum(countStudents(teacher.teacherCourses), [
@@ -86,7 +89,7 @@ const Teacher = () => {
 							</div>
 							<span className='teacher-full__title'>Типы курсов</span>
 							<div className='teacher-full__subjects'>
-								{teacher.teacherCourses.length &&
+								{teacher.teacherCourses.length ? (
 									teacher.teacherCourses.map((course) => (
 										<div className='teacher-full__subject' key={course._id}>
 											<div className='teacher-full__container'>
@@ -110,7 +113,10 @@ const Teacher = () => {
 												{course.price} грн
 											</button>
 										</div>
-									))}
+									))
+								) : (
+									<div>Курсов нет</div>
+								)}
 							</div>
 							<span className='teacher-full__title'>Отзывы</span>
 							<span className='teacher-full__reviews-count'>
@@ -122,7 +128,7 @@ const Teacher = () => {
 								])}
 							</span>
 							<div className='teacher-full__reviews'>
-								{teacher.reviews.length &&
+								{teacher.reviews.length ? (
 									teacher.reviews.map((review) => (
 										<div className='teacher-full__review' key={review._id}>
 											<img
@@ -150,7 +156,10 @@ const Teacher = () => {
 												</div>
 											)}
 										</div>
-									))}
+									))
+								) : (
+									<div>Отзывов нет</div>
+								)}
 							</div>
 							<div>{state}</div>
 						</div>
