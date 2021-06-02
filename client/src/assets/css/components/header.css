@@ -54,19 +54,6 @@
 	color: var(--accent-color);
 }
 
-.header__avatar {
-	height: 35px;
-	width: 35px;
-	object-fit: cover;
-	border-radius: 50%;
-	cursor: pointer;
-	transition: box-shadow 0.3s ease;
-}
-
-.header__avatar:hover {
-	box-shadow: var(--shadow);
-}
-
 .header__menu {
 	position: absolute;
 	right: 0;

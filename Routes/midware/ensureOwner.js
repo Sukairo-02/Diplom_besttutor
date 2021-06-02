@@ -11,26 +11,26 @@ module.exports = async function (req, res, next) {
 		if (!teacher) {
 			return res
 				.status(403)
-				.json({ message: 'Error: nonexistent teacher!' })
+				.json({ message: 'Ошибка: несуществующий учитель!' })
 		}
 
 		const { courseID } = req.body
 		if (!courseID) {
 			return res
 				.status(403)
-				.json({ message: "Error: nonexistent course's ID!" })
+				.json({ message: 'Ошибка: отсутствует id курса!' })
 		}
 
 		const course = await Courses.findOne({ _id: courseID })
 		if (!course) {
 			return res
 				.status(403)
-				.json({ message: "Error: can't find course in the database!" })
+				.json({ message: 'Ошибка: курс не найден в базе данных!' })
 		}
 		if (teacher.src !== course.teacher) {
 			return res
 				.status(403)
-				.json({ message: "Error: you don't own this course!" })
+				.json({ message: 'Ошибка: вы не владеете этим курсом!' })
 		}
 
 		req.course = course
@@ -39,6 +39,6 @@ module.exports = async function (req, res, next) {
 		console.log(e)
 		return res
 			.status(500)
-			.json({ message: "Error occured while validating teacher's data!" })
+			.json({	message: 'Во время подтверждения данных учителя произошла ошибка' })
 	}
 }

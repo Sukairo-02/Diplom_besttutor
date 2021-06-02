@@ -29,7 +29,7 @@ router.post(
 	[
 		ensureRoles(['TCHR']),
 		ensureActiveteacher,
-		check('title', "You must enter course's title!").notEmpty(),
+		check('title', 'Вы должны ввести название курса!').notEmpty(),
 	],
 	controller.newcourse
 ) //adds new course of current user if user is teacher
@@ -37,7 +37,7 @@ router.post(
 router.post(
 	'/editcourse',
 	[
-		check('title', "You must enter course's title!").notEmpty(),
+		check('title', 'Вы должны ввести название курса!').notEmpty(),
 		ensureRoles(['TCHR']),
 		ensureActiveteacher,
 		ensureOwner,
@@ -49,7 +49,6 @@ router.post(
 router.post(
 	'/editprice',
 	[
-		check('title', "You must enter course's title!").notEmpty(),
 		ensureRoles(['TCHR']),
 		ensureActiveteacher,
 		ensureOwner,

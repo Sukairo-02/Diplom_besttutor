@@ -1,15 +1,13 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { UserProfileSubject } from './index';
+import { BoughtSubject } from './index';
 
-const UserProfile = () => {
+const UserProfile = ({ info }) => {
 	const history = useHistory();
-	const info = useSelector((state) => state.userInfo.info);
 
-	const btnHandler = React.useCallback(() => {
+	const btnHandler = () => {
 		history.push('/teachers');
-	}, [history]);
+	};
 
 	return (
 		<>
@@ -24,9 +22,10 @@ const UserProfile = () => {
 				</div>
 			) : (
 				<div className='user-profile'>
+					<h2 className='user-profile__title'>Купленные курсы</h2>
 					<div className='user-profile__subjects'>
 						{info.courses.map((course) => (
-							<UserProfileSubject key={course._id} course={course} />
+							<BoughtSubject key={course._id} course={course} />
 						))}
 					</div>
 				</div>

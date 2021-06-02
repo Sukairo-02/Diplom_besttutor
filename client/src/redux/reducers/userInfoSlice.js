@@ -6,16 +6,16 @@ const { authFetch } = createAuthProvider();
 export const fetchUserInfo = createAsyncThunk(
 	'userInfo/fetchUserInfo',
 	async () => {
-		const response = await authFetch('/api/auth/userdata');
-		const data = await response.json();
+		const data = await authFetch('/api/auth/userdata');
 
-		if (data.courses.length) {
+		if (data?.courses?.length) {
 			const userCourses = await authFetch('/api/school/usercourses/');
-			const userCoursesData = await userCourses.json();
+			data.courses = userCourses.courses;
+		}
 
-			data.courses = userCoursesData.courses;
-
-			return data;
+		if (data?.teacherCourses?.length) {
+			const teacherCourses = await authFetch('/api/school/courses/');
+			data.teacherCourses = teacherCourses.courses;
 		}
 
 		return data;
@@ -25,8 +25,8 @@ export const fetchUserInfo = createAsyncThunk(
 export const fetchTeacherCourses = createAsyncThunk(
 	'userInfo/fetchTeacherCourses',
 	async () => {
-		const response = await authFetch('/api/school/courses/');
-		return response.json();
+		const data = await authFetch('/api/school/courses/');
+		return data;
 	}
 );
 
@@ -44,10 +44,34 @@ export const userInfoSlice = createSlice({
 				state.loading = 'pending';
 			}
 		},
-		[fetchUserInfo.fulfilled]: (state, action) => {
+		[fetchUserInfo.fulfilled]: (state, { payload }) => {
 			if (state.loading === 'pending') {
 				state.loading = 'idle';
-				state.info = action.payload;
+
+				payload.dateOfBirth = payload.dateOfBirth.slice(0, 10);
+
+				for (let i = 0; i < payload?.teacherCourses?.length; i++) {
+					for (let j = 0; j < payload.teacherCourses[i].lessons.length; j++) {
+						payload.teacherCourses[i].lessons[j].date = payload.teacherCourses[
+							i
+						].lessons[j].date.slice(0, 10);
+						payload.teacherCourses[i].lessons[j].endDate =
+							payload.teacherCourses[i].lessons[j].endDate.slice(0, 10);
+					}
+				}
+
+				for (let i = 0; i < payload?.courses?.length; i++) {
+					for (let j = 0; j < payload.courses[i].lessons.length; j++) {
+						payload.courses[i].lessons[j].date = payload.courses[i].lessons[
+							j
+						].date.slice(0, 10);
+						payload.courses[i].lessons[j].endDate = payload.courses[i].lessons[
+							j
+						].endDate.slice(0, 10);
+					}
+				}
+
+				state.info = payload;
 			}
 		},
 		[fetchUserInfo.rejected]: (state, action) => {
@@ -62,10 +86,22 @@ export const userInfoSlice = createSlice({
 				state.loading = 'pending';
 			}
 		},
-		[fetchTeacherCourses.fulfilled]: (state, action) => {
+		[fetchTeacherCourses.fulfilled]: (state, { payload }) => {
 			if (state.loading === 'pending') {
 				state.loading = 'idle';
-				state.info.teacherCourses = action.payload.courses;
+
+				for (let i = 0; i < payload?.courses?.length; i++) {
+					for (let j = 0; j < payload.courses[i].lessons.length; j++) {
+						payload.courses[i].lessons[j].date = payload.courses[i].lessons[
+							j
+						].date.slice(0, 10);
+						payload.courses[i].lessons[j].endDate = payload.courses[i].lessons[
+							j
+						].endDate.slice(0, 10);
+					}
+				}
+
+				state.info.teacherCourses = payload.courses;
 			}
 		},
 		[fetchTeacherCourses.rejected]: (state, action) => {

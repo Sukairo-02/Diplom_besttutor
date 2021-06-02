@@ -6,8 +6,8 @@ const { authFetch } = createAuthProvider();
 export const fetchSubjects = createAsyncThunk(
 	'subjects/fetchSubjects',
 	async () => {
-		const response = await authFetch('/api/school/getSubjects');
-		return response.json();
+		const data = await authFetch('/api/school/getSubjects');
+		return data;
 	}
 );
 

@@ -25,19 +25,10 @@ const EditForm = ({ data }) => {
 	const formSubmitHandler = async (data) => {
 		setState('Loading');
 		try {
-			let response = await authFetch('/api/auth/edit', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
-			let result = await response.json();
+			const result = await authFetch('/api/auth/edit', 'POST', data);
 			setState(result.message);
 
 			dispatch(fetchUserInfo());
-
-			return result.message;
 		} catch (err) {
 			setState(err.message);
 		}
@@ -49,7 +40,7 @@ const EditForm = ({ data }) => {
 				avatar: data.avatar,
 				username: data.username,
 				email: data.email,
-				dateOfBirth: data.dateOfBirth.slice(0, 10),
+				dateOfBirth: data.dateOfBirth,
 				phone: data.phone,
 				address: data.address,
 				area: data.area,
