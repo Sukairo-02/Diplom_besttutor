@@ -85,11 +85,11 @@ const BoughtSubject = ({ course }) => {
 										<div className='subject__lesson-type'>
 											Тип: {lesson.location}
 										</div>
-										<div className='subject__lesson-start'>
-											Начало: {lesson.date.slice(0, 10)}
+										<div className='subject__lesson-time'>
+											Начало: {lesson.date}
 										</div>
-										<div className='subject__lesson-end'>
-											Конец: {lesson.endDate.slice(0, 10)}
+										<div className='subject__lesson-time'>
+											Конец: {lesson.endDate}
 										</div>
 									</div>
 								))}
@@ -125,7 +125,7 @@ const BoughtSubject = ({ course }) => {
 								formSubmitHandler(values);
 							}}>
 							<Form className='form teacher-profile__form'>
-								<h3>Добавить/изменить отзыв</h3>
+								<h3 className='form__title'>Добавить/изменить отзыв</h3>
 								<fieldset className='form__fieldset'>
 									<FormInput label='Рейтинг' name='rating' type='number' />
 								</fieldset>

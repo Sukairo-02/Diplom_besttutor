@@ -8,7 +8,7 @@ const TeacherProfile = ({ info }) => {
 		<div className='content'>
 			<div className='content__main'>
 				<div className='teacher-profile'>
-					<h2>Созданные курсы</h2>
+					<h2 className='teacher-profile__title'>Созданные курсы</h2>
 					<div className='teacher-profile__subjects'>
 						{info.teacherCourses.length
 							? info.teacherCourses.map((course) => (
@@ -16,7 +16,7 @@ const TeacherProfile = ({ info }) => {
 							  ))
 							: ''}
 					</div>
-					<h2>Купленные курсы</h2>
+					<h2 className='teacher-profile__title'>Купленные курсы</h2>
 					<div className='teacher-profile__subjects'>
 						{info.courses.length
 							? info.courses.map((course) => (

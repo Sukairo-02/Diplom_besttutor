@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { getUserInfo } from '../redux/selectors';
 import { createAuthProvider } from '../jwt';
 
 const Header = () => {
-	const { info } = useSelector(({ userInfo }) => userInfo);
+	const info = useSelector(getUserInfo);
 	const { logout } = createAuthProvider();
 	const [visibleMenu, setVisibleMenu] = React.useState(false);
 

@@ -44,7 +44,7 @@ const TeacherProfileForm = () => {
 				formSubmitHandler(values);
 			}}>
 			<Form className='form teacher-profile__form'>
-				<h3>Добавить новый курс</h3>
+				<h3 className='form__title'>Добавить новый курс</h3>
 				<fieldset className='form__fieldset'>
 					<FormInput label='Название курса' name='title' type='text' />
 				</fieldset>

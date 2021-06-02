@@ -11,7 +11,7 @@ const TasksAnswers = ({ index, values }) => {
 		<FieldArray name={`questions[${index}].answers`}>
 			{(arrayHelpers) => (
 				<>
-					<h4>Ответы</h4>
+					<h5 className='form__title'>Ответы</h5>
 					{values.map((_, sIndex) => (
 						<fieldset
 							className='form__fieldset form__fieldset--flex'

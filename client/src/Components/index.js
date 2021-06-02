@@ -1,6 +1,7 @@
 export { default as Header } from './Header';
 export { default as TeacherBig } from './TeacherBig';
 export { default as BoughtSubject } from './BoughtSubject';
+export { default as ScrollToTop } from './ScrollToTop';
 
 export { default as TeacherForm } from './TeacherForm';
 export { default as FormInput } from './FormInput';

@@ -24,7 +24,7 @@ const TeacherProfileSubjectLessons = ({ course }) => {
 
 	return (
 		<div className='subject__lessons'>
-			{course.lessons.length &&
+			{course.lessons.length ? (
 				course.lessons.map((lesson, index) => (
 					<div className='subject__lesson' key={lesson._id}>
 						{course.isPublished ? (
@@ -39,14 +39,13 @@ const TeacherProfileSubjectLessons = ({ course }) => {
 						)}
 						<div className='subject__lesson-number'>Занятие: {index + 1}</div>
 						<div className='subject__lesson-type'>Тип: {lesson.location}</div>
-						<div className='subject__lesson-start'>
-							Начало: {lesson.date.slice(0, 10)}
-						</div>
-						<div className='subject__lesson-end'>
-							Конец: {lesson.endDate.slice(0, 10)}
-						</div>
+						<div className='subject__lesson-time'>Начало: {lesson.date}</div>
+						<div className='subject__lesson-time'>Конец: {lesson.endDate}</div>
 					</div>
-				))}
+				))
+			) : (
+				<div>Уроков нет</div>
+			)}
 			{!course.isPublished && <TeacherProfileLessonsForm id={course._id} />}
 		</div>
 	);

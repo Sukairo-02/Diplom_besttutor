@@ -40,7 +40,7 @@ const EditForm = ({ data }) => {
 				avatar: data.avatar,
 				username: data.username,
 				email: data.email,
-				dateOfBirth: data.dateOfBirth.slice(0, 10),
+				dateOfBirth: data.dateOfBirth,
 				phone: data.phone,
 				address: data.address,
 				area: data.area,

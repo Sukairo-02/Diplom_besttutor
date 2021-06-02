@@ -19,7 +19,7 @@ const emptyQuestion = {
 const TasksQuestions = ({ values, helpers }) => {
 	return (
 		<div className='form__container'>
-			<h3>Все вопросы</h3>
+			<h4 className='form__title'>Все вопросы</h4>
 			{values.map((question, index) => (
 				<div className='form__question' key={index}>
 					<fieldset className='form__fieldset form__fieldset--flex'>

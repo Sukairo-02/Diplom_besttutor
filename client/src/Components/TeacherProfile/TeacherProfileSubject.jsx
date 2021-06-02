@@ -5,14 +5,14 @@ import TeacherProfileSubjectUsers from './TeacherProfileSubjectUsers';
 import { ChevronDown } from '../../assets/icons';
 
 const TeacherProfileSubject = ({ course }) => {
-	const [isclose, setIsClose] = React.useState(true);
+	const [isClose, setisClose] = React.useState(true);
 	const [height, setHeight] = React.useState('0px');
 
 	const content = React.useRef(null);
 
 	const btnHandler = () => {
-		setIsClose(!isclose);
-		setHeight(isclose ? `${content.current.scrollHeight}px` : '0px');
+		setisClose(!isClose);
+		setHeight(isClose ? `${content.current.scrollHeight}px` : '0px');
 	};
 
 	return (
@@ -25,7 +25,7 @@ const TeacherProfileSubject = ({ course }) => {
 							<span className='mr-10'>{course.price} грн</span>
 							<button
 								className={
-									'btn btn--transparent ' + (isclose ? '' : 'btn--rotate')
+									'btn btn--transparent ' + (isClose ? '' : 'btn--rotate')
 								}
 								onClick={btnHandler}>
 								<ChevronDown />
@@ -36,7 +36,7 @@ const TeacherProfileSubject = ({ course }) => {
 						ref={content}
 						style={{ maxHeight: height }}
 						className={
-							'subject__info ' + (isclose ? '' : 'subject__info--active')
+							'subject__info ' + (isClose ? '' : 'subject__info--active')
 						}>
 						<TeacherProfileSubjectForm course={course} />
 						<span className='subject__min-title'>Уроки</span>

@@ -5,9 +5,9 @@ import { BoughtSubject } from './index';
 const UserProfile = ({ info }) => {
 	const history = useHistory();
 
-	const btnHandler = React.useCallback(() => {
+	const btnHandler = () => {
 		history.push('/teachers');
-	}, [history]);
+	};
 
 	return (
 		<>
@@ -22,7 +22,7 @@ const UserProfile = ({ info }) => {
 				</div>
 			) : (
 				<div className='user-profile'>
-					<h2>Купленные курсы</h2>
+					<h2 className='user-profile__title'>Купленные курсы</h2>
 					<div className='user-profile__subjects'>
 						{info.courses.map((course) => (
 							<BoughtSubject key={course._id} course={course} />
