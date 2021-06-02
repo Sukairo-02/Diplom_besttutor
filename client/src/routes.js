@@ -11,13 +11,14 @@ import {
 	Task,
 	PreviewTask,
 } from './pages';
-import { Header } from './Components';
+import { Header, ScrollToTop } from './Components';
 
 export const useRoutes = (isAuthenticated) => {
 	if (isAuthenticated) {
 		return (
 			<>
 				<Header />
+				<ScrollToTop />
 				<Switch>
 					<Route exact path='/' component={Home} />
 					<Route path='/teachers' component={Teachers} />
