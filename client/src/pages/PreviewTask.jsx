@@ -2,28 +2,20 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getTask, getStatistic } from '../redux/selectors';
 import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
-import { createAuthProvider } from '../jwt';
+import { useAuthFetch } from '../hooks/authFetch.hook';
 
 const PreviewTask = ({ location }) => {
-	const dispatch = useDispatch();
 	const item = useSelector(getTask);
 	const statistic = useSelector(getStatistic);
-	const { authFetch } = createAuthProvider();
 
-	const [state, setState] = React.useState('');
+	const dispatch = useDispatch();
+	const { request } = useAuthFetch();
 
-	const deleteBtnHandler = async (id) => {
-		setState('Loading');
-		try {
-			const result = await authFetch('/api/school/delassignment', 'DELETE', {
-				courseID: location.state.state,
-				assignmentID: id,
-			});
-			await dispatch(fetchTeacherCourses());
-			setState(result.message);
-		} catch (err) {
-			setState(err.message);
-		}
+	const deleteBtnHandler = (id) => {
+		request('/api/school/delassignment', 'DELETE', {
+			courseID: location.state.state,
+			assignmentID: id,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
 	return (
@@ -79,7 +71,6 @@ const PreviewTask = ({ location }) => {
 								onClick={() => deleteBtnHandler(item._id)}>
 								Удалить
 							</button>
-							<span>{state}</span>
 						</div>
 					</div>
 					<div className='content__aside'>

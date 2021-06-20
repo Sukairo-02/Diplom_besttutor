@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useHttp } from '../hooks/http.hook';
+import { useFetch } from '../hooks/fetch.hook';
 import { Formik, Form } from 'formik';
 import { FormInput, FormSelect } from '../Components';
 import * as yup from 'yup';
@@ -23,17 +23,15 @@ const validationSchema = yup.object({
 });
 
 const Signup = () => {
-	const { loading, request } = useHttp();
+	const { loading, request } = useFetch();
 
-	const formHandler = async (values) => {
-		await request('/api/auth/register', 'POST', values)
-			.then((data) => {
-				request('/api/auth/sendValidation', 'POST', {
-					email: values.email,
-				}).catch((error) => alert(error.message));
-				alert(data.message);
-			})
-			.catch((error) => alert(error.message));
+	const formHandler = (values) => {
+		request('/api/auth/register', 'POST', values).then((data) => {
+			request('/api/auth/sendValidation', 'POST', {
+				email: values.email,
+			});
+			alert(data.message);
+		});
 	};
 
 	return (

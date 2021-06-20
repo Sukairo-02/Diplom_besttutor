@@ -7,3 +7,4 @@ export { default as EditProfile } from './EditProfile';
 export { default as Tasks } from './Tasks';
 export { default as Task } from './Task';
 export { default as PreviewTask } from './PreviewTask';
+export { default as Main } from './Main';

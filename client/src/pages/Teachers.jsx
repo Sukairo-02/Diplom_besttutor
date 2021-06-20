@@ -13,7 +13,7 @@ import {
 	fetchTeacherReviews,
 } from '../redux/reducers/teachersSlice';
 import { getSubjects } from '../redux/selectors';
-import { TeacherBig } from '../Components';
+import { TeacherBig, TeachersFiltration, Loader } from '../Components';
 
 const parametersItems = [
 	{ name: 'Оценка: высокая', value: 'pointsAsc' },
@@ -50,13 +50,19 @@ const Teachers = () => {
 		}
 	});
 
-	const parametersHandler = (type) => {
-		dispatch(sortItems(type));
-	};
+	const parametersHandler = React.useCallback(
+		(type) => {
+			dispatch(sortItems(type));
+		},
+		[dispatch]
+	);
 
-	const filteringHandler = (name) => {
-		dispatch(setFilter(name));
-	};
+	const filteringHandler = React.useCallback(
+		(name) => {
+			dispatch(setFilter(name));
+		},
+		[dispatch]
+	);
 
 	const profileBtnHandler = React.useCallback(
 		async (id) => {
@@ -85,51 +91,17 @@ const Teachers = () => {
 									</div>
 								))
 							) : (
-								<span>Загрузка учителей</span>
+								<Loader text={'Загрузка учителей'} />
 							)}
 						</div>
 					</div>
 					<div className='content__aside'>
-						<div className='teachers__filtration'>
-							<h3 className='form__title'>Фильтрация</h3>
-							<form className='form'>
-								<fieldset className='form__fieldset'>
-									<label className='form__label' htmlFor='filterSubjects'>
-										Предмет
-									</label>
-									<select
-										className='form__select'
-										name='filtering'
-										id='filterSubjects'
-										onChange={(event) => filteringHandler(event.target.value)}>
-										<option value=''>Все</option>
-										{subjects.length &&
-											subjects.map((subject) => (
-												<option key={subject._id} value={subject.name}>
-													{subject.name}
-												</option>
-											))}
-									</select>
-								</fieldset>
-								<fieldset className='form__fieldset'>
-									<label className='form__label' htmlFor='filterParameters'>
-										Параметры
-									</label>
-									<select
-										className='form__select'
-										name='parameters'
-										id='filterParameters'
-										onChange={(event) => parametersHandler(event.target.value)}>
-										<option value=''>Выбирите параметр</option>
-										{parametersItems.map((item) => (
-											<option key={item.value} value={item.value}>
-												{item.name}
-											</option>
-										))}
-									</select>
-								</fieldset>
-							</form>
-						</div>
+						<TeachersFiltration
+							subjects={subjects}
+							filteringHandler={filteringHandler}
+							parametersItems={parametersItems}
+							parametersHandler={parametersHandler}
+						/>
 					</div>
 				</div>
 			</div>

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useHttp } from '../hooks/http.hook';
 import { Formik, Form } from 'formik';
+import { useFetch } from '../hooks/fetch.hook';
+import { createAuthProvider } from '../jwt';
 import { FormInput } from '../Components';
 import * as yup from 'yup';
 import img from '../assets/img/1.webp';
-import { createAuthProvider } from '../jwt';
 
 const validationSchema = yup.object({
 	email: yup
@@ -18,16 +18,14 @@ const validationSchema = yup.object({
 });
 
 const Login = () => {
-	const { loading, request } = useHttp();
+	const { loading, request } = useFetch();
 	const { login } = createAuthProvider();
 
 	const formHandler = (values) => {
-		request('/api/auth/login', 'POST', values)
-			.then((data) => {
-				login(data);
-				document.location.reload();
-			})
-			.catch((error) => alert(error.message));
+		request('/api/auth/login', 'POST', values).then((data) => {
+			login(data);
+			document.location.reload();
+		});
 	};
 
 	return (

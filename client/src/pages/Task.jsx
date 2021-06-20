@@ -1,38 +1,26 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getTask } from '../redux/selectors';
-import { createAuthProvider } from '../jwt';
 import { TaskForm, TaskResults } from '../Components';
+import { useAuthFetch } from '../hooks/authFetch.hook';
 
 const Task = () => {
-	const [state, setState] = React.useState('');
 	const [submit, setSubmit] = React.useState(false);
 	const [results, setResults] = React.useState();
 
 	const item = useSelector(getTask);
-	const { authFetch } = createAuthProvider();
+	const { request } = useAuthFetch();
 
-	const deleteBtnHandler = async () => {
-		setState('Loading');
-		try {
-			const result = await authFetch('/api/school/delsubmit', 'DELETE', {
-				assignmentID: item._id,
-			});
-			setState(result.message);
-		} catch (err) {
-			setState(err.message);
-		}
+	const deleteBtnHandler = () => {
+		request('/api/school/delsubmit', 'DELETE', {
+			assignmentID: item._id,
+		});
 	};
 
-	const getResultsBtnHandler = async () => {
-		try {
-			const result = await authFetch('/api/school/getsubmit', 'POST', {
-				assignmentID: item._id,
-			});
-			setResults(result.submit);
-		} catch (err) {
-			alert(err.message);
-		}
+	const getResultsBtnHandler = () => {
+		request('/api/school/getsubmit', 'POST', {
+			assignmentID: item._id,
+		}).then((results) => setResults(results.submit));
 	};
 
 	return (
@@ -73,7 +61,6 @@ const Task = () => {
 									Получить результаты
 								</button>
 							</div>
-							<div>{state}</div>
 						</>
 					)}
 				</div>

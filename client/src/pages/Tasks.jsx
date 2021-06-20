@@ -15,6 +15,7 @@ import {
 	FormCheckbox,
 	FormSelect,
 	TasksQuestions,
+	Loader,
 } from '../Components';
 import * as yup from 'yup';
 
@@ -181,7 +182,7 @@ const Tasks = () => {
 								)}
 							</Formik>
 						) : (
-							<div>Загрузка</div>
+							<Loader text={'Загрузка формы'} />
 						)}
 					</div>
 					<div className='content__aside'>
@@ -230,7 +231,7 @@ const Tasks = () => {
 								)}
 							</div>
 						) : (
-							<span>Загрузка</span>
+							<Loader text={'Загрузка тестов'} />
 						)}
 					</div>
 				</div>

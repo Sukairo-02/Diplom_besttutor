@@ -1,44 +1,45 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
-import { createAuthProvider } from '../jwt';
-import { declOfNum, countRating, countStudents } from '../util';
+import {
+	setTeacher,
+	fetchTeacher,
+	fetchTeacherCourses,
+	fetchTeacherReviews,
+} from '../redux/reducers/teachersSlice';
 import { getUserInfo, getTeacher } from '../redux/selectors';
+import { useAuthFetch } from '../hooks/authFetch.hook';
+import { declOfNum, countRating, countStudents } from '../util';
 import { Star, People } from '../assets/icons';
 
-const Teacher = () => {
-	const [state, setState] = React.useState();
+const Teacher = ({ match }) => {
+	const { request } = useAuthFetch();
 	const dispatch = useDispatch();
-	const { authFetch } = createAuthProvider();
 	const teacher = useSelector(getTeacher);
 	const info = useSelector(getUserInfo);
 
-	React.useEffect(() => {
-		if (Object.keys(info).length === 0) {
-			dispatch(fetchUserInfo());
-		}
-	});
+	// React.useEffect(() => {
+	// 	const loadUserData = async (id) => {
+	// 		await dispatch(fetchTeacher(id));
+	// 		await dispatch(fetchTeacherCourses(id));
+	// 		await dispatch(fetchTeacherReviews());
+	// 	};
 
-	const deleteBtnHandler = async () => {
-		setState('Loading');
-		try {
-			const result = await authFetch('/api/school/delreview', 'DELETE', {
-				teacher: teacher._id,
-			});
-			setState(result.message);
-		} catch (err) {
-			setState(err.message);
-		}
+	// 	if (match.params.id) {
+	// 		loadUserData(match.params.id);
+	// 	}
+	// }, []);
+
+	const deleteBtnHandler = () => {
+		request('/api/school/delreview', 'DELETE', {
+			teacher: teacher._id,
+		});
 	};
 
-	const subscribeToCourse = async (id) => {
-		try {
-			const data = await authFetch(`/api/school/subscribe/${id}`, 'POST');
-			dispatch(fetchUserInfo());
-			alert(data.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const subscribeToCourse = (id) => {
+		request(`/api/school/subscribe/${id}`, 'POST').then(() =>
+			dispatch(fetchUserInfo())
+		);
 	};
 
 	return (
@@ -161,7 +162,6 @@ const Teacher = () => {
 									<div>Отзывов нет</div>
 								)}
 							</div>
-							<div>{state}</div>
 						</div>
 					</div>
 				) : (

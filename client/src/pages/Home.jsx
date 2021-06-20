@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getUserInfo } from '../redux/selectors';
-import { TeacherProfile, UserProfile } from '../Components';
+import { TeacherProfile, UserProfile, Loader } from '../Components';
 
 const Home = () => {
 	const info = useSelector(getUserInfo);
@@ -12,13 +12,16 @@ const Home = () => {
 				{Object.keys(info).length !== 0 ? (
 					<>
 						{info.roles[0] === 'TCHR' ? (
-							<TeacherProfile info={info} />
+							<TeacherProfile
+								teacherCourses={info.teacherCourses}
+								courses={info.courses}
+							/>
 						) : (
-							<UserProfile info={info} />
+							<UserProfile courses={info.courses} />
 						)}
 					</>
 				) : (
-					<span>Загрузка профиля</span>
+					<Loader text={'Загрузка профиля'} />
 				)}
 			</div>
 		</main>

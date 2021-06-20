@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getUserInfo } from '../redux/selectors';
-import { EditForm, TeacherForm } from '../Components';
+import { EditForm, TeacherForm, Loader } from '../Components';
 
 const EditProfile = () => {
 	const info = useSelector(getUserInfo);
@@ -9,7 +9,7 @@ const EditProfile = () => {
 	return (
 		<main className='main'>
 			<div className='container'>
-				{Object.keys(info).length !== 0 && (
+				{Object.keys(info).length !== 0 ? (
 					<div className='content'>
 						<div className='content__main'>
 							<div className='edit-form edit-form--big'>
@@ -24,6 +24,8 @@ const EditProfile = () => {
 							)}
 						</aside>
 					</div>
+				) : (
+					<Loader text={'Загрузка формы'} />
 				)}
 			</div>
 		</main>
