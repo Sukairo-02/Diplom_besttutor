@@ -1,4 +1,5 @@
-@import "fonts.css";
-@import "vars.css";
-@import "components/components.css";
-@import "media.css";
+@import 'fonts.css';
+@import 'vars.css';
+@import 'components/components.css';
+@import 'media.css';
+@import 'lpMedia.css';

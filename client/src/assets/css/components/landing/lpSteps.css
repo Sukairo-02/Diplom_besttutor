@@ -1,0 +1,25 @@
+.lp-steps {
+	margin-bottom: 50px;
+}
+
+.lp-steps__row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.lp-steps__group {
+	text-align: center;
+}
+
+.lp-steps__title {
+	margin: 0 0 20px 0;
+	font-size: 32px;
+}
+
+.lp-steps__text {
+	font-size: 18px;
+	line-height: 25px;
+}
