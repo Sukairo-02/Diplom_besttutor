@@ -1,43 +1,30 @@
 import React from 'react';
-import { createAuthProvider } from '../../jwt';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
 
-const TeacherProfileSubjectUsers = ({ course }) => {
+const TeacherProfileSubjectUsers = ({ courseId, usersdata }) => {
 	const dispatch = useDispatch();
-	const { authFetch } = createAuthProvider();
+	const { request } = useAuthFetch();
 
-	const refundOneUserBtnHandler = async (id) => {
-		try {
-			const result = await authFetch(`/api/school/refund/${id}`, 'POST', {
-				courseID: course._id,
-			});
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const refundOneUserBtnHandler = (id) => {
+		request(`/api/school/refund/${id}`, 'POST', {
+			courseID: courseId,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
-	const refundAllUsersBtnHandler = async () => {
-		try {
-			const result = await authFetch(`/api/school/refund`, 'POST', {
-				courseID: course._id,
-			});
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const refundAllUsersBtnHandler = () => {
+		request('/api/school/refund', 'POST', {
+			courseID: courseId,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
 	return (
 		<>
-			{course.usersdata.length ? (
+			{usersdata.length ? (
 				<>
-					{course.usersdata.map((user) => (
+					{usersdata.map((user) => (
 						<div className='subject__user' key={user.id}>
 							<img
 								src={user.avatar}
@@ -64,6 +51,11 @@ const TeacherProfileSubjectUsers = ({ course }) => {
 			)}
 		</>
 	);
+};
+
+TeacherProfileSubjectUsers.propTypes = {
+	courseId: PropTypes.string,
+	usersdata: PropTypes.array,
 };
 
 export default TeacherProfileSubjectUsers;

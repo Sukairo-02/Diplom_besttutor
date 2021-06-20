@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
-import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
-import { createAuthProvider } from '../../jwt';
 import { Formik, Form } from 'formik';
+import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
 import { FormInput, FormTextarea } from '../index';
 import * as yup from 'yup';
 
@@ -14,83 +15,43 @@ const validationSchema = yup.object({
 
 const TeacherProfileSubjectForm = ({ course }) => {
 	const dispatch = useDispatch();
-	const { authFetch } = createAuthProvider();
+	const { request } = useAuthFetch();
 
-	const publishBtnHandler = async () => {
-		try {
-			const result = await authFetch('/api/school/publishcourse/', 'POST', {
-				courseID: course._id,
-			});
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const publishBtnHandler = () => {
+		request('/api/school/publishcourse/', 'POST', {
+			courseID: course._id,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
-	const updateBtnHandler = async (data) => {
-		try {
-			const result = await authFetch('/api/school/editcourse/', 'POST', data);
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const updateBtnHandler = (data) => {
+		request('/api/school/editcourse/', 'POST', data).then(() =>
+			dispatch(fetchTeacherCourses())
+		);
 	};
 
-	const updatePriceBtnHandler = async (data) => {
-		try {
-			const result = await authFetch('/api/school/editprice/', 'POST', {
-				courseID: course._id,
-				price: data,
-			});
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const updatePriceBtnHandler = (data) => {
+		request('/api/school/editprice/', 'POST', {
+			courseID: course._id,
+			price: data,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
-	const unblockeBtnHandler = async () => {
-		try {
-			const result = await authFetch('/api/school/unblockcourse/', 'POST', {
-				courseID: course._id,
-			});
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const unblockeBtnHandler = () => {
+		request('/api/school/unblockcourse/', 'POST', {
+			courseID: course._id,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
-	const blockeBtnHandler = async () => {
-		try {
-			const result = await authFetch('/api/school/blockcourse/', 'POST', {
-				courseID: course._id,
-			});
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const blockeBtnHandler = () => {
+		request('/api/school/blockcourse/', 'POST', {
+			courseID: course._id,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
-	const deleteBtnHandler = async () => {
-		try {
-			const result = await authFetch('/api/school/deletecourse/', 'DELETE', {
-				courseID: course._id,
-			});
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const deleteBtnHandler = () => {
+		request('/api/school/deletecourse/', 'DELETE', {
+			courseID: course._id,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
 	return (
@@ -167,6 +128,10 @@ const TeacherProfileSubjectForm = ({ course }) => {
 			)}
 		</Formik>
 	);
+};
+
+TeacherProfileSubjectForm.propTypes = {
+	course: PropTypes.object,
 };
 
 export default TeacherProfileSubjectForm;

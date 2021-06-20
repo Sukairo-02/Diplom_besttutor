@@ -1,33 +1,27 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
-import { createAuthProvider } from '../../jwt';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
 import TeacherProfileLessonsForm from './TeacherProfileLessonsForm';
 
-const TeacherProfileSubjectLessons = ({ course }) => {
+const TeacherProfileSubjectLessons = ({ courseId, lessons, isPublished }) => {
 	const dispatch = useDispatch();
-	const { authFetch } = createAuthProvider();
+	const { request } = useAuthFetch();
 
-	const deleteLessonBtnHandler = async (id) => {
-		try {
-			const result = await authFetch('/api/school/dellesson/', 'DELETE', {
-				courseID: course._id,
-				lessonID: id,
-			});
-			dispatch(fetchTeacherCourses());
-
-			alert(result.message);
-		} catch (err) {
-			alert(err.message);
-		}
+	const deleteLessonBtnHandler = (lessonId) => {
+		request('/api/school/dellesson/', 'DELETE', {
+			courseID: courseId,
+			lessonID: lessonId,
+		}).then(() => dispatch(fetchTeacherCourses()));
 	};
 
 	return (
 		<div className='subject__lessons'>
-			{course.lessons.length ? (
-				course.lessons.map((lesson, index) => (
+			{lessons.length ? (
+				lessons.map((lesson, index) => (
 					<div className='subject__lesson' key={lesson._id}>
-						{course.isPublished ? (
+						{isPublished ? (
 							''
 						) : (
 							<div
@@ -46,9 +40,15 @@ const TeacherProfileSubjectLessons = ({ course }) => {
 			) : (
 				<div>Уроков нет</div>
 			)}
-			{!course.isPublished && <TeacherProfileLessonsForm id={course._id} />}
+			{!isPublished && <TeacherProfileLessonsForm id={courseId} />}
 		</div>
 	);
+};
+
+TeacherProfileSubjectLessons.propTypes = {
+	courseId: PropTypes.string,
+	lessons: PropTypes.array,
+	isPublished: PropTypes.bool,
 };
 
 export default TeacherProfileSubjectLessons;

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
 import { Formik, Form } from 'formik';
 import { FormInput, FormTextarea } from '../index';
-import { createAuthProvider } from '../../jwt';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
@@ -17,19 +17,12 @@ const validationSchema = yup.object({
 
 const TeacherProfileForm = () => {
 	const dispatch = useDispatch();
-	const [state, setState] = React.useState('');
-	const { authFetch } = createAuthProvider();
+	const { request } = useAuthFetch();
 
-	const formSubmitHandler = async (data) => {
-		setState('Loading');
-		try {
-			const result = await authFetch('/api/school/newcourse', 'POST', data);
-			setState(result.message);
-
-			dispatch(fetchTeacherCourses());
-		} catch (err) {
-			setState(err.message);
-		}
+	const formSubmitHandler = (formData) => {
+		request('/api/school/newcourse', 'POST', formData).then(() =>
+			dispatch(fetchTeacherCourses())
+		);
 	};
 
 	return (
@@ -57,7 +50,6 @@ const TeacherProfileForm = () => {
 				<button className='btn' type='submit'>
 					Добавить
 				</button>
-				<span className='form__result'>{state}</span>
 			</Form>
 		</Formik>
 	);

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TeacherProfileSubjectLessons from './TeacherProfileSubjectLessons';
 import TeacherProfileSubjectForm from './TeacherProfileSubjectForm';
 import TeacherProfileSubjectUsers from './TeacherProfileSubjectUsers';
@@ -40,15 +41,26 @@ const TeacherProfileSubject = ({ course }) => {
 						}>
 						<TeacherProfileSubjectForm course={course} />
 						<span className='subject__min-title'>Уроки</span>
-						<TeacherProfileSubjectLessons course={course} />
+						<TeacherProfileSubjectLessons
+							courseId={course._id}
+							lessons={course.lessons}
+							isPublished={course.isPublished}
+						/>
 					</div>
 				</div>
 			</div>
 			<div className='subject__users'>
-				<TeacherProfileSubjectUsers course={course} />
+				<TeacherProfileSubjectUsers
+					courseId={course._id}
+					usersdata={course.usersdata}
+				/>
 			</div>
 		</div>
 	);
+};
+
+TeacherProfileSubject.propTypes = {
+	course: PropTypes.object,
 };
 
 export default TeacherProfileSubject;

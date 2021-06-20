@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { BoughtSubject } from './index';
 
-const UserProfile = ({ info }) => {
+const UserProfile = ({ courses }) => {
 	const history = useHistory();
 
 	const btnHandler = () => {
@@ -11,7 +12,7 @@ const UserProfile = ({ info }) => {
 
 	return (
 		<>
-			{!info.courses.length ? (
+			{!courses.length ? (
 				<div className='content__empty'>
 					У вас пока нет предмета и учителя.
 					<br />
@@ -24,7 +25,7 @@ const UserProfile = ({ info }) => {
 				<div className='user-profile'>
 					<h2 className='user-profile__title'>Купленные курсы</h2>
 					<div className='user-profile__subjects'>
-						{info.courses.map((course) => (
+						{courses.map((course) => (
 							<BoughtSubject key={course._id} course={course} />
 						))}
 					</div>
@@ -32,6 +33,10 @@ const UserProfile = ({ info }) => {
 			)}
 		</>
 	);
+};
+
+UserProfile.propTypes = {
+	courses: PropTypes.array,
 };
 
 export default UserProfile;

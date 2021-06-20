@@ -1,8 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { declOfNum, countRating } from '../util';
 import { Star } from '../assets/icons';
 
 const TeacherBig = React.memo(({ data, profileBtnHandler }) => {
+	const openTeacherProfile = () => {
+		profileBtnHandler(data._id);
+	};
+
 	return (
 		<div className='teacher-big'>
 			<img src={data.avatar} alt='Аватар' className='teacher-big__avatar' />
@@ -24,7 +29,7 @@ const TeacherBig = React.memo(({ data, profileBtnHandler }) => {
 					{declOfNum(data.reviews.length, ['отзыв', 'отзыва', 'отзывов'])}
 				</span>
 				<button
-					onClick={() => profileBtnHandler(data._id)}
+					onClick={openTeacherProfile}
 					className='btn btn--transparent teacher-big__btn'
 					type='button'>
 					Профиль
@@ -33,5 +38,10 @@ const TeacherBig = React.memo(({ data, profileBtnHandler }) => {
 		</div>
 	);
 });
+
+TeacherBig.propTypes = {
+	data: PropTypes.object,
+	profileBtnHandler: PropTypes.func,
+};
 
 export default TeacherBig;

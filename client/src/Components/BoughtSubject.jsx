@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { fetchTaskForStudent } from '../redux/reducers/taskSlice';
-import { createAuthProvider } from '../jwt';
 import { Formik, Form } from 'formik';
+import { fetchTaskForStudent } from '../redux/reducers/taskSlice';
+import { useAuthFetch } from '../hooks/authFetch.hook';
 import { FormInput, FormTextarea } from './index';
 import * as yup from 'yup';
 import { ChevronDown } from '../assets/icons';
@@ -21,12 +22,11 @@ const validationSchema = yup.object({
 const BoughtSubject = ({ course }) => {
 	const [isclose, setIsClose] = React.useState(true);
 	const [height, setHeight] = React.useState('0px');
-	const [state, setState] = React.useState();
 
 	const content = React.useRef(null);
 
+	const { request } = useAuthFetch();
 	const dispatch = useDispatch();
-	const { authFetch } = createAuthProvider();
 
 	const history = useHistory();
 
@@ -40,14 +40,8 @@ const BoughtSubject = ({ course }) => {
 		setHeight(isclose ? `${content.current.scrollHeight}px` : '0px');
 	};
 
-	const formSubmitHandler = async (data) => {
-		setState('Loading');
-		try {
-			const result = await authFetch('/api/school/review', 'POST', data);
-			setState(result.message);
-		} catch (err) {
-			setState(err.message);
-		}
+	const formSubmitHandler = (formData) => {
+		request('/api/school/review', 'POST', formData);
 	};
 
 	return (
@@ -135,7 +129,6 @@ const BoughtSubject = ({ course }) => {
 								<button className='btn' type='submit'>
 									Добавить
 								</button>
-								<span className='form__result'>{state}</span>
 							</Form>
 						</Formik>
 					</div>
@@ -143,6 +136,10 @@ const BoughtSubject = ({ course }) => {
 			</div>
 		</div>
 	);
+};
+
+BoughtSubject.propTypes = {
+	course: PropTypes.object,
 };
 
 export default BoughtSubject;

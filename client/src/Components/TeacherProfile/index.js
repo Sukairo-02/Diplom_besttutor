@@ -1,25 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TeacherProfileForm from './TeacherProfileForm';
 import TeacherProfileSubject from './TeacherProfileSubject';
 import { BoughtSubject } from '../index';
 
-const TeacherProfile = ({ info }) => {
+const TeacherProfile = ({ teacherCourses, courses }) => {
 	return (
 		<div className='content'>
 			<div className='content__main'>
 				<div className='teacher-profile'>
 					<h2 className='teacher-profile__title'>Созданные курсы</h2>
 					<div className='teacher-profile__subjects'>
-						{info.teacherCourses.length
-							? info.teacherCourses.map((course) => (
+						{teacherCourses.length
+							? teacherCourses.map((course) => (
 									<TeacherProfileSubject key={course._id} course={course} />
 							  ))
 							: ''}
 					</div>
 					<h2 className='teacher-profile__title'>Купленные курсы</h2>
 					<div className='teacher-profile__subjects'>
-						{info.courses.length
-							? info.courses.map((course) => (
+						{courses.length
+							? courses.map((course) => (
 									<BoughtSubject key={course._id} course={course} />
 							  ))
 							: ''}
@@ -31,6 +32,11 @@ const TeacherProfile = ({ info }) => {
 			</div>
 		</div>
 	);
+};
+
+TeacherProfile.propTypes = {
+	teacherCourses: PropTypes.array,
+	courses: PropTypes.array,
 };
 
 export default TeacherProfile;

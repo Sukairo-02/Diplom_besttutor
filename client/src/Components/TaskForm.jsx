@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik, Form, FieldArray } from 'formik';
-import { createAuthProvider } from '../jwt';
+import { useAuthFetch } from '../hooks/authFetch.hook';
 import { FormCheckbox } from './index';
 import * as yup from 'yup';
 
@@ -16,6 +17,7 @@ const validationSchema = yup.object({
 				)
 				.test('Выбран ответ ?', 'Не выбран ответ', (answers) => {
 					let sum = 0;
+
 					for (let i = 0; i < answers.length; i++) {
 						if (answers[i]?.isChecked) {
 							sum += 1;
@@ -31,19 +33,10 @@ const validationSchema = yup.object({
 });
 
 const TaskForm = ({ item, setSubmit }) => {
-	const [state, setState] = React.useState('');
+	const { request } = useAuthFetch();
 
-	const { authFetch } = createAuthProvider();
-
-	const formSubmitHandler = async (data) => {
-		setState('Loading');
-		try {
-			const result = await authFetch('/api/school/submit', 'POST', data);
-			setState(result.message);
-			setSubmit(true);
-		} catch (err) {
-			setState(err.message);
-		}
+	const formSubmitHandler = (formData) => {
+		request('/api/school/submit', 'POST', formData).then(() => setSubmit(true));
 	};
 
 	return (
@@ -104,11 +97,15 @@ const TaskForm = ({ item, setSubmit }) => {
 					<button className='btn' type='submit'>
 						Отправить
 					</button>
-					<span className='form__result'>{state}</span>
 				</Form>
 			)}
 		</Formik>
 	);
+};
+
+TaskForm.propTypes = {
+	item: PropTypes.object,
+	setSubmit: PropTypes.func,
 };
 
 export default TaskForm;

@@ -47,7 +47,7 @@ const Header = () => {
 				{visibleMenu && (
 					<div className='header__menu'>
 						<ul>
-							{info.roles[0] === 'TCHR' ? (
+							{Object.keys(info).length !== 0 && info.roles[0] === 'TCHR' ? (
 								<li>
 									<Link to='/tasks'>Тесты</Link>
 								</li>
@@ -58,7 +58,7 @@ const Header = () => {
 								<Link to='/editProfile'>Редактировать профиль</Link>
 							</li>
 							<li>
-								<a href='/login' onClick={logoutHandler}>
+								<a href='/' onClick={logoutHandler}>
 									Выход
 								</a>
 							</li>
