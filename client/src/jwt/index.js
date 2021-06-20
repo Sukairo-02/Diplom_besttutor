@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 export const createTokenProvider = () => {
 	let _token = JSON.parse(localStorage.getItem('REACT_TOKEN_AUTH')) || null;
 
@@ -48,21 +46,6 @@ export const createTokenProvider = () => {
 		return !!_token;
 	};
 
-	let observers = [];
-
-	const subscribe = (observer) => {
-		observers.push(observer);
-	};
-
-	const unsubscribe = (observer) => {
-		observers = observers.filter((_observer) => _observer !== observer);
-	};
-
-	const notify = () => {
-		const isLogged = isLoggedIn();
-		observers.forEach((observer) => observer(isLogged));
-	};
-
 	const setToken = (token) => {
 		if (token) {
 			localStorage.setItem('REACT_TOKEN_AUTH', JSON.stringify(token));
@@ -70,15 +53,12 @@ export const createTokenProvider = () => {
 			localStorage.removeItem('REACT_TOKEN_AUTH');
 		}
 		_token = token;
-		notify();
 	};
 
 	return {
 		getToken,
 		isLoggedIn,
 		setToken,
-		subscribe,
-		unsubscribe,
 	};
 };
 
@@ -114,21 +94,7 @@ export const createAuthProvider = () => {
 	};
 
 	const useAuth = () => {
-		const [isLogged, setIsLogged] = useState(tokenProvider.isLoggedIn());
-
-		useEffect(() => {
-			const listener = (newIsLogged) => {
-				setIsLogged(newIsLogged);
-			};
-
-			tokenProvider.subscribe(listener);
-
-			return () => {
-				tokenProvider.unsubscribe(listener);
-			};
-		}, []);
-
-		return [isLogged];
+		return tokenProvider.isLoggedIn();
 	};
 
 	return {
