@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
-import { FormFile, FormInput } from './index';
-import { createAuthProvider } from '../jwt';
 import { useDispatch } from 'react-redux';
+import { useAuthFetch } from '../hooks/authFetch.hook';
 import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
+import { FormFile, FormInput } from './index';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
@@ -17,30 +18,14 @@ const validationSchema = yup.object({
 });
 
 const EditForm = ({ data }) => {
-	const [state, setState] = React.useState('');
-	const { authFetch } = createAuthProvider();
+	const { request } = useAuthFetch();
 
 	const dispatch = useDispatch();
 
-	const formSubmitHandler = async (data) => {
-		setState('Loading');
-		try {
-			let response = await authFetch('/api/auth/edit', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
-			let result = await response.json();
-			setState(result.message);
-
-			dispatch(fetchUserInfo());
-
-			return result.message;
-		} catch (err) {
-			setState(err.message);
-		}
+	const formSubmitHandler = (formData) => {
+		request('/api/auth/edit', 'POST', formData).then(() =>
+			dispatch(fetchUserInfo())
+		);
 	};
 
 	return (
@@ -49,7 +34,7 @@ const EditForm = ({ data }) => {
 				avatar: data.avatar,
 				username: data.username,
 				email: data.email,
-				dateOfBirth: data.dateOfBirth.slice(0, 10),
+				dateOfBirth: data.dateOfBirth,
 				phone: data.phone,
 				address: data.address,
 				area: data.area,
@@ -95,11 +80,14 @@ const EditForm = ({ data }) => {
 					<button className='btn' type='submit'>
 						Сохранить
 					</button>
-					<span className='form__result'>{state}</span>
 				</Form>
 			)}
 		</Formik>
 	);
+};
+
+EditForm.propTypes = {
+	data: PropTypes.object,
 };
 
 export default EditForm;

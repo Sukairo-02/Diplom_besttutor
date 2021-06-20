@@ -1,0 +1,17 @@
+.lp {
+	background-color: var(--lp-main-bg);
+}
+
+.lp-container {
+	position: relative;
+	z-index: 2;
+	max-width: 1200px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+.lp-row {
+	display: flex;
+	flex-wrap: wrap;
+}

@@ -1,22 +1,15 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
-import { EditForm, TeacherForm } from '../Components';
+import { useSelector } from 'react-redux';
+import { getUserInfo } from '../redux/selectors';
+import { EditForm, TeacherForm, Loader } from '../Components';
 
 const EditProfile = () => {
-	const dispatch = useDispatch();
-	const info = useSelector((state) => state.userInfo.info);
-
-	React.useEffect(() => {
-		if (Object.keys(info).length === 0) {
-			dispatch(fetchUserInfo());
-		}
-	});
+	const info = useSelector(getUserInfo);
 
 	return (
 		<main className='main'>
 			<div className='container'>
-				{Object.keys(info).length !== 0 && (
+				{Object.keys(info).length !== 0 ? (
 					<div className='content'>
 						<div className='content__main'>
 							<div className='edit-form edit-form--big'>
@@ -31,6 +24,8 @@ const EditProfile = () => {
 							)}
 						</aside>
 					</div>
+				) : (
+					<Loader text={'Загрузка формы'} />
 				)}
 			</div>
 		</main>

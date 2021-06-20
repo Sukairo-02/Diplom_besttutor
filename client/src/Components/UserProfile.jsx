@@ -1,19 +1,18 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { UserProfileSubject } from './index';
+import { BoughtSubject } from './index';
 
-const UserProfile = () => {
+const UserProfile = ({ courses }) => {
 	const history = useHistory();
-	const info = useSelector((state) => state.userInfo.info);
 
-	const btnHandler = React.useCallback(() => {
+	const btnHandler = () => {
 		history.push('/teachers');
-	}, [history]);
+	};
 
 	return (
 		<>
-			{!info.courses.length ? (
+			{!courses.length ? (
 				<div className='content__empty'>
 					У вас пока нет предмета и учителя.
 					<br />
@@ -24,15 +23,20 @@ const UserProfile = () => {
 				</div>
 			) : (
 				<div className='user-profile'>
+					<h2 className='user-profile__title'>Купленные курсы</h2>
 					<div className='user-profile__subjects'>
-						{info.courses.map((course) => (
-							<UserProfileSubject key={course._id} course={course} />
+						{courses.map((course) => (
+							<BoughtSubject key={course._id} course={course} />
 						))}
 					</div>
 				</div>
 			)}
 		</>
 	);
+};
+
+UserProfile.propTypes = {
+	courses: PropTypes.array,
 };
 
 export default UserProfile;

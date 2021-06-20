@@ -1,10 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import { FormSelect, FormTextarea } from './index';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
 import { fetchSubjects } from '../redux/reducers/subjectsSlice';
-import { createAuthProvider } from '../jwt';
+import { getSubjects } from '../redux/selectors';
+import { useAuthFetch } from '../hooks/authFetch.hook';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
@@ -15,11 +17,10 @@ const validationSchema = yup.object({
 });
 
 const TeacherForm = ({ data }) => {
-	const [state, setState] = React.useState('');
-	const { authFetch } = createAuthProvider();
-	const subjects = useSelector((state) => state.subjects.items);
+	const subjects = useSelector(getSubjects);
 
 	const dispatch = useDispatch();
+	const { request } = useAuthFetch();
 
 	React.useEffect(() => {
 		if (!subjects.length) {
@@ -27,25 +28,10 @@ const TeacherForm = ({ data }) => {
 		}
 	});
 
-	const formSubmitHandler = async (data) => {
-		setState('Loading');
-		try {
-			let response = await authFetch('/api/auth/editteacher', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
-			let result = await response.json();
-			setState(result.message);
-
-			dispatch(fetchUserInfo());
-
-			return result.message;
-		} catch (err) {
-			setState(err.message);
-		}
+	const formSubmitHandler = (formData) => {
+		request('/api/auth/editteacher', 'POST', formData).then(() =>
+			dispatch(fetchUserInfo())
+		);
 	};
 
 	return (
@@ -83,10 +69,13 @@ const TeacherForm = ({ data }) => {
 				<button className='btn' type='submit'>
 					Сохранить
 				</button>
-				<span className='form__result'>{state}</span>
 			</Form>
 		</Formik>
 	);
+};
+
+TeacherForm.propTypes = {
+	data: PropTypes.object,
 };
 
 export default TeacherForm;

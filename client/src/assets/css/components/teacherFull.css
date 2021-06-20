@@ -7,6 +7,7 @@ pre {
 	display: flex;
 	gap: 20px;
 	max-width: 820px;
+	margin: 0 auto;
 	padding: 20px;
 	background-color: var(--secondary-bg);
 	border-radius: var(--radius);
@@ -28,36 +29,27 @@ pre {
 	width: 50px;
 }
 
-.teacher-full__name {
-	font-size: 20px;
-	margin: 0;
+.teacher-full__container--flex {
+	flex: 1 1 auto;
+	width: 100%;
 }
 
-.teacher-full__name,
+.teacher-full__name {
+	margin-bottom: 10px;
+}
+
 .teacher-full__discipline,
 .teacher-full__disciple,
-.teacher-full__count {
-	margin-bottom: 10px;
-}
-
-.teacher-full__disciple,
-.teacher-full__count {
-	display: inline-block;
-	margin-right: 20px;
-}
-
+.teacher-full__count,
 .teacher-full__rating {
 	display: inline-block;
-	margin-bottom: 10px;
+	margin: 0 10px 10px 0;
+	font-weight: 300;
 }
 
 .teacher-full__desc {
 	margin: 0;
 	margin-bottom: 20px;
-}
-
-.teacher-full__desc--nonemb {
-	margin-bottom: 0;
 }
 
 .teacher-full__summary {
@@ -83,12 +75,18 @@ pre {
 	background-color: var(--accent-color);
 }
 
-.teacher-full__work {
+.teacher-full__work,
+.teacher-full_education {
 	line-height: 22px;
+	white-space: pre-wrap;
 }
 
 .teacher-full__mini-title {
-	margin-bottom: 10px;
+	margin-bottom: 5px;
+}
+
+.teacher-full__subjects {
+	margin-bottom: 20px;
 }
 
 .teacher-full__subject {
@@ -102,14 +100,16 @@ pre {
 }
 
 .teacher-full__subject:last-child {
-	margin-bottom: 20px;
+	margin-bottom: 0;
 }
 
 .teacher-full__lessons {
+	font-weight: 300;
 	color: var(--secondary-text);
 }
 
 .teacher-full__review {
+	position: relative;
 	display: flex;
 	gap: 20px;
 	padding: 20px;
@@ -122,11 +122,15 @@ pre {
 	margin-bottom: 0;
 }
 
-.teacher-full__reviews-count {
-	margin-left: 10px;
+.teacher-full__review-del {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	font-size: 20px;
+	cursor: pointer;
 }
 
-.teacher-full__rating {
-	color: var(--secondary-text);
-	margin-bottom: 10px;
+.teacher-full__reviews-count {
+	margin-left: 10px;
+	font-weight: 300;
 }

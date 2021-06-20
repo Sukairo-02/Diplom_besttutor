@@ -1,10 +1,46 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
+import {
+	setTeacher,
+	fetchTeacher,
+	fetchTeacherCourses,
+	fetchTeacherReviews,
+} from '../redux/reducers/teachersSlice';
+import { getUserInfo, getTeacher } from '../redux/selectors';
+import { useAuthFetch } from '../hooks/authFetch.hook';
 import { declOfNum, countRating, countStudents } from '../util';
 import { Star, People } from '../assets/icons';
 
-const Teacher = () => {
-	const { teacher } = useSelector(({ teachers }) => teachers);
+const Teacher = ({ match }) => {
+	const { request } = useAuthFetch();
+	const dispatch = useDispatch();
+	const teacher = useSelector(getTeacher);
+	const info = useSelector(getUserInfo);
+
+	// React.useEffect(() => {
+	// 	const loadUserData = async (id) => {
+	// 		await dispatch(fetchTeacher(id));
+	// 		await dispatch(fetchTeacherCourses(id));
+	// 		await dispatch(fetchTeacherReviews());
+	// 	};
+
+	// 	if (match.params.id) {
+	// 		loadUserData(match.params.id);
+	// 	}
+	// }, []);
+
+	const deleteBtnHandler = () => {
+		request('/api/school/delreview', 'DELETE', {
+			teacher: teacher._id,
+		});
+	};
+
+	const subscribeToCourse = (id) => {
+		request(`/api/school/subscribe/${id}`, 'POST').then(() =>
+			dispatch(fetchUserInfo())
+		);
+	};
 
 	return (
 		<main className='main'>
@@ -16,9 +52,11 @@ const Teacher = () => {
 							alt='Аватар'
 							className='teacher-full__avatar'
 						/>
-						<div className='teacher-full__container'>
-							<h3 className='teacher-full__name'>{teacher.username}</h3>
-							<div className='teacher-full__discipline'>{teacher.subject}</div>
+						<div className='teacher-full__container teacher-full__container--flex'>
+							<h2 className='teacher-full__name'>{teacher.username}</h2>
+							<span className='teacher-full__discipline'>
+								{teacher.subject}
+							</span>
 							<span className='teacher-full__disciple'>
 								<People size={16} /> {countStudents(teacher.teacherCourses)}{' '}
 								{declOfNum(countStudents(teacher.teacherCourses), [
@@ -41,18 +79,18 @@ const Teacher = () => {
 							<p className='teacher-full__desc'>{teacher.desc}</p>
 							<span className='teacher-full__title'>Резюме</span>
 							<div className='teacher-full__summary'>
-								<pre className='teacher-full__work'>
+								<div className='teacher-full__work'>
 									<div className='teacher-full__mini-title'>Работа</div>
 									{teacher.experience}
-								</pre>
-								<pre className='teacher-full_education'>
+								</div>
+								<div className='teacher-full_education'>
 									<div className='teacher-full__mini-title'>Образование</div>
 									{teacher.education}
-								</pre>
+								</div>
 							</div>
 							<span className='teacher-full__title'>Типы курсов</span>
 							<div className='teacher-full__subjects'>
-								{teacher.teacherCourses.length &&
+								{teacher.teacherCourses.length ? (
 									teacher.teacherCourses.map((course) => (
 										<div className='teacher-full__subject' key={course._id}>
 											<div className='teacher-full__container'>
@@ -68,9 +106,18 @@ const Teacher = () => {
 													])}
 												</div>
 											</div>
-											<button className='btn'>{course.price} грн</button>
+											<button
+												type='button'
+												title='Купить курс'
+												className='btn'
+												onClick={() => subscribeToCourse(course._id)}>
+												{course.price} грн
+											</button>
 										</div>
-									))}
+									))
+								) : (
+									<div>Курсов нет</div>
+								)}
 							</div>
 							<span className='teacher-full__title'>Отзывы</span>
 							<span className='teacher-full__reviews-count'>
@@ -82,7 +129,7 @@ const Teacher = () => {
 								])}
 							</span>
 							<div className='teacher-full__reviews'>
-								{teacher.reviews.length &&
+								{teacher.reviews.length ? (
 									teacher.reviews.map((review) => (
 										<div className='teacher-full__review' key={review._id}>
 											<img
@@ -101,13 +148,24 @@ const Teacher = () => {
 													{review.text}
 												</p>
 											</div>
+											{review.author === info._id && (
+												<div
+													className='teacher-full__review-del'
+													title='Удалить отзыв'
+													onClick={deleteBtnHandler}>
+													&#215;
+												</div>
+											)}
 										</div>
-									))}
+									))
+								) : (
+									<div>Отзывов нет</div>
+								)}
 							</div>
 						</div>
 					</div>
 				) : (
-					'Loading'
+					<span>Ошибка, попробуйте еще раз</span>
 				)}
 			</div>
 		</main>

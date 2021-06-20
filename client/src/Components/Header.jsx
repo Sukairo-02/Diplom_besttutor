@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getUserInfo } from '../redux/selectors';
 import { createAuthProvider } from '../jwt';
 
 const Header = () => {
+	const info = useSelector(getUserInfo);
 	const { logout } = createAuthProvider();
 	const [visibleMenu, setVisibleMenu] = React.useState(false);
 
@@ -35,14 +38,8 @@ const Header = () => {
 						<Link to='/'>Главная</Link>
 					</li>
 					<li className='header__li'>
-						<Link to='/subjects'>Предметы</Link>
-					</li>
-					<li className='header__li'>
 						<Link to='/teachers'>Учителя</Link>
 					</li>
-					{/* <li className='header__li'>
-						<Link to='/offlineLessons'>Оффлайн уроки</Link>
-					</li> */}
 				</ul>
 				<button ref={menuRef} onClick={toggleVisiblePopup} className='btn'>
 					Меню
@@ -50,14 +47,18 @@ const Header = () => {
 				{visibleMenu && (
 					<div className='header__menu'>
 						<ul>
-							{/* <li>
-								<Link to='/chats'>Чаты</Link>
-							</li> */}
+							{Object.keys(info).length !== 0 && info.roles[0] === 'TCHR' ? (
+								<li>
+									<Link to='/tasks'>Тесты</Link>
+								</li>
+							) : (
+								''
+							)}
 							<li>
 								<Link to='/editProfile'>Редактировать профиль</Link>
 							</li>
 							<li>
-								<a href='/login' onClick={logoutHandler}>
+								<a href='/' onClick={logoutHandler}>
 									Выход
 								</a>
 							</li>

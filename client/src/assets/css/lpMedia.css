@@ -1,0 +1,162 @@
+/* GRID */
+@media screen and (max-width: 1200px) {
+	.lp-container {
+		max-width: 960px;
+	}
+}
+
+@media screen and (max-width: 995px) {
+	.lp-container {
+		max-width: 720px;
+	}
+}
+
+/* HEADER */
+@media screen and (max-width: 505px) {
+	.lp-header__nav ul {
+		gap: 20px;
+	}
+}
+
+/* ABOUT */
+@media screen and (max-width: 1200px) {
+	.lp-about__group {
+		margin-bottom: 50px;
+	}
+
+	.lp-about__group {
+		flex: 0 0 60%;
+	}
+}
+
+@media screen and (max-width: 995px) {
+	.lp-about {
+		margin-top: 30px;
+	}
+
+	.lp-about__row {
+		flex-wrap: wrap;
+	}
+
+	.lp-about__group {
+		flex: 0 0 100%;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.lp-about__title {
+		font-size: 36px;
+		line-height: 50px;
+	}
+}
+
+/* STEPS */
+@media screen and (max-width: 1200px) {
+	.lp-steps__row {
+		justify-content: space-around;
+	}
+}
+
+/* SUBJECTS */
+@media screen and (max-width: 1200px) {
+	.lp-subjects__grid {
+		grid-template-columns: repeat(5, 1fr);
+	}
+
+	.lp-subjects__info {
+		grid-column-start: 1;
+		grid-column-end: 3;
+	}
+
+	.lp-subjects__item_last {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 995px) {
+	.lp-subjects__grid {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 20px;
+	}
+
+	.lp-subjects__info {
+		margin-bottom: 30px;
+	}
+
+	.lp-subjects__item_last {
+		display: block;
+	}
+}
+
+@media screen and (max-width: 590px) {
+	.lp-subjects__grid {
+		justify-content: space-around;
+	}
+}
+
+/* TEACHERS */
+@media screen and (max-width: 1200px) {
+	.lp-teachers__container {
+		justify-content: space-around;
+	}
+}
+
+@media screen and (max-width: 355px) {
+	.lp-teachers__name {
+		font-size: 18px;
+	}
+
+	.lp-teachers__city {
+		font-size: 16px;
+	}
+}
+
+/* CITYS */
+@media screen and (max-width: 1200px) {
+	.lp-citys__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.lp-citys__info {
+		grid-column-start: 2;
+		grid-column-end: 4;
+	}
+
+	.lp-citys__item_last {
+		display: block;
+	}
+}
+
+@media screen and (max-width: 995px) {
+	.lp-citys__grid {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
+
+	.lp-citys__info {
+		margin: 0 0 30px 0;
+	}
+
+	.lp-citys__item {
+		width: 270px;
+	}
+
+	.lp-citys__item_last {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 590px) {
+	.lp-citys__grid {
+		justify-content: space-around;
+	}
+}
+
+@media screen and (max-width: 369px) {
+	.lp-offers__list li {
+		font-size: 16px;
+	}
+}
