@@ -379,6 +379,7 @@ class authController {
 					experience: teacher.experience,
 					subject: teacher.subject,
 					teacherCourses: teacher.courses,
+					reviews: teacher.reviews
 				})
 			} else {
 				return res.json({
@@ -668,6 +669,7 @@ class authController {
 					experience: teacher.experience,
 					subject: teacher.subject,
 					teacherCourses: teacher.courses,
+					reviews: teacher.reviews
 				})
 			} else {
 				return res.json({
@@ -782,6 +784,7 @@ class authController {
 						experience: teacher.experience,
 						subject: teacher.subject,
 						teacherCourses: teacher.courses,
+						reviews: teacher.reviews
 					})
 				} else {
 					users.push({
