@@ -1,22 +1,22 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
+import { useHistory } from 'react-router-dom';
+import { Formik, Form, FieldArray } from 'formik';
+import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
 import {
 	fetchTaskForTeacher,
 	fetchStatisticForTeacher,
-} from '../redux/reducers/taskSlice';
-import { getUserInfo } from '../redux/selectors';
-import { Formik, Form, FieldArray } from 'formik';
-import { createAuthProvider } from '../jwt';
-import { useHistory } from 'react-router-dom';
+} from '../../redux/reducers/taskSlice';
+import { getUserInfo } from '../../redux/selectors';
+import { createAuthProvider } from '../../jwt';
+import TasksQuestions from './TasksQuestions';
 import {
 	FormInput,
 	FormTextarea,
 	FormCheckbox,
 	FormSelect,
-	TasksQuestions,
 	Loader,
-} from '../Components';
+} from '../../Components';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
@@ -62,7 +62,7 @@ const emptyQuestion = {
 	],
 };
 
-const Tasks = () => {
+export const Tasks = () => {
 	const dispatch = useDispatch();
 	const { authFetch } = createAuthProvider();
 	const history = useHistory();
@@ -239,5 +239,3 @@ const Tasks = () => {
 		</main>
 	);
 };
-
-export default Tasks;

@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { useFetch } from '../hooks/fetch.hook';
 import { Formik, Form } from 'formik';
-import { FormInput, FormSelect } from '../Components';
+import { useFetch } from '../../hooks/fetch.hook';
+import { FormInput, FormSelect } from '../../Components';
 import * as yup from 'yup';
-import img from '../assets/img/2.webp';
+import img from '../../assets/img/2.webp';
 
 const validationSchema = yup.object({
 	isTeacher: yup.string(),
@@ -22,7 +22,7 @@ const validationSchema = yup.object({
 		.required('Password обязательное поле'),
 });
 
-const Signup = () => {
+export const Signup = () => {
 	const { loading, request } = useFetch();
 
 	const formHandler = (values) => {
@@ -94,5 +94,3 @@ const Signup = () => {
 		</main>
 	);
 };
-
-export default Signup;

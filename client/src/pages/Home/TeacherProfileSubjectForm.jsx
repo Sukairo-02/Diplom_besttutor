@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
 import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
 import { useAuthFetch } from '../../hooks/authFetch.hook';
-import { FormInput, FormTextarea } from '../index';
+import { FormInput, FormTextarea } from '../../Components';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({

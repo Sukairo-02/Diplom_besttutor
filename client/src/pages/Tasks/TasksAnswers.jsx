@@ -1,5 +1,5 @@
-import { FormInput, FormCheckbox } from './index';
 import { FieldArray } from 'formik';
+import { FormInput, FormCheckbox } from '../../Components';
 
 const emptyAnswer = {
 	text: '',

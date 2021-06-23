@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Formik, Form } from 'formik';
-import { useFetch } from '../hooks/fetch.hook';
-import { createAuthProvider } from '../jwt';
-import { FormInput } from '../Components';
+import { useFetch } from '../../hooks/fetch.hook';
+import { createAuthProvider } from '../../jwt';
+import { FormInput } from '../../Components';
 import * as yup from 'yup';
-import img from '../assets/img/1.webp';
+import img from '../../assets/img/1.webp';
 
 const validationSchema = yup.object({
 	email: yup
@@ -17,7 +17,7 @@ const validationSchema = yup.object({
 		.required('Пароль обязательное поле'),
 });
 
-const Login = () => {
+export const Login = () => {
 	const { loading, request } = useFetch();
 	const { login } = createAuthProvider();
 
@@ -76,5 +76,3 @@ const Login = () => {
 		</main>
 	);
 };
-
-export default Login;

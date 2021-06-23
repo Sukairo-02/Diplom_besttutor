@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getTask } from '../redux/selectors';
-import { TaskForm, TaskResults } from '../Components';
-import { useAuthFetch } from '../hooks/authFetch.hook';
+import { getTask } from '../../redux/selectors';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
+import TaskForm from './TaskForm';
+import TaskResults from './TaskResults';
 
-const Task = () => {
+export const Task = () => {
 	const [submit, setSubmit] = React.useState(false);
 	const [results, setResults] = React.useState();
 
@@ -68,5 +69,3 @@ const Task = () => {
 		</main>
 	);
 };
-
-export default Task;

@@ -1,9 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getUserInfo } from '../redux/selectors';
-import { TeacherProfile, UserProfile, Loader } from '../Components';
+import { getUserInfo } from '../../redux/selectors';
+import UserProfile from './UserProfile';
+import TeacherProfile from './TeacherProfile';
+import { Loader } from '../../Components';
 
-const Home = () => {
+export const Home = () => {
 	const info = useSelector(getUserInfo);
 
 	return (
@@ -27,5 +29,3 @@ const Home = () => {
 		</main>
 	);
 };
-
-export default Home;

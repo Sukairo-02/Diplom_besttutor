@@ -1,9 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getUserInfo } from '../redux/selectors';
-import { EditForm, TeacherForm, Loader } from '../Components';
+import { getUserInfo } from '../../redux/selectors';
+import EditForm from './EditForm';
+import TeacherForm from './TeacherForm';
+import { Loader } from '../../Components';
 
-const EditProfile = () => {
+export const EditProfile = () => {
 	const info = useSelector(getUserInfo);
 
 	return (
@@ -31,5 +33,3 @@ const EditProfile = () => {
 		</main>
 	);
 };
-
-export default EditProfile;

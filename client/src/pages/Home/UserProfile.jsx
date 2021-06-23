@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
-import { BoughtSubject } from './index';
+import { BoughtSubject } from '../../Components';
 
 const UserProfile = ({ courses }) => {
 	const history = useHistory();

@@ -1,18 +1,18 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
+import { fetchUserInfo } from '../../redux/reducers/userInfoSlice';
 import {
 	setTeacher,
 	fetchTeacher,
 	fetchTeacherCourses,
 	fetchTeacherReviews,
-} from '../redux/reducers/teachersSlice';
-import { getUserInfo, getTeacher } from '../redux/selectors';
-import { useAuthFetch } from '../hooks/authFetch.hook';
-import { declOfNum, countRating, countStudents } from '../util';
-import { Star, People } from '../assets/icons';
+} from '../../redux/reducers/teachersSlice';
+import { getUserInfo, getTeacher } from '../../redux/selectors';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
+import { declOfNum, countRating, countStudents } from '../../util';
+import { Star, People } from '../../assets/icons';
 
-const Teacher = ({ match }) => {
+export const Teacher = ({ match }) => {
 	const { request } = useAuthFetch();
 	const dispatch = useDispatch();
 	const teacher = useSelector(getTeacher);
@@ -171,5 +171,3 @@ const Teacher = ({ match }) => {
 		</main>
 	);
 };
-
-export default Teacher;

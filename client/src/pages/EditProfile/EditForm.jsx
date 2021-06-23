@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import { useDispatch } from 'react-redux';
-import { useAuthFetch } from '../hooks/authFetch.hook';
-import { fetchUserInfo } from '../redux/reducers/userInfoSlice';
-import { FormFile, FormInput } from './index';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
+import { fetchUserInfo } from '../../redux/reducers/userInfoSlice';
+import { FormFile, FormInput } from '../../Components/index';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({

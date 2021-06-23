@@ -1,4 +1,5 @@
-import { FormInput, FormCheckbox, TasksAnswers } from './index';
+import TasksAnswers from './TasksAnswers';
+import { FormInput, FormCheckbox } from '../../Components';
 
 const emptyQuestion = {
 	title: '',

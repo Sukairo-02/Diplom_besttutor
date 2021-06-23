@@ -5,15 +5,17 @@ import {
 	fetchTeachers,
 	sortItems,
 	setFilter,
-} from '../redux/reducers/teachersSlice';
-import { fetchSubjects } from '../redux/reducers/subjectsSlice';
+} from '../../redux/reducers/teachersSlice';
+import { fetchSubjects } from '../../redux/reducers/subjectsSlice';
 import {
 	setTeacher,
 	fetchTeacherCourses,
 	fetchTeacherReviews,
-} from '../redux/reducers/teachersSlice';
-import { getSubjects } from '../redux/selectors';
-import { TeacherBig, TeachersFiltration, Loader } from '../Components';
+} from '../../redux/reducers/teachersSlice';
+import { getSubjects } from '../../redux/selectors';
+import TeacherBig from './TeacherBig';
+import TeachersFiltration from './TeachersFiltration';
+import { Loader } from '../../Components';
 
 const parametersItems = [
 	{ name: 'Оценка: высокая', value: 'pointsAsc' },
@@ -22,7 +24,7 @@ const parametersItems = [
 	{ name: 'Количество курсов', value: 'corses' },
 ];
 
-const Teachers = () => {
+export const Teachers = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
@@ -108,5 +110,3 @@ const Teachers = () => {
 		</main>
 	);
 };
-
-export default Teachers;

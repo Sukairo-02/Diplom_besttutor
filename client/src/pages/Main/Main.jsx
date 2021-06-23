@@ -1,20 +1,6 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import main from '../assets/img/main.webp';
-import lviv from '../assets/img/citys/1.webp';
-import kiev from '../assets/img/citys/2.webp';
-import harkov from '../assets/img/citys/3.webp';
-import doneck from '../assets/img/citys/4.webp';
-import dnipro from '../assets/img/citys/5.webp';
-import odesa from '../assets/img/citys/6.webp';
-import mukachevo from '../assets/img/citys/7.webp';
-import teacher1 from '../assets/img/teachers/1.webp';
-import teacher2 from '../assets/img/teachers/2.webp';
-import teacher3 from '../assets/img/teachers/3.webp';
-import teacher4 from '../assets/img/teachers/4.webp';
-import teacher5 from '../assets/img/teachers/5.webp';
-import teacher6 from '../assets/img/teachers/6.webp';
-import { People, Star } from '../assets/icons';
+import { People, Star } from '../../assets/icons';
 
 const colors = [
 	'rgba(0, 255, 8, .5)',
@@ -31,7 +17,7 @@ const colors = [
 	'rgba(255, 0, 70, .5)',
 ];
 
-const Main = () => {
+export const Main = () => {
 	const history = useHistory();
 	const subjectsGridRef = React.useRef();
 
@@ -103,7 +89,7 @@ const Main = () => {
 							<div>
 								<img
 									className='lp-about__img'
-									src={main}
+									src='img/main.webp'
 									alt='Онлайн обучение'
 								/>
 							</div>
@@ -233,7 +219,7 @@ const Main = () => {
 								<div className='lp-teachers__item'>
 									<div className='lp-teachers__group'>
 										<div className='lp-teachers__img'>
-											<img src={teacher1} alt='Светлана Шевцова' />
+											<img src='img/teachers/1.webp' alt='Светлана Шевцова' />
 										</div>
 										<div className='lp-teachers__info'>
 											<h5 className='lp-teachers__name'>Светлана Шевцова</h5>
@@ -263,7 +249,7 @@ const Main = () => {
 								<div className='lp-teachers__item'>
 									<div className='lp-teachers__group'>
 										<div className='lp-teachers__img'>
-											<img src={teacher2} alt='Светлана Шевцова' />
+											<img src='img/teachers/2.webp' alt='Светлана Шевцова' />
 										</div>
 										<div className='lp-teachers__info'>
 											<h5 className='lp-teachers__name'>Евгений Голота</h5>
@@ -294,7 +280,7 @@ const Main = () => {
 								<div className='lp-teachers__item'>
 									<div className='lp-teachers__group'>
 										<div className='lp-teachers__img'>
-											<img src={teacher3} alt='Светлана Шевцова' />
+											<img src='img/teachers/3.webp' alt='Светлана Шевцова' />
 										</div>
 										<div className='lp-teachers__info'>
 											<h5 className='lp-teachers__name'>Михаил Мельник</h5>
@@ -325,7 +311,7 @@ const Main = () => {
 								<div className='lp-teachers__item'>
 									<div className='lp-teachers__group'>
 										<div className='lp-teachers__img'>
-											<img src={teacher4} alt='Светлана Шевцова' />
+											<img src='img/teachers/4.webp' alt='Светлана Шевцова' />
 										</div>
 										<div className='lp-teachers__info'>
 											<h5 className='lp-teachers__name'>Валерия Коваленко</h5>
@@ -355,7 +341,7 @@ const Main = () => {
 								<div className='lp-teachers__item'>
 									<div className='lp-teachers__group'>
 										<div className='lp-teachers__img'>
-											<img src={teacher5} alt='Светлана Шевцова' />
+											<img src='img/teachers/5.webp' alt='Светлана Шевцова' />
 										</div>
 										<div className='lp-teachers__info'>
 											<h5 className='lp-teachers__name'>Дмитрий Лозенко</h5>
@@ -386,7 +372,7 @@ const Main = () => {
 								<div className='lp-teachers__item'>
 									<div className='lp-teachers__group'>
 										<div className='lp-teachers__img'>
-											<img src={teacher6} alt='Светлана Шевцова' />
+											<img src='img/teachers/6.webp' alt='Светлана Шевцова' />
 										</div>
 										<div className='lp-teachers__info'>
 											<h5 className='lp-teachers__name'>Наталья Ермакова</h5>
@@ -438,43 +424,71 @@ const Main = () => {
 								</button>
 							</div>
 							<div className='lp-citys__item'>
-								<img className='lp-citys__img' src={lviv} alt='Львов' />
+								<img
+									className='lp-citys__img'
+									src='img/citys/1.webp'
+									alt='Львов'
+								/>
 
 								<h5 className='lp-citys__name'>Львов</h5>
 								<p className='lp-citys__count'>126 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img className='lp-citys__img' src={kiev} alt='Киев' />
+								<img
+									className='lp-citys__img'
+									src='img/citys/2.webp'
+									alt='Киев'
+								/>
 
 								<h5 className='lp-citys__name'>Киев</h5>
 								<p className='lp-citys__count'>230 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img className='lp-citys__img' src={harkov} alt='Харьков' />
+								<img
+									className='lp-citys__img'
+									src='img/citys/3.webp'
+									alt='Харьков'
+								/>
 
 								<h5 className='lp-citys__name'>Харьков</h5>
 								<p className='lp-citys__count'>185 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img className='lp-citys__img' src={doneck} alt='Донецк' />
+								<img
+									className='lp-citys__img'
+									src='img/citys/4.webp'
+									alt='Донецк'
+								/>
 
 								<h5 className='lp-citys__name'>Донецк</h5>
 								<p className='lp-citys__count'>290 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img className='lp-citys__img' src={dnipro} alt='Днепр' />
+								<img
+									className='lp-citys__img'
+									src='img/citys/5.webp'
+									alt='Днепр'
+								/>
 
 								<h5 className='lp-citys__name'>Днепр</h5>
 								<p className='lp-citys__count'>110 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img className='lp-citys__img' src={odesa} alt='Одесса' />
+								<img
+									className='lp-citys__img'
+									src='img/citys/6.webp'
+									alt='Одесса'
+								/>
 
 								<h5 className='lp-citys__name'>Одесса</h5>
 								<p className='lp-citys__count'>298 учителей</p>
 							</div>
 							<div className='lp-citys__item lp-citys__item_last'>
-								<img className='lp-citys__img' src={mukachevo} alt='Мукачево' />
+								<img
+									className='lp-citys__img'
+									src='img/citys/7.webp'
+									alt='Мукачево'
+								/>
 
 								<h5 className='lp-citys__name'>Мукачево</h5>
 								<p className='lp-citys__count'>546 учителей</p>
@@ -556,5 +570,3 @@ const Main = () => {
 		</div>
 	);
 };
-
-export default Main;

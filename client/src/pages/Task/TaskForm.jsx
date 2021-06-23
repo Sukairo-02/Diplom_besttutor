@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, FieldArray } from 'formik';
-import { useAuthFetch } from '../hooks/authFetch.hook';
-import { FormCheckbox } from './index';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
+import { FormCheckbox } from '../../Components';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({

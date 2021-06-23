@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { declOfNum, countRating } from '../util';
-import { Star } from '../assets/icons';
+import { declOfNum, countRating } from '../../util';
+import { Star } from '../../assets/icons';
 
 const TeacherBig = React.memo(({ data, profileBtnHandler }) => {
 	const openTeacherProfile = () => {

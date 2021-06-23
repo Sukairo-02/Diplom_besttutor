@@ -1,10 +1,10 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getTask, getStatistic } from '../redux/selectors';
-import { fetchTeacherCourses } from '../redux/reducers/userInfoSlice';
-import { useAuthFetch } from '../hooks/authFetch.hook';
+import { getTask, getStatistic } from '../../redux/selectors';
+import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
 
-const PreviewTask = ({ location }) => {
+export const PreviewTask = ({ location }) => {
 	const item = useSelector(getTask);
 	const statistic = useSelector(getStatistic);
 
@@ -119,5 +119,3 @@ const PreviewTask = ({ location }) => {
 		</main>
 	);
 };
-
-export default PreviewTask;

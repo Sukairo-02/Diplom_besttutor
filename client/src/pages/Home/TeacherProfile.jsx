@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TeacherProfileForm from './TeacherProfileForm';
 import TeacherProfileSubject from './TeacherProfileSubject';
-import { BoughtSubject } from '../index';
+import { BoughtSubject } from '../../Components';
 
 const TeacherProfile = ({ teacherCourses, courses }) => {
 	return (

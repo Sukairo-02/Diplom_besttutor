@@ -1,9 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
 import { Formik, Form } from 'formik';
-import { FormInput, FormTextarea } from '../index';
+import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
 import { useAuthFetch } from '../../hooks/authFetch.hook';
+import { FormInput, FormTextarea } from '../../Components';
 import * as yup from 'yup';
 
 const validationSchema = yup.object({
