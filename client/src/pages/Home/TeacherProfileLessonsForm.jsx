@@ -17,10 +17,11 @@ const TeacherProfileLessonsForm = ({ id }) => {
 	const dispatch = useDispatch();
 	const { request } = useAuthFetch();
 
-	const formSubmitHandler = (formData) => {
-		request('/api/school/newlesson/', 'POST', formData).then(() =>
-			dispatch(fetchTeacherCourses())
-		);
+	const formSubmitHandler = (formData, actions) => {
+		request('/api/school/newlesson/', 'POST', formData).then(() => {
+			dispatch(fetchTeacherCourses());
+			actions.resetForm();
+		});
 	};
 
 	return (
@@ -32,8 +33,8 @@ const TeacherProfileLessonsForm = ({ id }) => {
 				endDate: '',
 			}}
 			validationSchema={validationSchema}
-			onSubmit={(values) => {
-				formSubmitHandler(values);
+			onSubmit={(values, actions) => {
+				formSubmitHandler(values, actions);
 			}}>
 			<Form className='form teacher-profile__form'>
 				<fieldset className='form__fieldset'>

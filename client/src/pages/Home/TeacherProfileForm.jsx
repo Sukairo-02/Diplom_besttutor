@@ -19,10 +19,11 @@ const TeacherProfileForm = () => {
 	const dispatch = useDispatch();
 	const { request } = useAuthFetch();
 
-	const formSubmitHandler = (formData) => {
-		request('/api/school/newcourse', 'POST', formData).then(() =>
-			dispatch(fetchTeacherCourses())
-		);
+	const formSubmitHandler = (formData, actions) => {
+		request('/api/school/newcourse', 'POST', formData).then(() => {
+			dispatch(fetchTeacherCourses());
+			actions.resetForm();
+		});
 	};
 
 	return (
@@ -33,8 +34,8 @@ const TeacherProfileForm = () => {
 				desc: '',
 			}}
 			validationSchema={validationSchema}
-			onSubmit={(values) => {
-				formSubmitHandler(values);
+			onSubmit={(values, actions) => {
+				formSubmitHandler(values, actions);
 			}}>
 			<Form className='form teacher-profile__form'>
 				<h3 className='form__title'>Добавить новый курс</h3>

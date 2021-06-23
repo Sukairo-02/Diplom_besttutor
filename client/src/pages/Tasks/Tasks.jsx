@@ -8,7 +8,7 @@ import {
 	fetchStatisticForTeacher,
 } from '../../redux/reducers/taskSlice';
 import { getUserInfo } from '../../redux/selectors';
-import { createAuthProvider } from '../../jwt';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
 import TasksQuestions from './TasksQuestions';
 import {
 	FormInput,
@@ -64,11 +64,10 @@ const emptyQuestion = {
 
 export const Tasks = () => {
 	const dispatch = useDispatch();
-	const { authFetch } = createAuthProvider();
+	const { request } = useAuthFetch();
 	const history = useHistory();
 
 	const info = useSelector(getUserInfo);
-	const [state, setState] = React.useState('');
 
 	const taskBtnHandeler = async (taskId, courseId) => {
 		await dispatch(fetchTaskForTeacher(taskId));
@@ -76,15 +75,11 @@ export const Tasks = () => {
 		history.push('/previewTask', { state: courseId });
 	};
 
-	const formSubmitHandler = async (data) => {
-		setState('Loading');
-		try {
-			const result = await authFetch('/api/school/newassignment', 'POST', data);
-			await dispatch(fetchTeacherCourses());
-			setState(result.message);
-		} catch (err) {
-			setState(err.message);
-		}
+	const formSubmitHandler = async (formData, actions) => {
+		request('/api/school/newassignment', 'POST', formData).then(() => {
+			dispatch(fetchTeacherCourses());
+			actions.resetForm();
+		});
 	};
 
 	return (
@@ -105,8 +100,8 @@ export const Tasks = () => {
 									questions: [emptyQuestion],
 								}}
 								validationSchema={validationSchema}
-								onSubmit={(values) => {
-									formSubmitHandler(values);
+								onSubmit={(values, actions) => {
+									formSubmitHandler(values, actions);
 								}}>
 								{({ values, errors }) => (
 									<Form className='form tasks__form'>
@@ -177,7 +172,6 @@ export const Tasks = () => {
 										<button className='btn' type='submit'>
 											Добавить новое задание
 										</button>
-										<span className='form__result'>{state}</span>
 									</Form>
 								)}
 							</Formik>
