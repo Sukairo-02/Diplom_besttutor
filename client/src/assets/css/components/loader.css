@@ -1,3 +1,7 @@
+.App > .loader {
+	justify-content: center;
+}
+
 .loader {
 	display: flex;
 	align-items: center;
