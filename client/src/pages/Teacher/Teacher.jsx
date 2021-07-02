@@ -2,13 +2,12 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserInfo } from '../../redux/reducers/userInfoSlice';
 import {
-	setTeacher,
 	fetchTeacher,
-	fetchTeacherCourses,
 	fetchTeacherReviews,
 } from '../../redux/reducers/teachersSlice';
 import { getUserInfo, getTeacher } from '../../redux/selectors';
 import { useAuthFetch } from '../../hooks/authFetch.hook';
+import { Loader } from '../../Components';
 import { declOfNum, countRating, countStudents } from '../../util';
 import { Star, People } from '../../assets/icons';
 
@@ -18,17 +17,16 @@ export const Teacher = ({ match }) => {
 	const teacher = useSelector(getTeacher);
 	const info = useSelector(getUserInfo);
 
-	// React.useEffect(() => {
-	// 	const loadUserData = async (id) => {
-	// 		await dispatch(fetchTeacher(id));
-	// 		await dispatch(fetchTeacherCourses(id));
-	// 		await dispatch(fetchTeacherReviews());
-	// 	};
+	React.useEffect(() => {
+		const loadTeacherData = async (id) => {
+			await dispatch(fetchTeacher(id));
+			await dispatch(fetchTeacherReviews());
+		};
 
-	// 	if (match.params.id) {
-	// 		loadUserData(match.params.id);
-	// 	}
-	// }, []);
+		if (Object.keys(teacher).length === 0 && match.params.id) {
+			loadTeacherData(match.params.id);
+		}
+	}, [dispatch, match.params.id, teacher]);
 
 	const deleteBtnHandler = () => {
 		request('/api/school/delreview', 'DELETE', {
@@ -37,9 +35,9 @@ export const Teacher = ({ match }) => {
 	};
 
 	const subscribeToCourse = (id) => {
-		request(`/api/school/subscribe/${id}`, 'POST').then(() =>
-			dispatch(fetchUserInfo())
-		);
+		request(`/api/school/subscribe/${id}`, 'POST', {}, () => {
+			dispatch(fetchUserInfo());
+		});
 	};
 
 	return (
@@ -165,7 +163,7 @@ export const Teacher = ({ match }) => {
 						</div>
 					</div>
 				) : (
-					<span>Ошибка, попробуйте еще раз</span>
+					<Loader text='Загрузка данных учителя' />
 				)}
 			</div>
 		</main>

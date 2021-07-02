@@ -19,7 +19,7 @@ const validationSchema = yup.object({
 	text: yup.string().required('Текс отзыва обязателен'),
 });
 
-const BoughtSubject = ({ course }) => {
+const BoughtSubject = React.memo(({ course }) => {
 	const [isclose, setIsClose] = React.useState(true);
 	const [height, setHeight] = React.useState('0px');
 
@@ -88,7 +88,7 @@ const BoughtSubject = ({ course }) => {
 									</div>
 								))}
 						</div>
-						<span className='subject__min-title'>Тесты</span>
+						<span className='subject__min-title'>Задания</span>
 						<div className='subject__tasks' style={{ marginTop: 0 }}>
 							{course.assignments.length ? (
 								course.assignments.map((assignment) => (
@@ -97,14 +97,14 @@ const BoughtSubject = ({ course }) => {
 										<button
 											className='btn'
 											type='button'
-											title='Пройти тесты'
+											title='Пройти задание'
 											onClick={() => taskBtnHandeler(assignment._id)}>
 											Открыть
 										</button>
 									</div>
 								))
 							) : (
-								<span>Тестов нет</span>
+								<span>Заданий нет</span>
 							)}
 						</div>
 						<span className='subject__min-title'>Отзыв</span>
@@ -136,7 +136,7 @@ const BoughtSubject = ({ course }) => {
 			</div>
 		</div>
 	);
-};
+});
 
 BoughtSubject.propTypes = {
 	course: PropTypes.object,

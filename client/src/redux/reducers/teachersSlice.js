@@ -16,6 +16,12 @@ export const fetchTeacher = createAsyncThunk(
 	'teachers/fetchTeacher',
 	async (id) => {
 		const data = await authFetch(`/api/auth/userdataID/${id}`);
+
+		if (data?.teacherCourses?.length) {
+			const teacherCourses = await authFetch(`/api/school/courses/${id}`);
+			data.teacherCourses = teacherCourses.courses;
+		}
+
 		return data;
 	}
 );

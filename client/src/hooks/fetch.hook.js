@@ -4,7 +4,7 @@ export const useFetch = () => {
 	const [loading, setLoading] = React.useState(false);
 
 	const request = React.useCallback(
-		async (url, method = 'GET', body = null, headers = {}) => {
+		async (url, method = 'GET', body = null, headers = {}, cb) => {
 			setLoading(true);
 
 			try {
@@ -21,6 +21,8 @@ export const useFetch = () => {
 				}
 
 				setLoading(false);
+
+				if (cb) cb(data);
 
 				return data;
 			} catch (err) {

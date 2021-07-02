@@ -5,7 +5,7 @@ import { getUserInfo } from './redux/selectors';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useRoutes } from './hooks/routes.hook';
 import { createAuthProvider } from './jwt';
-import { Notifications } from './Components';
+import { Loader, Notifications } from './Components';
 
 const App = () => {
 	const { useAuth } = createAuthProvider();
@@ -17,19 +17,19 @@ const App = () => {
 	const info = useSelector(getUserInfo);
 
 	React.useEffect(() => {
-		if (Object.keys(info).length === 0) {
+		if (Object.keys(info).length === 0 && logged) {
 			dispatch(fetchUserInfo());
 		}
 	});
-
+	console.log('App rendered');
 	return (
 		<div className='App'>
 			<Notifications />
-			<Router>
-				<React.Suspense fallback={<div>Загрузка...</div>}>
-					{routes}
-				</React.Suspense>
-			</Router>
+			{Object.keys(info).length === 0 && logged ? (
+				<Loader text='Загрузка данных пользователя' />
+			) : (
+				<Router>{routes}</Router>
+			)}
 		</div>
 	);
 };

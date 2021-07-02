@@ -26,7 +26,7 @@ export const Signup = () => {
 	const { loading, request } = useFetch();
 
 	const formHandler = (values) => {
-		request('/api/auth/register', 'POST', values).then((data) => {
+		request('/api/auth/register', 'POST', values, {}, (data) => {
 			request('/api/auth/sendValidation', 'POST', {
 				email: values.email,
 			});

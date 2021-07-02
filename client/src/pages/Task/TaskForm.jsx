@@ -36,7 +36,9 @@ const TaskForm = ({ item, setSubmit }) => {
 	const { request } = useAuthFetch();
 
 	const formSubmitHandler = (formData) => {
-		request('/api/school/submit', 'POST', formData).then(() => setSubmit(true));
+		request('/api/school/submit', 'POST', formData, {}, () => {
+			setSubmit(true);
+		});
 	};
 
 	return (

@@ -1,19 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TeacherProfileSubjectLessons from './TeacherProfileSubjectLessons';
+import { useDispatch } from 'react-redux';
+import { teacherUsersdataDelete } from '../../redux/reducers/userInfoSlice';
 import TeacherProfileSubjectForm from './TeacherProfileSubjectForm';
-import TeacherProfileSubjectUsers from './TeacherProfileSubjectUsers';
+import TeacherProfileSubjectLesson from './TeacherProfileSubjectLesson';
+import TeacherProfileLessonsForm from './TeacherProfileLessonsForm';
+import TeacherProfileSubjectUser from './TeacherProfileSubjectUser';
+import { useAuthFetch } from '../../hooks/authFetch.hook';
 import { ChevronDown } from '../../assets/icons';
 
-const TeacherProfileSubject = ({ course }) => {
+const TeacherProfileSubject = React.memo(({ course }) => {
 	const [isClose, setisClose] = React.useState(true);
 	const [height, setHeight] = React.useState('0px');
 
 	const content = React.useRef(null);
 
+	const { request } = useAuthFetch();
+	const dispatch = useDispatch();
+
 	const btnHandler = () => {
 		setisClose(!isClose);
 		setHeight(isClose ? `${content.current.scrollHeight}px` : '0px');
+	};
+
+	const refundAllUsersBtnHandler = () => {
+		request(
+			'/api/school/refund',
+			'POST',
+			{
+				courseID: course._id,
+			},
+			{},
+			() => {
+				dispatch(
+					teacherUsersdataDelete({
+						courseID: course._id,
+						userdatasID: course.usersdataIds,
+					})
+				);
+			}
+		);
 	};
 
 	return (
@@ -40,24 +66,50 @@ const TeacherProfileSubject = ({ course }) => {
 							'subject__info ' + (isClose ? '' : 'subject__info--active')
 						}>
 						<TeacherProfileSubjectForm course={course} />
+
 						<span className='subject__min-title'>Уроки</span>
-						<TeacherProfileSubjectLessons
-							courseId={course._id}
-							lessons={course.lessons}
-							isPublished={course.isPublished}
-						/>
+						<div className='subject__lessons'>
+							{course.lessonsIds.length ? (
+								course.lessonsIds.map((lessonID, index) => (
+									<TeacherProfileSubjectLesson
+										key={lessonID}
+										index={index}
+										courseID={course._id}
+										lessonID={lessonID}
+										isPublished={course.isPublished}
+									/>
+								))
+							) : (
+								<div>Уроков нет</div>
+							)}
+							{!course.isPublished && (
+								<TeacherProfileLessonsForm courseID={course._id} />
+							)}
+						</div>
 					</div>
 				</div>
 			</div>
 			<div className='subject__users'>
-				<TeacherProfileSubjectUsers
-					courseId={course._id}
-					usersdata={course.usersdata}
-				/>
+				{course.usersdataIds.length ? (
+					<>
+						{course.usersdataIds.map((userID) => (
+							<TeacherProfileSubjectUser
+								key={userID}
+								courseID={course._id}
+								userID={userID}
+							/>
+						))}
+						<button className='btn' onClick={refundAllUsersBtnHandler}>
+							Вернуть деньги всем ученикам
+						</button>
+					</>
+				) : (
+					<div className='subject__user-info'>Учеников нет</div>
+				)}
 			</div>
 		</div>
 	);
-};
+});
 
 TeacherProfileSubject.propTypes = {
 	course: PropTypes.object,

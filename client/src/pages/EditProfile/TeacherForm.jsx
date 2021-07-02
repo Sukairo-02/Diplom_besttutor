@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import { FormSelect, FormTextarea } from '../../Components/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserInfo } from '../../redux/reducers/userInfoSlice';
+import { updateInfo } from '../../redux/reducers/userInfoSlice';
 import { fetchSubjects } from '../../redux/reducers/subjectsSlice';
 import { getSubjects } from '../../redux/selectors';
 import { useAuthFetch } from '../../hooks/authFetch.hook';
@@ -29,9 +29,9 @@ const TeacherForm = ({ data }) => {
 	});
 
 	const formSubmitHandler = (formData) => {
-		request('/api/auth/editteacher', 'POST', formData).then(() =>
-			dispatch(fetchUserInfo())
-		);
+		request('/api/auth/editteacher', 'POST', formData, {}, () => {
+			dispatch(updateInfo(formData));
+		});
 	};
 
 	return (

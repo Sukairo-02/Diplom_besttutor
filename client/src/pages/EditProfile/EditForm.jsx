@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form } from 'formik';
 import { useDispatch } from 'react-redux';
 import { useAuthFetch } from '../../hooks/authFetch.hook';
-import { fetchUserInfo } from '../../redux/reducers/userInfoSlice';
+import { updateInfo } from '../../redux/reducers/userInfoSlice';
 import { FormFile, FormInput } from '../../Components/index';
 import * as yup from 'yup';
 
@@ -23,9 +23,9 @@ const EditForm = ({ data }) => {
 	const dispatch = useDispatch();
 
 	const formSubmitHandler = (formData) => {
-		request('/api/auth/edit', 'POST', formData).then(() =>
-			dispatch(fetchUserInfo())
-		);
+		request('/api/auth/edit', 'POST', formData, {}, () => {
+			dispatch(updateInfo(formData));
+		});
 	};
 
 	return (

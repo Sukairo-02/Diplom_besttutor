@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
-import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
+import { nanoid } from '@reduxjs/toolkit';
+import { teacherLessonAdd } from '../../redux/reducers/userInfoSlice';
 import { useAuthFetch } from '../../hooks/authFetch.hook';
 import { FormInput, FormSelect } from '../../Components';
 import * as yup from 'yup';
@@ -13,13 +14,23 @@ const validationSchema = yup.object({
 	endDate: yup.date().required('Выберите конец урока'),
 });
 
-const TeacherProfileLessonsForm = ({ id }) => {
+const TeacherProfileLessonsForm = React.memo(({ courseID }) => {
 	const dispatch = useDispatch();
 	const { request } = useAuthFetch();
 
 	const formSubmitHandler = (formData, actions) => {
-		request('/api/school/newlesson/', 'POST', formData).then(() => {
-			dispatch(fetchTeacherCourses());
+		request('/api/school/newlesson/', 'POST', formData, {}, () => {
+			const id = nanoid();
+			dispatch(
+				teacherLessonAdd({
+					courseID,
+					lessonID: id,
+					data: {
+						_id: id,
+						...formData,
+					},
+				})
+			);
 			actions.resetForm();
 		});
 	};
@@ -27,7 +38,7 @@ const TeacherProfileLessonsForm = ({ id }) => {
 	return (
 		<Formik
 			initialValues={{
-				courseID: id,
+				courseID: courseID,
 				location: '',
 				date: '',
 				endDate: '',
@@ -58,10 +69,10 @@ const TeacherProfileLessonsForm = ({ id }) => {
 			</Form>
 		</Formik>
 	);
-};
+});
 
 TeacherProfileLessonsForm.propTypes = {
-	id: PropTypes.string,
+	courseID: PropTypes.string,
 };
 
 export default TeacherProfileLessonsForm;

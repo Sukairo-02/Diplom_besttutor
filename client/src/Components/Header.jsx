@@ -47,9 +47,9 @@ const Header = () => {
 				{visibleMenu && (
 					<div className='header__menu'>
 						<ul>
-							{Object.keys(info).length !== 0 && info.roles[0] === 'TCHR' ? (
+							{info.roles[0] === 'TCHR' ? (
 								<li>
-									<Link to='/tasks'>Тесты</Link>
+									<Link to='/tasks'>Задания</Link>
 								</li>
 							) : (
 								''

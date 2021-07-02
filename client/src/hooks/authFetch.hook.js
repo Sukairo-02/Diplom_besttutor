@@ -1,5 +1,5 @@
 import React from 'react';
-import { v4 } from 'uuid';
+import { nanoid } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 import { createAuthProvider } from '../jwt';
 import { addNote } from '../redux/reducers/notificationSlice';
@@ -9,10 +9,10 @@ export const useAuthFetch = () => {
 	const { authFetch } = createAuthProvider();
 
 	const request = React.useCallback(
-		async (url, method = 'GET', body = null, headers = {}) => {
+		async (url, method = 'GET', body = null, headers = {}, cb) => {
 			dispatch(
 				addNote({
-					id: v4(),
+					id: nanoid(),
 					type: 'LOADING',
 					message: 'Загрузка',
 				})
@@ -23,17 +23,19 @@ export const useAuthFetch = () => {
 
 				dispatch(
 					addNote({
-						id: v4(),
+						id: nanoid(),
 						type: 'SUCCESS',
 						message: result.message || 'Загружено',
 					})
 				);
 
+				if (cb) cb(result);
+
 				return result;
 			} catch (err) {
 				dispatch(
 					addNote({
-						id: v4(),
+						id: nanoid(),
 						type: 'Error',
 						message: err.message || 'Что-то пошло не так',
 					})

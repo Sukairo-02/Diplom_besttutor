@@ -42,15 +42,14 @@ export const Teachers = () => {
 	const subjects = useSelector(getSubjects);
 
 	React.useEffect(() => {
-		async function loadData() {
-			await dispatch(fetchTeachers());
-			await dispatch(fetchSubjects());
+		if (!teachers.length) {
+			dispatch(fetchTeachers());
 		}
 
-		if (!teachers.length) {
-			loadData();
+		if (!subjects.length) {
+			dispatch(fetchSubjects());
 		}
-	});
+	}, [dispatch]);
 
 	const parametersHandler = React.useCallback(
 		(type) => {
@@ -72,7 +71,7 @@ export const Teachers = () => {
 			await dispatch(fetchTeacherCourses(id));
 			await dispatch(fetchTeacherReviews());
 
-			history.push(`teacher/${id}`);
+			history.push(`teacher/${id}`, { id });
 		},
 		[dispatch, history]
 	);

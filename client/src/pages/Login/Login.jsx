@@ -22,7 +22,7 @@ export const Login = () => {
 	const { login } = createAuthProvider();
 
 	const formHandler = (values) => {
-		request('/api/auth/login', 'POST', values).then((data) => {
+		request('/api/auth/login', 'POST', values, {}, (data) => {
 			login(data);
 			document.location.reload();
 		});

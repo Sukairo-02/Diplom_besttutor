@@ -7,7 +7,6 @@
 - react-router-dom
 - formik
 - yup
-- uuid
 
 ## Script for start project
 

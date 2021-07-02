@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { Formik, Form } from 'formik';
-import { fetchTeacherCourses } from '../../redux/reducers/userInfoSlice';
+import { nanoid } from '@reduxjs/toolkit';
+import { teacherCourseAdd } from '../../redux/reducers/userInfoSlice';
 import { useAuthFetch } from '../../hooks/authFetch.hook';
 import { FormInput, FormTextarea } from '../../Components';
 import * as yup from 'yup';
@@ -15,17 +17,29 @@ const validationSchema = yup.object({
 	desc: yup.string().required('Описание курса обязательно'),
 });
 
-const TeacherProfileForm = () => {
+const TeacherProfileForm = React.memo(({ teacherId, teacherSubject }) => {
 	const dispatch = useDispatch();
 	const { request } = useAuthFetch();
 
 	const formSubmitHandler = (formData, actions) => {
-		request('/api/school/newcourse', 'POST', formData).then(() => {
-			dispatch(fetchTeacherCourses());
+		request('/api/school/newcourse', 'POST', formData, {}, () => {
+			dispatch(
+				teacherCourseAdd({
+					...formData,
+					_id: nanoid(),
+					isBlocked: false,
+					isPublished: false,
+					subject: teacherSubject,
+					teacher: teacherId,
+					lessonsIds: [],
+					assignmentsIds: [],
+					usersdataIds: [],
+				})
+			);
 			actions.resetForm();
 		});
 	};
-
+	console.log('TeacherProfileForm rendered');
 	return (
 		<Formik
 			initialValues={{
@@ -54,6 +68,11 @@ const TeacherProfileForm = () => {
 			</Form>
 		</Formik>
 	);
+});
+
+TeacherProfileForm.propTypes = {
+	teacherId: PropTypes.string,
+	teacherSubject: PropTypes.string,
 };
 
 export default TeacherProfileForm;
