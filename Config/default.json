@@ -13,7 +13,7 @@
 	},
 
 	"client": {
-		"address": "http://localhost:3000/"
+		"address": "https://best-tutor.herokuapp.com/"
 	},
 
 	"email": {
