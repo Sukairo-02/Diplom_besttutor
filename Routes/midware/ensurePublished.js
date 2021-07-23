@@ -1,4 +1,4 @@
-const Courses = require('../../models/Courses')
+const Courses = require('../../Models/Courses')
 
 module.exports = async function (req, res, next) {
 	if (req.method === 'OPTIONS') {
