@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserInfo } from './redux/reducers/userInfoSlice';
 import { getUserInfo } from './redux/selectors';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { useRoutes } from './routes';
+import { useRoutes } from './hooks/routes.hook';
 import { createAuthProvider } from './jwt';
+import { Loader, Notifications } from './Components';
 
 const App = () => {
 	const { useAuth } = createAuthProvider();
-	const [logged] = useAuth();
+	const logged = useAuth();
 	const isAuthenticated = !!logged;
 	const routes = useRoutes(isAuthenticated);
 
@@ -16,14 +17,19 @@ const App = () => {
 	const info = useSelector(getUserInfo);
 
 	React.useEffect(() => {
-		if (Object.keys(info).length === 0) {
+		if (Object.keys(info).length === 0 && logged) {
 			dispatch(fetchUserInfo());
 		}
 	});
-
+	console.log('App rendered');
 	return (
 		<div className='App'>
-			<Router>{routes}</Router>
+			<Notifications />
+			{Object.keys(info).length === 0 && logged ? (
+				<Loader text='Загрузка данных пользователя' />
+			) : (
+				<Router>{routes}</Router>
+			)}
 		</div>
 	);
 };

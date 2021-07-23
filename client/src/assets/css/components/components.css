@@ -17,3 +17,17 @@
 @import 'task.css';
 @import 'statistic.css';
 @import 'teachers.css';
+@import 'notification.css';
+@import 'loader.css';
+
+/* Landing */
+@import 'landing/lpGrid.css';
+@import 'landing/lpAbout.css';
+@import 'landing/lpCitys.css';
+@import 'landing/lpFooter.css';
+@import 'landing/lpHeader.css';
+@import 'landing/lpIntro.css';
+@import 'landing/lpOffers.css';
+@import 'landing/lpSteps.css';
+@import 'landing/lpSubjects.css';
+@import 'landing/lpTeachers.css';

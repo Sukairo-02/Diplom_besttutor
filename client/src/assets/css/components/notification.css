@@ -1,0 +1,64 @@
+.notifications {
+	position: fixed;
+	top: 90px;
+	right: 20px;
+	width: 300px;
+	z-index: 999;
+}
+
+.notification {
+	width: 300px;
+	margin-bottom: 20px;
+	background-color: var(--secondary-bg);
+	box-shadow: var(--shadow);
+	border-radius: var(--radius);
+	overflow: hidden;
+	animation: SlideLeft 0.4s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes SlideLeft {
+	0% {
+		margin-left: 120%;
+	}
+
+	100% {
+		margin-left: 0;
+	}
+}
+
+@keyframes SlideRight {
+	0% {
+		margin-left: 0;
+	}
+
+	100% {
+		margin-left: 120%;
+	}
+}
+
+.notification.exit {
+	animation: SlideRight 0.4s;
+	animation-fill-mode: forwards;
+}
+
+.notification p {
+	margin: 0;
+	padding: 10px;
+}
+
+.notification__bar {
+	height: 5px;
+}
+
+.notification.success .notification__bar {
+	background-color: #65d266;
+}
+
+.notification.loading .notification__bar {
+	background-color: var(--accent-color);
+}
+
+.notification.error .notification__bar {
+	background-color: red;
+}

@@ -12,3 +12,7 @@ export const getTeachersFilter = (state) => state.teachers.filter;
 
 // userInfoSlice
 export const getUserInfo = (state) => state.userInfo.info;
+export const getBoughtCourses = (state) => state.userInfo.courses;
+
+// notificationSlice
+export const getNotifications = (state) => state.notifications;

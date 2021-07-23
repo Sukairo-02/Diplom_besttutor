@@ -12,6 +12,20 @@ export const fetchTeachers = createAsyncThunk(
 	}
 );
 
+export const fetchTeacher = createAsyncThunk(
+	'teachers/fetchTeacher',
+	async (id) => {
+		const data = await authFetch(`/api/auth/userdataID/${id}`);
+
+		if (data?.teacherCourses?.length) {
+			const teacherCourses = await authFetch(`/api/school/courses/${id}`);
+			data.teacherCourses = teacherCourses.courses;
+		}
+
+		return data;
+	}
+);
+
 export const fetchTeacherCourses = createAsyncThunk(
 	'teachers/fetchTeacherCourses',
 	async (id) => {
@@ -26,28 +40,33 @@ export const fetchTeacherReviews = createAsyncThunk(
 		const {
 			teacher: { reviews },
 		} = getState().teachers;
-		const usersIds = reviews.map((review) => review.author);
 
-		const data = await authFetch('/api/auth/lightdataArr/', 'POST', {
-			ids: usersIds,
-		});
+		if (reviews.length) {
+			const usersIds = reviews.map((review) => review.author);
 
-		const newReviews = [];
-
-		await reviews.forEach((review) => {
-			data.users.forEach((user) => {
-				if (review.author === user._id) {
-					newReviews.push(
-						(review = {
-							...review,
-							...user,
-						})
-					);
-				}
+			const data = await authFetch('/api/auth/lightdataArr/', 'POST', {
+				ids: usersIds,
 			});
-		});
 
-		return newReviews;
+			const newReviews = [];
+
+			await reviews.forEach((review) => {
+				data.users.forEach((user) => {
+					if (review.author === user._id) {
+						newReviews.push(
+							(review = {
+								...review,
+								...user,
+							})
+						);
+					}
+				});
+			});
+
+			return newReviews;
+		}
+
+		return reviews;
 	}
 );
 
@@ -109,6 +128,24 @@ export const teachersSlice = createSlice({
 			}
 		},
 		[fetchTeachers.rejected]: (state, action) => {
+			if (state.loading === 'pending') {
+				state.loading = 'idle';
+				state.error = action.error;
+			}
+		},
+
+		[fetchTeacher.pending]: (state) => {
+			if (state.loading === 'idle') {
+				state.loading = 'pending';
+			}
+		},
+		[fetchTeacher.fulfilled]: (state, action) => {
+			if (state.loading === 'pending') {
+				state.loading = 'idle';
+				state.teacher = action.payload;
+			}
+		},
+		[fetchTeacher.rejected]: (state, action) => {
 			if (state.loading === 'pending') {
 				state.loading = 'idle';
 				state.error = action.error;

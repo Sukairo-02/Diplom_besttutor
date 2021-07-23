@@ -49,7 +49,7 @@ const Header = () => {
 						<ul>
 							{info.roles[0] === 'TCHR' ? (
 								<li>
-									<Link to='/tasks'>Тесты</Link>
+									<Link to='/tasks'>Задания</Link>
 								</li>
 							) : (
 								''
@@ -58,7 +58,7 @@ const Header = () => {
 								<Link to='/editProfile'>Редактировать профиль</Link>
 							</li>
 							<li>
-								<a href='/login' onClick={logoutHandler}>
+								<a href='/' onClick={logoutHandler}>
 									Выход
 								</a>
 							</li>
