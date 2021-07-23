@@ -4,6 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
+		"start": "node api.js",
 		"test": "nodemon api.js",
 		"run": "node api.js",
 		"client": "npm run start --prefix client",

@@ -1,8 +1,8 @@
-const User = require('../../models/User')
-const Teacher = require('../../models/Teacher')
-const Subjects = require('../../models/Subjects')
-const Assignments = require('../../models/Assignments')
-const Courses = require('../../models/Courses')
+const User = require('../../Models/User')
+const Teacher = require('../../Models/Teacher')
+const Subjects = require('../../Models/Subjects')
+const Assignments = require('../../Models/Assignments')
+const Courses = require('../../Models/Courses')
 const { validationResult } = require('express-validator')
 
 function getMaxDate(a) {
