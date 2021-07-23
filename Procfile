@@ -1,2 +1,2 @@
 worker: node api.js
-web: npm run start
+web: node client/src/App.js
