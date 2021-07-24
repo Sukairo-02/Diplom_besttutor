@@ -9,7 +9,7 @@
 		"refreshSecret": "ThisIsARefreshTokensSecret",
 		"mailSecret": "ThisIsAMailSecret",
 		"passSecret": "ThisIsAPasswordRestorationSecret",
-		"address": "http://localhost:5353/"
+		"address": "https://best-tutor.herokuapp.com/"
 	},
 
 	"client": {
