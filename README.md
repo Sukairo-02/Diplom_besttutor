@@ -1,27 +1,46 @@
-# Dependencies
+# BestTutor
 
+This project allows users to search for teachers, buy their courses, take tests, leave feedback about the teacher and edit personal data. Teachers can create courses with detailed settings, create tests and get statistics on them.
+
+**Technologies**
+
+Server: [Sukairo-02](https://github.com/Sukairo-02)
+
+- express
+- mongoose
+- jsonwebtoken
+- express-validator
 - bcryptjs
 - config
-- express
-- express-validator
-- jsonwebtoken
-- mongoose
 - nodemailer
 - concurrently
 - nodemon
 
-## Available scripts
+Client: [Kybbot Артём Одийко](https://github.com/Kybbot)
+
+- react
+- @reduxjs/toolkit
+- react-redux
+- react-router-dom
+- formik
+- yup
+
+**Links:**
+
+Site - [BestTutor](https://best-tutor.herokuapp.com/)
+
+### Available scripts
 
 In the project directory, you can run:
 
 ### `npm run dev`
 
-Runs the server and react
+Starts up the project
 
 ### `npm run test`
 
-Runs the server
+Starts up the server
 
 ### `npm run client`
 
-Runs the react
+Starts up the react
