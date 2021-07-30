@@ -1,2 +1,1 @@
-worker: node api.js
-web: npm run start --prefix client
+web: npm install --only=dev && npm install && npm run start
