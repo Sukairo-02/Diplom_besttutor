@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "cd client && npm install --only=dev && npm install && cd .. && node api.js",
+		"start": "cd client && npm install --only=dev && npm install && npm run build && cd .. && node api.js",
 		"test": "nodemon api.js",
 		"run": "node api.js",
 		"client": "npm run start --prefix client",
