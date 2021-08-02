@@ -1,17 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	fetchTeachers,
-	sortItems,
-	setFilter,
-} from '../../redux/reducers/teachersSlice';
+import { fetchTeachers, sortItems, setFilter } from '../../redux/reducers/teachersSlice';
 import { fetchSubjects } from '../../redux/reducers/subjectsSlice';
-import {
-	setTeacher,
-	fetchTeacherCourses,
-	fetchTeacherReviews,
-} from '../../redux/reducers/teachersSlice';
+import { setTeacher, fetchTeacherCourses, fetchTeacherReviews } from '../../redux/reducers/teachersSlice';
 import { getSubjects } from '../../redux/selectors';
 import TeacherBig from './TeacherBig';
 import TeachersFiltration from './TeachersFiltration';
@@ -45,11 +37,13 @@ export const Teachers = () => {
 		if (!teachers.length) {
 			dispatch(fetchTeachers());
 		}
+	}, [dispatch, teachers.length]);
 
+	React.useEffect(() => {
 		if (!subjects.length) {
 			dispatch(fetchSubjects());
 		}
-	}, [dispatch]);
+	}, [dispatch, subjects.length]);
 
 	const parametersHandler = React.useCallback(
 		(type) => {
@@ -85,10 +79,7 @@ export const Teachers = () => {
 							{teachers.length ? (
 								teachers.map((teacher) => (
 									<div className='teachers__item' key={teacher._id}>
-										<TeacherBig
-											data={teacher}
-											profileBtnHandler={profileBtnHandler}
-										/>
+										<TeacherBig data={teacher} profileBtnHandler={profileBtnHandler} />
 									</div>
 								))
 							) : (

@@ -21,7 +21,7 @@ const App = () => {
 			dispatch(fetchUserInfo());
 		}
 	});
-	console.log('App rendered');
+
 	return (
 		<div className='App'>
 			<Notifications />

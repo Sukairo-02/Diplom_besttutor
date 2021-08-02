@@ -40,7 +40,7 @@ export const Task = () => {
 			}
 		);
 	};
-	console.log('Task rendered');
+
 	return (
 		<main className='main'>
 			<div className='container'>
@@ -52,9 +52,7 @@ export const Task = () => {
 						<div className='task__info'>
 							<div>Перемешано: {item.isShuffled ? '✅' : '❌'}</div>
 							<div>Поздняя сдача: {item.allowOvertime ? '✅' : '❌'}</div>
-							<div className='task__points'>
-								Максимально баллов: {item.maxPoints}
-							</div>
+							<div className='task__points'>Максимально баллов: {item.maxPoints}</div>
 						</div>
 						<span className='task__min-title'>Время</span>
 						<div className='task__times'>
@@ -67,16 +65,10 @@ export const Task = () => {
 						{submit && (
 							<>
 								<div className='task__btns'>
-									<button
-										className='btn'
-										type='button'
-										onClick={deleteBtnHandler}>
+									<button className='btn' type='button' onClick={deleteBtnHandler}>
 										Удалить ответы
 									</button>
-									<button
-										className='btn'
-										type='button'
-										onClick={getResultsBtnHandler}>
+									<button className='btn' type='button' onClick={getResultsBtnHandler}>
 										Получить результаты
 									</button>
 								</div>
