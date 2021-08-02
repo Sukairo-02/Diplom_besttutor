@@ -1,1 +1,1 @@
-web: npm install --only=dev && npm install && cd client && npm install --only=devc && npm install && npm run build && cd .. && node api.js
+web: npm install --only=dev && npm install && cd client && npm install --only=dev && npm install && npm run build && cd .. && node api.js
