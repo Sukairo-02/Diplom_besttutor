@@ -1,2 +1,1 @@
-worker: npm install --only=dev && npm install && npm install --only=dev --prefix client && npm install --prefix client && npm run build --prefix client
-web: node api.js
+web: npm install --only=dev && npm install && cd client && npm install --only=devc && npm install && npm run build && cd .. && node api.js
