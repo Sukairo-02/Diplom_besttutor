@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { fetchUserInfo } from './redux/reducers/userInfoSlice';
 import { getUserInfo } from './redux/selectors';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { useRoutes } from './hooks/routes.hook';
 import { createAuthProvider } from './jwt';
 import { Loader, Notifications } from './Components';
@@ -21,7 +21,7 @@ const App = () => {
 			dispatch(fetchUserInfo());
 		}
 	});
-	console.log('App rendered');
+
 	return (
 		<div className='App'>
 			<Notifications />

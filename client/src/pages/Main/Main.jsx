@@ -65,8 +65,7 @@ export const Main = () => {
 								</nav>
 							</div>
 							<div className='lp-header__enter'>
-								<Link to='/login'>Войти</Link> /{' '}
-								<Link to='/signup'>Зарегистрироваться</Link>
+								<Link to='/login'>Войти</Link> / <Link to='/signup'>Зарегистрироваться</Link>
 							</div>
 						</header>
 					</div>
@@ -76,9 +75,7 @@ export const Main = () => {
 					<div className='lp-container'>
 						<div className='lp-about__row'>
 							<div className='lp-about__group'>
-								<h1 className='lp-about__title'>
-									Найди лучшего учителя для своего ребёнка
-								</h1>
+								<h1 className='lp-about__title'>Найди лучшего учителя для своего ребёнка</h1>
 								<p className='lp-about__text'>
 									Получай квалифицированную помощь <br /> онлайн или на дому
 								</p>
@@ -87,11 +84,7 @@ export const Main = () => {
 								</button>
 							</div>
 							<div>
-								<img
-									className='lp-about__img'
-									src='img/main.webp'
-									alt='Онлайн обучение'
-								/>
+								<img className='lp-about__img' src='img/main.webp' alt='Онлайн обучение' />
 							</div>
 						</div>
 					</div>
@@ -104,8 +97,7 @@ export const Main = () => {
 						<div className='lp-steps__group'>
 							<h3 className='lp-steps__title'>Найди учителя</h3>
 							<p className='lp-steps__text'>
-								Найди подходящего учителя <br /> для себя благодаря удобному
-								поиску.
+								Найди подходящего учителя <br /> для себя благодаря удобному поиску.
 							</p>
 						</div>
 						<div className='lp-steps__group'>
@@ -118,8 +110,7 @@ export const Main = () => {
 						<div className='lp-steps__group'>
 							<h3 className='lp-steps__title'>Начни учиться</h3>
 							<p className='lp-steps__text'>
-								Проведи пробный урок и начни <br /> заниматься на постоянной
-								основе.
+								Проведи пробный урок и начни <br /> заниматься на постоянной основе.
 							</p>
 						</div>
 					</div>
@@ -133,10 +124,8 @@ export const Main = () => {
 							<div className='lp-subjects__info'>
 								<h3 className='lp-subjects__title'>Выбери предмет для себя</h3>
 								<p className='lp-subjects__text'>
-									Больше 10к учеников занимается у нас с лучшими учителями в
-									своем деле. От Математики до Английского, от Истории до
-									биологии, от программирования до пения, у нас есть все. Найди
-									своего учителя.
+									Больше 10к учеников занимается у нас с лучшими учителями в своем деле. От Математики до Английского,
+									от Истории до Биологии, от Программирования до Пения, у нас есть все. Найди своего учителя.
 								</p>
 								<button onClick={logBtnHandler} className='btn'>
 									Найти учителя
@@ -227,15 +216,12 @@ export const Main = () => {
 										</div>
 									</div>
 									<div className='lp-teachers__desc'>
-										Репетитор по Норвежскому языку. Опыт преподавания
-										Норвежского языка - 8 лет. Занимаюсь языком 10 лет. Училась
-										в Норвегии 3 год. Свободно владею Норвежским языком. Работаю
-										в Норвежской фирме, каждый день использую язык
+										Репетитор по Норвежскому языку. Опыт преподавания Норвежского языка - 8 лет. Занимаюсь языком 10
+										лет. Училась в Норвегии 3 год. Свободно владею Норвежским языком. Работаю в Норвежской фирме, каждый
+										день использую язык
 									</div>
 									<div className='lp-teacher__subject'>Норвежский</div>
-									<div
-										className='lp-teachers__group'
-										style={{ flexWrap: 'wrap' }}>
+									<div className='lp-teachers__group' style={{ flexWrap: 'wrap' }}>
 										<div className='lp-teacher__students'>
 											<People size={16} /> 15 учеников
 										</div>
@@ -257,15 +243,12 @@ export const Main = () => {
 										</div>
 									</div>
 									<div className='lp-teachers__desc'>
-										Репетитор по Норвежскому языку. Опыт преподавания
-										Норвежского языка - 8 лет. Занимаюсь языком 10 лет. Училась
-										в Норвегии 3 год. Свободно владею Норвежским языком. Работаю
-										в Норвежской фирме, каждый день использую язык
+										Репетитор по Норвежскому языку. Опыт преподавания Норвежского языка - 8 лет. Занимаюсь языком 10
+										лет. Училась в Норвегии 3 год. Свободно владею Норвежским языком. Работаю в Норвежской фирме, каждый
+										день использую язык
 									</div>
 									<div className='lp-teacher__subject'>Арабский</div>
-									<div
-										className='lp-teachers__group'
-										style={{ flexWrap: 'wrap' }}>
+									<div className='lp-teachers__group' style={{ flexWrap: 'wrap' }}>
 										<div className='lp-teacher__students'>
 											<People size={16} /> 56 учеников
 										</div>
@@ -288,15 +271,12 @@ export const Main = () => {
 										</div>
 									</div>
 									<div className='lp-teachers__desc'>
-										Репетитор по Норвежскому языку. Опыт преподавания
-										Норвежского языка - 8 лет. Занимаюсь языком 10 лет. Училась
-										в Норвегии 3 год. Свободно владею Норвежским языком. Работаю
-										в Норвежской фирме, каждый день использую язык
+										Репетитор по Норвежскому языку. Опыт преподавания Норвежского языка - 8 лет. Занимаюсь языком 10
+										лет. Училась в Норвегии 3 год. Свободно владею Норвежским языком. Работаю в Норвежской фирме, каждый
+										день использую язык
 									</div>
 									<div className='lp-teacher__subject'>Немецкий</div>
-									<div
-										className='lp-teachers__group'
-										style={{ flexWrap: 'wrap' }}>
+									<div className='lp-teachers__group' style={{ flexWrap: 'wrap' }}>
 										<div className='lp-teacher__students'>
 											<People size={16} /> 39 ученика
 										</div>
@@ -319,15 +299,12 @@ export const Main = () => {
 										</div>
 									</div>
 									<div className='lp-teachers__desc'>
-										Репетитор по Норвежскому языку. Опыт преподавания
-										Норвежского языка - 8 лет. Занимаюсь языком 10 лет. Училась
-										в Норвегии 3 год. Свободно владею Норвежским языком. Работаю
-										в Норвежской фирме, каждый день использую язык
+										Репетитор по Норвежскому языку. Опыт преподавания Норвежского языка - 8 лет. Занимаюсь языком 10
+										лет. Училась в Норвегии 3 год. Свободно владею Норвежским языком. Работаю в Норвежской фирме, каждый
+										день использую язык
 									</div>
 									<div className='lp-teacher__subject'>Украинский</div>
-									<div
-										className='lp-teachers__group'
-										style={{ flexWrap: 'wrap' }}>
+									<div className='lp-teachers__group' style={{ flexWrap: 'wrap' }}>
 										<div className='lp-teacher__students'>
 											<People size={16} /> 3 ученика
 										</div>
@@ -349,15 +326,12 @@ export const Main = () => {
 										</div>
 									</div>
 									<div className='lp-teachers__desc'>
-										Репетитор по Норвежскому языку. Опыт преподавания
-										Норвежского языка - 8 лет. Занимаюсь языком 10 лет. Училась
-										в Норвегии 3 год. Свободно владею Норвежским языком. Работаю
-										в Норвежской фирме, каждый день использую язык
+										Репетитор по Норвежскому языку. Опыт преподавания Норвежского языка - 8 лет. Занимаюсь языком 10
+										лет. Училась в Норвегии 3 год. Свободно владею Норвежским языком. Работаю в Норвежской фирме, каждый
+										день использую язык
 									</div>
 									<div className='lp-teacher__subject'>Корейский</div>
-									<div
-										className='lp-teachers__group'
-										style={{ flexWrap: 'wrap' }}>
+									<div className='lp-teachers__group' style={{ flexWrap: 'wrap' }}>
 										<div className='lp-teacher__students'>
 											<People size={16} /> 189 ученика
 										</div>
@@ -380,15 +354,12 @@ export const Main = () => {
 										</div>
 									</div>
 									<div className='lp-teachers__desc'>
-										Репетитор по Норвежскому языку. Опыт преподавания
-										Норвежского языка - 8 лет. Занимаюсь языком 10 лет. Училась
-										в Норвегии 3 год. Свободно владею Норвежским языком. Работаю
-										в Норвежской фирме, каждый день использую язык
+										Репетитор по Норвежскому языку. Опыт преподавания Норвежского языка - 8 лет. Занимаюсь языком 10
+										лет. Училась в Норвегии 3 год. Свободно владею Норвежским языком. Работаю в Норвежской фирме, каждый
+										день использую язык
 									</div>
 									<div className='lp-teacher__subject'>Испанский</div>
-									<div
-										className='lp-teachers__group'
-										style={{ flexWrap: 'wrap' }}>
+									<div className='lp-teachers__group' style={{ flexWrap: 'wrap' }}>
 										<div className='lp-teacher__students'>
 											<People size={16} /> 84 ученика
 										</div>
@@ -411,84 +382,53 @@ export const Main = () => {
 					<div className='lp-row'>
 						<div className='lp-citys__grid'>
 							<div className='lp-citys__info'>
-								<h3 className='lp-citys__title'>
-									Найди учителя в своем городе
-								</h3>
+								<h3 className='lp-citys__title'>Найди учителя в своем городе</h3>
 								<p className='lp-citys__text'>
-									Выбери город и начни поиск учителя рядом с собой. Запишись к
-									учителю который тебе подошел больше всего и проводи частные
-									уроки на дому.
+									Выбери город и начни поиск учителя рядом с собой. Запишись к учителю который тебе подошел больше всего
+									и проводи частные уроки на дому.
 								</p>
 								<button onClick={logBtnHandler} className='btn'>
 									Найти учителя
 								</button>
 							</div>
 							<div className='lp-citys__item'>
-								<img
-									className='lp-citys__img'
-									src='img/citys/1.webp'
-									alt='Львов'
-								/>
+								<img className='lp-citys__img' src='img/citys/1.webp' alt='Львов' />
 
 								<h5 className='lp-citys__name'>Львов</h5>
 								<p className='lp-citys__count'>126 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img
-									className='lp-citys__img'
-									src='img/citys/2.webp'
-									alt='Киев'
-								/>
+								<img className='lp-citys__img' src='img/citys/2.webp' alt='Киев' />
 
 								<h5 className='lp-citys__name'>Киев</h5>
 								<p className='lp-citys__count'>230 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img
-									className='lp-citys__img'
-									src='img/citys/3.webp'
-									alt='Харьков'
-								/>
+								<img className='lp-citys__img' src='img/citys/3.webp' alt='Харьков' />
 
 								<h5 className='lp-citys__name'>Харьков</h5>
 								<p className='lp-citys__count'>185 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img
-									className='lp-citys__img'
-									src='img/citys/4.webp'
-									alt='Донецк'
-								/>
+								<img className='lp-citys__img' src='img/citys/4.webp' alt='Донецк' />
 
 								<h5 className='lp-citys__name'>Донецк</h5>
 								<p className='lp-citys__count'>290 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img
-									className='lp-citys__img'
-									src='img/citys/5.webp'
-									alt='Днепр'
-								/>
+								<img className='lp-citys__img' src='img/citys/5.webp' alt='Днепр' />
 
 								<h5 className='lp-citys__name'>Днепр</h5>
 								<p className='lp-citys__count'>110 учителей</p>
 							</div>
 							<div className='lp-citys__item'>
-								<img
-									className='lp-citys__img'
-									src='img/citys/6.webp'
-									alt='Одесса'
-								/>
+								<img className='lp-citys__img' src='img/citys/6.webp' alt='Одесса' />
 
 								<h5 className='lp-citys__name'>Одесса</h5>
 								<p className='lp-citys__count'>298 учителей</p>
 							</div>
 							<div className='lp-citys__item lp-citys__item_last'>
-								<img
-									className='lp-citys__img'
-									src='img/citys/7.webp'
-									alt='Мукачево'
-								/>
+								<img className='lp-citys__img' src='img/citys/7.webp' alt='Мукачево' />
 
 								<h5 className='lp-citys__name'>Мукачево</h5>
 								<p className='lp-citys__count'>546 учителей</p>
@@ -560,8 +500,7 @@ export const Main = () => {
 								</nav>
 							</div>
 							<div className='lp-header__enter'>
-								<Link to='/login'>Войти</Link> /{' '}
-								<Link to='/signup'>Зарегистрироваться</Link>
+								<Link to='/login'>Войти</Link> / <Link to='/signup'>Зарегистрироваться</Link>
 							</div>
 						</header>
 					</div>
