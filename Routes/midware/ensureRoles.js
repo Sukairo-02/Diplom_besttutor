@@ -1,48 +1,39 @@
-const jwt = require('jsonwebtoken')
-const config = require('config')
+const jwt = require('jsonwebtoken');
+const config = require('config');
 
-module.exports = function (roles) {
-    return (req, res, next) => {
-        if (req.method === "OPTIONS") {
-            return next()
-        }
-    
-        try {
-            if (!req.headers.authorization) {
-                return res
-                .status(401)
-                .json({message: "Ошибка: вы не авторизованы!"}) 
-            }
+module.exports = (roles) => {
+	return (req, res, next) => {
+		if (req.method === 'OPTIONS') {
+			return next();
+		}
 
-            const token = req.headers.authorization.split(' ')[1]
-            if (!token)
-            {
-                return res
-                .status(401)
-                .json({message: "Ошибка: вы не авторизованы!"})
-            }
-            const decData = jwt.verify(token, config.get('server.secret'))
-            const {roles: userRoles} = decData
-            let hasRole = false
-            userRoles.forEach(role => {
-                if(roles.includes(role)) {
-                    hasRole = true
-                }
-            })
+		try {
+			if (!req.headers.authorization) {
+				return res.status(401).json({ message: 'Ошибка: вы не авторизованы!' });
+			}
 
-            if(!hasRole) {
-                return res
-                .status(403)
-                .json({message: "Ошибка: недостаточно прав!"})
-            }
+			const token = req.headers.authorization.split(' ')[1];
+			if (!token) {
+				return res.status(401).json({ message: 'Ошибка: вы не авторизованы!' });
+			}
+			const decData = jwt.verify(token, config.get('server.secret'));
+			const { roles: userRoles } = decData;
+			let hasRole = false;
+			userRoles.forEach((role) => {
+				if (roles.includes(role)) {
+					hasRole = true;
+				}
+			});
 
-            req.user = decData
-            return next()
-        } catch (e) {
-            console.log(e)
-            return res
-            .status(401)
-            .json({message: "Ошибка: вы не авторизованы!"})
-        }
-    }
-}
+			if (!hasRole) {
+				return res.status(403).json({ message: 'Ошибка: недостаточно прав!' });
+			}
+
+			req.user = decData;
+			return next();
+		} catch (e) {
+			console.log(e);
+			return res.status(401).json({ message: 'Ошибка: вы не авторизованы!' });
+		}
+	};
+};

@@ -1,10 +1,10 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
 
 const Assignments = new Schema({
 	title: { type: String, required: true },
 	desc: { type: String },
-	isShuffled: { type: Boolean, required: true, default: false }, //determines if questions and answer variants will be shuffled
-	allowOvertime: { type: Boolean, required: true, default: false }, //determines if users will be able to submit past endDate
+	isShuffled: { type: Boolean, required: true, default: false }, // determines if questions and answer variants will be shuffled
+	allowOvertime: { type: Boolean, required: true, default: false }, // determines if users will be able to submit past endDate
 	maxPoints: { type: Number, default: 0 },
 	date: { type: Date, required: true, default: Date.now },
 	endDate: { type: Date },
@@ -13,7 +13,7 @@ const Assignments = new Schema({
 			title: { type: String, required: true },
 			qID: { type: String },
 			points: { type: Number, default: 0 },
-			isMulAnswers: { type: Boolean, required: true, default: false }, //determines whether question is answered by radio button or checkbox (radio by default)
+			isMulAnswers: { type: Boolean, required: true, default: false }, // determines whether question is answered by radio button or checkbox (radio by default)
 			answers: [
 				{
 					nID: { type: String },
@@ -53,6 +53,6 @@ const Assignments = new Schema({
 			],
 		},
 	],
-})
+});
 
-module.exports = model('Assignments', Assignments)
+module.exports = model('Assignments', Assignments);

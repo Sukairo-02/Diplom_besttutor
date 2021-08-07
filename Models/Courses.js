@@ -1,7 +1,7 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require('mongoose');
 
 const Courses = new Schema({
-	teacher: { type: String, required: true }, //contains 'src' field of teacher, which is similar to his User ID
+	teacher: { type: String, required: true }, // contains 'src' field of teacher, which is similar to his User ID
 	subject: { type: String, required: true },
 	title: { type: String, required: true },
 	desc: { type: String },
@@ -22,6 +22,6 @@ const Courses = new Schema({
 		},
 	],
 	assignments: [{ type: String }],
-})
+});
 
-module.exports = model('Courses', Courses)
+module.exports = model('Courses', Courses);
