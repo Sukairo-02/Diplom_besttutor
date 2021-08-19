@@ -39,7 +39,7 @@ const TeacherProfileForm = React.memo(({ teacherId, teacherSubject }) => {
 			actions.resetForm();
 		});
 	};
-
+	console.log('TeacherProfileForm rendered');
 	return (
 		<Formik
 			initialValues={{
@@ -50,15 +50,14 @@ const TeacherProfileForm = React.memo(({ teacherId, teacherSubject }) => {
 			validationSchema={validationSchema}
 			onSubmit={(values, actions) => {
 				formSubmitHandler(values, actions);
-			}}
-		>
+			}}>
 			<Form className='form teacher-profile__form'>
 				<h3 className='form__title'>Добавить новый курс</h3>
 				<fieldset className='form__fieldset'>
 					<FormInput label='Название курса' name='title' type='text' />
 				</fieldset>
 				<fieldset className='form__fieldset'>
-					<FormInput label='Цена (грн)' name='price' type='number' min='0' />
+					<FormInput label='Цена (грн)' name='price' type='number' />
 				</fieldset>
 				<fieldset className='form__fieldset'>
 					<FormTextarea label='Описание курса' name='desc' />

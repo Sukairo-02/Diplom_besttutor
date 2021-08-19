@@ -31,16 +31,14 @@ const Header = () => {
 
 	return (
 		<header className='header'>
-			<div className='header__logo'>
-				<Link to='/home'>BestTutor</Link>
-			</div>
+			<div className='header__logo'>BestTutor</div>
 			<nav className='header__nav'>
 				<ul className='header__ul'>
 					<li className='header__li'>
-						<Link to='/home'>Главная</Link>
+						<Link to='/'>Главная</Link>
 					</li>
 					<li className='header__li'>
-						<Link to='/teachers'>Учители</Link>
+						<Link to='/teachers'>Учителя</Link>
 					</li>
 				</ul>
 				<button ref={menuRef} onClick={toggleVisiblePopup} className='btn'>

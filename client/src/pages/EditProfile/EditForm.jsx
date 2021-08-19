@@ -11,7 +11,7 @@ const validationSchema = yup.object({
 	photo: yup.mixed(),
 	username: yup.string(),
 	dateOfBirth: yup.string(),
-	phone: yup.string().max(13, 'Максимальная длина 13 символов'),
+	phone: yup.string().max(10),
 	address: yup.string(),
 	area: yup.string(),
 	city: yup.string(),
@@ -43,12 +43,14 @@ const EditForm = ({ data }) => {
 			validationSchema={validationSchema}
 			onSubmit={(values) => {
 				formSubmitHandler(values);
-			}}
-		>
+			}}>
 			{(formik) => (
 				<Form className='form' encType='multipart/form-data'>
 					<fieldset className='form__fieldset form__fieldset--center'>
-						<FormFile setFieldValue={formik.setFieldValue} avatar={data.avatar} />
+						<FormFile
+							setFieldValue={formik.setFieldValue}
+							avatar={data.avatar}
+						/>
 					</fieldset>
 					<fieldset className='form__fieldset '>
 						<FormInput label='Имя и Фамилия' name='username' type='text' />
@@ -61,7 +63,7 @@ const EditForm = ({ data }) => {
 					</fieldset>
 					<fieldset className='form__fieldset form__fieldset--flex'>
 						<fieldset className='form__fieldset'>
-							<FormInput label='Телефон' name='phone' type='tel' placeholder='+380982913867' />
+							<FormInput label='Телефон' name='phone' type='tel' />
 						</fieldset>
 						<fieldset className='form__fieldset'>
 							<FormInput label='Адрес' name='address' type='text' />
