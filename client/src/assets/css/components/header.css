@@ -24,11 +24,6 @@
 	font-size: 30px;
 }
 
-.header__logo a {
-	color: var(--main-text);
-	text-decoration: none;
-}
-
 .header__nav {
 	position: relative;
 	display: flex;

@@ -23,9 +23,15 @@ const FormFile = ({ setFieldValue, avatar }) => {
 	return (
 		<>
 			<input type='hidden' name='MAX_FILE_SIZE' value='5242880' />
-			<input className='form__file' id='editAvatarInput' type='file' name='avatar' onChange={inputChangeHandler} />
+			<input
+				className='form__file'
+				id='editAvatarInput'
+				type='file'
+				name='avatar'
+				onChange={inputChangeHandler}
+			/>
 			<label htmlFor='editAvatarInput' className='form__drop-zone'>
-				Загрузите сюда фото
+				Загрузите или перетащите сюда фото
 				{img ? <img src={img} alt='Аватар' className='form__img' /> : ''}
 				<div className='form__edit'>
 					<Edit />

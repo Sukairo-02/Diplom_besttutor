@@ -54,10 +54,6 @@
 	.teacher-big__container {
 		width: 100%;
 	}
-
-	.teacher-big__container--flex {
-		flex: 0 0 auto;
-	}
 }
 
 @media screen and (max-width: 700px) {

@@ -22,7 +22,7 @@
 }
 
 .teacher-big__container--flex {
-	flex: 0 0 117px;
+	flex: 0 0 auto;
 }
 
 .teacher-big__name {
