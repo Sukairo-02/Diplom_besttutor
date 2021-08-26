@@ -10,6 +10,7 @@
 		"prettier/prettier": "error",
 		"no-plusplus": "off",
 		"no-nested-ternary": "warn",
-		"no-param-reassign": "warn"
+		"no-param-reassign": "warn",
+		"no-continue": "off"
 	}
 }
